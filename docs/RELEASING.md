@@ -85,3 +85,19 @@ Authenticode code-signing certificate.
 
 These signing steps require private certificates/secrets and therefore should
 not be guessed or committed to the repository.
+
+
+## macOS architecture builds
+
+The workflow now builds two separate macOS packages:
+
+- `macos-latest` -> Apple Silicon build
+- `macos-15-intel` -> Intel build
+
+Release assets:
+
+- `QA-Evidence-Builder-macOS-Apple-Silicon.zip`
+- `QA-Evidence-Builder-macOS-Intel.zip`
+- `QA-Evidence-Builder-Windows.exe`
+
+Do not rename one macOS build to imply universal compatibility. These are separate native builds.

@@ -47,6 +47,14 @@ The project follows Semantic Versioning where practical.
 - GitHub Actions automated builds for macOS and Windows.
 - GitHub Release automation with downloadable macOS and Windows binaries.
 
+### Changed
+
+- macOS release artifacts are now split by CPU architecture.
+- Added `QA-Evidence-Builder-macOS-Apple-Silicon.zip`.
+- Added `QA-Evidence-Builder-macOS-Intel.zip`.
+- Windows standalone executable remains `QA-Evidence-Builder-Windows.exe`.
+- Release notes now explain which macOS build users should download.
+
 ### Security
 
 - Application processing is local-only.

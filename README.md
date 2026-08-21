@@ -81,13 +81,23 @@ Initial public release: **v1.0.0**
 
 Prebuilt binaries are published under **GitHub Releases**.
 
-- **macOS:** download `QA-Evidence-Builder-macOS.zip`, extract it, then open `QA Evidence Builder.app`.
-- **Windows:** download `QA-Evidence-Builder-Windows.exe` and run it directly.
+### macOS
+
+Choose the package that matches your Mac:
+
+- **Apple Silicon (M1 / M2 / M3 / M4 and newer):** `QA-Evidence-Builder-macOS-Apple-Silicon.zip`
+- **Intel Mac:** `QA-Evidence-Builder-macOS-Intel.zip`
+
+Extract the ZIP, then open `QA Evidence Builder.app`.
+
+### Windows
+
+- Download `QA-Evidence-Builder-Windows.exe`
+- Run the executable directly.
 
 Users of these release builds do not need VS Code or a separate Python installation.
 
 > macOS and Windows builds are currently unsigned. Gatekeeper or SmartScreen may display a warning until code signing is configured.
-
 ## Automated releases
 
 GitHub Actions builds both operating-system versions whenever a version tag such as `v1.0.1` is pushed.

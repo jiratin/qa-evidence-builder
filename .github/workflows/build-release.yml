@@ -15,13 +15,18 @@ permissions:
   contents: write
 
 jobs:
-  build-macos:
-    name: Build macOS app
+  build-macos-apple-silicon:
+    name: Build macOS Apple Silicon
     runs-on: macos-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Show runner architecture
+        run: |
+          uname -m
+          python3 -c "import platform; print(platform.machine())"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -43,17 +48,71 @@ jobs:
             --paths src \
             run.py
 
-      - name: Package macOS app
+      - name: Verify Apple Silicon architecture
+        run: |
+          file "dist/QA Evidence Builder.app/Contents/MacOS/QA Evidence Builder"
+
+      - name: Package macOS Apple Silicon app
         run: |
           ditto -c -k --sequesterRsrc --keepParent \
             "dist/QA Evidence Builder.app" \
-            "QA-Evidence-Builder-macOS.zip"
+            "QA-Evidence-Builder-macOS-Apple-Silicon.zip"
 
-      - name: Upload macOS artifact
+      - name: Upload Apple Silicon artifact
         uses: actions/upload-artifact@v4
         with:
-          name: qa-evidence-builder-macos
-          path: QA-Evidence-Builder-macOS.zip
+          name: qa-evidence-builder-macos-apple-silicon
+          path: QA-Evidence-Builder-macOS-Apple-Silicon.zip
+          if-no-files-found: error
+
+  build-macos-intel:
+    name: Build macOS Intel
+    runs-on: macos-15-intel
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show runner architecture
+        run: |
+          uname -m
+          python3 -c "import platform; print(platform.machine())"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pyinstaller
+
+      - name: Build macOS app
+        run: |
+          pyinstaller \
+            --noconfirm \
+            --clean \
+            --windowed \
+            --name "QA Evidence Builder" \
+            --paths src \
+            run.py
+
+      - name: Verify Intel architecture
+        run: |
+          file "dist/QA Evidence Builder.app/Contents/MacOS/QA Evidence Builder"
+
+      - name: Package macOS Intel app
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent \
+            "dist/QA Evidence Builder.app" \
+            "QA-Evidence-Builder-macOS-Intel.zip"
+
+      - name: Upload Intel artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-evidence-builder-macos-intel
+          path: QA-Evidence-Builder-macOS-Intel.zip
           if-no-files-found: error
 
   build-windows:
@@ -97,7 +156,8 @@ jobs:
   release:
     name: Create GitHub Release
     needs:
-      - build-macos
+      - build-macos-apple-silicon
+      - build-macos-intel
       - build-windows
     runs-on: ubuntu-latest
 
@@ -115,10 +175,16 @@ jobs:
             echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Download macOS artifact
+      - name: Download Apple Silicon artifact
         uses: actions/download-artifact@v4
         with:
-          name: qa-evidence-builder-macos
+          name: qa-evidence-builder-macos-apple-silicon
+          path: release-assets
+
+      - name: Download Intel artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: qa-evidence-builder-macos-intel
           path: release-assets
 
       - name: Download Windows artifact
@@ -136,16 +202,26 @@ jobs:
             echo
             echo "## Downloads"
             echo
-            echo "- **macOS:** \`QA-Evidence-Builder-macOS.zip\`"
-            echo "  - Extract the ZIP and open \`QA Evidence Builder.app\`."
+            echo "### macOS"
+            echo
+            echo "- **Apple Silicon (M1/M2/M3/M4 and newer):** \`QA-Evidence-Builder-macOS-Apple-Silicon.zip\`"
+            echo "- **Intel Mac:** \`QA-Evidence-Builder-macOS-Intel.zip\`"
+            echo
+            echo "Extract the ZIP and open \`QA Evidence Builder.app\`."
+            echo
+            echo "### Windows"
+            echo
             echo "- **Windows:** \`QA-Evidence-Builder-Windows.exe\`"
-            echo "  - Download and run the executable directly."
+            echo
+            echo "Download and run the executable directly."
             echo
             echo "## Notes"
             echo
             echo "- Processing is local-only."
             echo "- Sensitive-data masking is enabled by default."
             echo "- Raw log export is optional and disabled by default."
+            echo "- macOS builds are currently unsigned/not notarized, so Gatekeeper may show a warning."
+            echo "- Windows builds are currently unsigned, so SmartScreen may show an unknown publisher warning."
             echo
             echo "See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for detailed changes."
           } > RELEASE_NOTES.md
@@ -157,19 +233,20 @@ jobs:
         run: |
           TAG="${{ steps.version.outputs.tag }}"
 
+          ASSETS=(
+            "release-assets/QA-Evidence-Builder-macOS-Apple-Silicon.zip"
+            "release-assets/QA-Evidence-Builder-macOS-Intel.zip"
+            "release-assets/QA-Evidence-Builder-Windows.exe"
+          )
+
           if gh release view "$TAG" >/dev/null 2>&1; then
             echo "Release $TAG already exists. Uploading/replacing assets."
-            gh release upload "$TAG" \
-              release-assets/QA-Evidence-Builder-macOS.zip \
-              release-assets/QA-Evidence-Builder-Windows.exe \
-              --clobber
+            gh release upload "$TAG" "${ASSETS[@]}" --clobber
             gh release edit "$TAG" \
               --title "QA Evidence Builder $TAG" \
               --notes-file RELEASE_NOTES.md
           else
-            gh release create "$TAG" \
-              release-assets/QA-Evidence-Builder-macOS.zip \
-              release-assets/QA-Evidence-Builder-Windows.exe \
+            gh release create "$TAG" "${ASSETS[@]}" \
               --title "QA Evidence Builder $TAG" \
               --notes-file RELEASE_NOTES.md
           fi

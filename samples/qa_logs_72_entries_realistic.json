@@ -1,0 +1,6050 @@
+[
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "5b3ec0aef0c04873b25b",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/home/config"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/home/config"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:00:00.100"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:00:00.100"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:00:00.100Z"
+      ],
+      "RESPONSE_TIME": [
+        120
+      ],
+      "REQUEST_ID": [
+        "REQ-0001"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0001"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Home"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Home"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/home"
+      ],
+      "kafka_topic_name": [
+        "config-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "config-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 1, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300000\", \"accountNumber\": \"ACC-100000\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 1, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300000\", \"accountNumber\": \"ACC-100000\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 1, \"email\": \"user0@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 1, \"email\": \"user0@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0001\", \"x-request-id\": \"5199fb94-f109-4a79-bcfe-3c4522a8eb84\", \"mfaf-transaction\": \"TX-DEMO-001\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"68d7c89c-740a-4544-ae72-c9c319589682\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "config-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:00:00.100Z",
+      1
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "7426421dca844f59b494",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/profile"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/profile"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:00:07.137"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:00:07.137"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:00:07.137Z"
+      ],
+      "RESPONSE_TIME": [
+        230
+      ],
+      "REQUEST_ID": [
+        "REQ-0002"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0002"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Profile"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Profile"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/profile"
+      ],
+      "kafka_topic_name": [
+        "profile-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "profile-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 2, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300001\", \"accountNumber\": \"ACC-100001\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 2, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300001\", \"accountNumber\": \"ACC-100001\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 2, \"email\": \"user1@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 2, \"email\": \"user1@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0002\", \"x-request-id\": \"7f4b936c-5542-4062-a250-63bfd0edf81c\", \"mfaf-transaction\": \"TX-DEMO-001\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"5132863c-de2f-4ea8-be3e-3ca81bb27720\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "profile-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:00:07.137Z",
+      2
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "dfe39f692abd41c9af0e",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:00:14.174"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:00:14.174"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:00:14.174Z"
+      ],
+      "RESPONSE_TIME": [
+        470
+      ],
+      "REQUEST_ID": [
+        "REQ-0003"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0003"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "sale-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "sale-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 3, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300002\", \"accountNumber\": \"ACC-100002\", \"cartId\": \"C-102\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 3, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300002\", \"accountNumber\": \"ACC-100002\", \"cartId\": \"C-102\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 3, \"email\": \"user2@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 3, \"email\": \"user2@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0003\", \"x-request-id\": \"0a76966f-cf0b-4f3b-a8e8-0f92a01ae35d\", \"mfaf-transaction\": \"TX-DEMO-001\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"e8c5951c-430e-4bd3-91cd-5b21c36db66d\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "sale-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:00:14.174Z",
+      3
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "efa48b03fb9b4bdcaab0",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/promotion/check"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/promotion/check"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:00:21.211"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:00:21.211"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:00:21.211Z"
+      ],
+      "RESPONSE_TIME": [
+        870
+      ],
+      "REQUEST_ID": [
+        "REQ-0004"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0004"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "promotion-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "promotion-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 4, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300003\", \"accountNumber\": \"ACC-100003\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 4, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300003\", \"accountNumber\": \"ACC-100003\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 4, \"email\": \"user3@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 4, \"email\": \"user3@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0004\", \"x-request-id\": \"5333db34-b5b9-4c8f-bdf6-c648ce48c423\", \"mfaf-transaction\": \"TX-DEMO-001\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"66360a9a-ec90-48a5-af3d-4ee2296a4df2\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "promotion-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:00:21.211Z",
+      4
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "0592bd5a931049fe8896",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        500
+      ],
+      "REQUEST_URI": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:00:28.248"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:00:28.248"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:00:28.248Z"
+      ],
+      "RESPONSE_TIME": [
+        3200
+      ],
+      "REQUEST_ID": [
+        "REQ-0005"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0005"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "payment-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "payment-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 5, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300004\", \"accountNumber\": \"ACC-100004\", \"orderId\": \"O-9004\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 5, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300004\", \"accountNumber\": \"ACC-100004\", \"orderId\": \"O-9004\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"50001\", \"resultDescription\": \"Internal Server Error\", \"developerMessage\": \"Payment gateway timeout\"}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"50001\", \"resultDescription\": \"Internal Server Error\", \"developerMessage\": \"Payment gateway timeout\"}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0005\", \"x-request-id\": \"251319b4-96cd-421e-9bc9-05ea56313fad\", \"mfaf-transaction\": \"TX-DEMO-001\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"10943633-f2c8-4fc3-89d5-f4de9af4307b\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "payment-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:00:28.248Z",
+      5
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "d11a98db25454c2692e3",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:00:35.285"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:00:35.285"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:00:35.285Z"
+      ],
+      "RESPONSE_TIME": [
+        130
+      ],
+      "REQUEST_ID": [
+        "REQ-0006"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0006"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "order-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "order-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 6, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300005\", \"accountNumber\": \"ACC-100005\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 6, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300005\", \"accountNumber\": \"ACC-100005\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 6, \"email\": \"user5@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 6, \"email\": \"user5@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0006\", \"x-request-id\": \"b19fda7d-a0ab-440a-9b84-144dd33a7741\", \"mfaf-transaction\": \"TX-DEMO-001\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"8ff6efcb-f0b5-4e52-8185-4f88c33e4f8f\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "order-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:00:35.285Z",
+      6
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "6d6c4d11a3c8412b8908",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/catalog/products"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/catalog/products"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:00:42.322"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:00:42.322"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:00:42.322Z"
+      ],
+      "RESPONSE_TIME": [
+        1300
+      ],
+      "REQUEST_ID": [
+        "REQ-0007"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0007"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Home"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Home"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/home"
+      ],
+      "kafka_topic_name": [
+        "catalog-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "catalog-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 7, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300006\", \"accountNumber\": \"ACC-100006\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 7, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300006\", \"accountNumber\": \"ACC-100006\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 7, \"email\": \"user6@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 7, \"email\": \"user6@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0007\", \"x-request-id\": \"3d7cb136-c669-460f-81f8-210780abaf33\", \"mfaf-transaction\": \"TX-DEMO-002\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"208ab8ba-a2f9-405c-9e4a-d0d4c071387d\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "catalog-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:00:42.322Z",
+      7
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "7b6830e2232b4c528a43",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/admin/report"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/admin/report"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:00:49.359"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:00:49.359"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:00:49.359Z"
+      ],
+      "RESPONSE_TIME": [
+        240
+      ],
+      "REQUEST_ID": [
+        "REQ-0008"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0008"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Admin Report"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Admin Report"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/admin-report"
+      ],
+      "kafka_topic_name": [
+        "report-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "report-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 8, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300007\", \"accountNumber\": \"ACC-100007\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 8, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300007\", \"accountNumber\": \"ACC-100007\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 8, \"email\": \"user7@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 8, \"email\": \"user7@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0008\", \"x-request-id\": \"ca74a25b-6ce7-40ec-be9e-70cf753f74d3\", \"mfaf-transaction\": \"TX-DEMO-002\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"47e1878c-9447-41ba-b9f1-19c707e9056b\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "report-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:00:49.359Z",
+      8
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "669bce1aaebb4962bbad",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/home/config"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/home/config"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:00:56.396"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:00:56.396"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:00:56.396Z"
+      ],
+      "RESPONSE_TIME": [
+        240
+      ],
+      "REQUEST_ID": [
+        "REQ-0009"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0009"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Home"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Home"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/home"
+      ],
+      "kafka_topic_name": [
+        "config-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "config-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 9, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300008\", \"accountNumber\": \"ACC-100008\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 9, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300008\", \"accountNumber\": \"ACC-100008\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 9, \"email\": \"user8@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 9, \"email\": \"user8@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0009\", \"x-request-id\": \"786dc63a-5615-4801-93f1-7e7b03aaad16\", \"mfaf-transaction\": \"TX-DEMO-002\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"44ee506a-dc4c-4fb1-8fe0-610a4c12bafb\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "config-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:00:56.396Z",
+      9
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "72e59f9e65904581aa64",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/profile"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/profile"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:01:03.433"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:01:03.433"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:01:03.433Z"
+      ],
+      "RESPONSE_TIME": [
+        280
+      ],
+      "REQUEST_ID": [
+        "REQ-0010"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0010"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Profile"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Profile"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/profile"
+      ],
+      "kafka_topic_name": [
+        "profile-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "profile-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 10, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300009\", \"accountNumber\": \"ACC-100009\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 10, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300009\", \"accountNumber\": \"ACC-100009\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 10, \"email\": \"user9@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 10, \"email\": \"user9@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0010\", \"x-request-id\": \"5365bd98-0e70-49dd-8180-4e7f9818d5e8\", \"mfaf-transaction\": \"TX-DEMO-002\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"5a862315-1c9e-4d43-97ef-3c0e164954da\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "profile-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:01:03.433Z",
+      10
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "9cec57f5a4c84a4199e1",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:01:10.470"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:01:10.470"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:01:10.470Z"
+      ],
+      "RESPONSE_TIME": [
+        410
+      ],
+      "REQUEST_ID": [
+        "REQ-0011"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0011"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "sale-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "sale-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 11, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300010\", \"accountNumber\": \"ACC-100010\", \"cartId\": \"C-110\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 11, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300010\", \"accountNumber\": \"ACC-100010\", \"cartId\": \"C-110\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 11, \"email\": \"user10@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 11, \"email\": \"user10@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0011\", \"x-request-id\": \"3760cc5e-e964-4740-b782-f3d915a3cc64\", \"mfaf-transaction\": \"TX-DEMO-002\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"b824fab2-58f1-4e63-a62f-33cdd5dd7db5\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "sale-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:01:10.470Z",
+      11
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "937abaa7d43946f292ff",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/promotion/check"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/promotion/check"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:01:17.507"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:01:17.507"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:01:17.507Z"
+      ],
+      "RESPONSE_TIME": [
+        1050
+      ],
+      "REQUEST_ID": [
+        "REQ-0012"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0012"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "promotion-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "promotion-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 12, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300011\", \"accountNumber\": \"ACC-100011\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 12, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300011\", \"accountNumber\": \"ACC-100011\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 12, \"email\": \"user11@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 12, \"email\": \"user11@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0012\", \"x-request-id\": \"d6605809-2176-4350-8851-3a1505deb934\", \"mfaf-transaction\": \"TX-DEMO-002\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"b170f97b-636c-4f86-a2b6-3b8369958b2c\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "promotion-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:01:17.507Z",
+      12
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "4e704b7f42ec4e3286a6",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        500
+      ],
+      "REQUEST_URI": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:01:24.544"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:01:24.544"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:01:24.544Z"
+      ],
+      "RESPONSE_TIME": [
+        3200
+      ],
+      "REQUEST_ID": [
+        "REQ-0013"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0013"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "payment-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "payment-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 13, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300012\", \"accountNumber\": \"ACC-100012\", \"orderId\": \"O-9012\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 13, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300012\", \"accountNumber\": \"ACC-100012\", \"orderId\": \"O-9012\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"50001\", \"resultDescription\": \"Internal Server Error\", \"developerMessage\": \"Payment gateway timeout\"}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"50001\", \"resultDescription\": \"Internal Server Error\", \"developerMessage\": \"Payment gateway timeout\"}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0013\", \"x-request-id\": \"42cdc666-d7c4-41da-a83b-9bbc3414aa9c\", \"mfaf-transaction\": \"TX-DEMO-003\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"015f967a-2665-40b5-9fad-263d5be836a2\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "payment-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:01:24.544Z",
+      13
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "fb1df945fb054d09b59c",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:01:31.581"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:01:31.581"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:01:31.581Z"
+      ],
+      "RESPONSE_TIME": [
+        280
+      ],
+      "REQUEST_ID": [
+        "REQ-0014"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0014"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "order-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "order-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 14, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300013\", \"accountNumber\": \"ACC-100013\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 14, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300013\", \"accountNumber\": \"ACC-100013\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 14, \"email\": \"user13@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 14, \"email\": \"user13@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0014\", \"x-request-id\": \"f7bad480-dcf9-431f-9ebd-88e98bc2286e\", \"mfaf-transaction\": \"TX-DEMO-003\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"9235c89e-f7ab-4f92-8486-4b4ed43c99b9\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "order-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:01:31.581Z",
+      14
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "16c056b4f8b842509579",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/catalog/products"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/catalog/products"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:01:38.618"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:01:38.618"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:01:38.618Z"
+      ],
+      "RESPONSE_TIME": [
+        1300
+      ],
+      "REQUEST_ID": [
+        "REQ-0015"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0015"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Home"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Home"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/home"
+      ],
+      "kafka_topic_name": [
+        "catalog-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "catalog-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 15, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300014\", \"accountNumber\": \"ACC-100014\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 15, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300014\", \"accountNumber\": \"ACC-100014\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 15, \"email\": \"user14@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 15, \"email\": \"user14@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0015\", \"x-request-id\": \"9fad1d7c-0f0c-473d-8d67-5374e90d4b96\", \"mfaf-transaction\": \"TX-DEMO-003\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"09c82a8f-5df0-4c53-9946-f9a0c2156719\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "catalog-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:01:38.618Z",
+      15
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "a94db9f9ce974df18b18",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/admin/report"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/admin/report"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:01:45.655"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:01:45.655"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:01:45.655Z"
+      ],
+      "RESPONSE_TIME": [
+        240
+      ],
+      "REQUEST_ID": [
+        "REQ-0016"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0016"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Admin Report"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Admin Report"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/admin-report"
+      ],
+      "kafka_topic_name": [
+        "report-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "report-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 16, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300015\", \"accountNumber\": \"ACC-100015\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 16, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300015\", \"accountNumber\": \"ACC-100015\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 16, \"email\": \"user15@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 16, \"email\": \"user15@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0016\", \"x-request-id\": \"fd7fe7de-058a-4369-8329-c4640345539b\", \"mfaf-transaction\": \"TX-DEMO-003\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"7f8869fe-66be-42e9-b5f8-646da60370ae\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "report-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:01:45.655Z",
+      16
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "9c69850d69834beeb1fd",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/home/config"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/home/config"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:01:52.692"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:01:52.692"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:01:52.692Z"
+      ],
+      "RESPONSE_TIME": [
+        160
+      ],
+      "REQUEST_ID": [
+        "REQ-0017"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0017"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Home"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Home"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/home"
+      ],
+      "kafka_topic_name": [
+        "config-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "config-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 17, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300016\", \"accountNumber\": \"ACC-100016\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 17, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300016\", \"accountNumber\": \"ACC-100016\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 17, \"email\": \"user16@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 17, \"email\": \"user16@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0017\", \"x-request-id\": \"67c66592-3637-4f1c-816e-7fa0f8f7f46f\", \"mfaf-transaction\": \"TX-DEMO-003\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"ea75308a-1ef5-40df-8d8c-ddbfedb04e18\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "config-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:01:52.692Z",
+      17
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "b2c85ab28e4d48f2a7af",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/profile"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/profile"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:01:59.729"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:01:59.729"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:01:59.729Z"
+      ],
+      "RESPONSE_TIME": [
+        330
+      ],
+      "REQUEST_ID": [
+        "REQ-0018"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0018"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Profile"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Profile"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/profile"
+      ],
+      "kafka_topic_name": [
+        "profile-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "profile-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 18, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300017\", \"accountNumber\": \"ACC-100017\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 18, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300017\", \"accountNumber\": \"ACC-100017\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 18, \"email\": \"user17@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 18, \"email\": \"user17@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0018\", \"x-request-id\": \"136015e4-04a5-4f85-bc2e-2dbf8009a2d2\", \"mfaf-transaction\": \"TX-DEMO-003\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"485bcdf2-defb-4edc-8f4a-10c97b9c8b4d\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "profile-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:01:59.729Z",
+      18
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "3b669d70355b49d98f31",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:02:06.766"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:02:06.766"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:02:06.766Z"
+      ],
+      "RESPONSE_TIME": [
+        350
+      ],
+      "REQUEST_ID": [
+        "REQ-0019"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0019"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "sale-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "sale-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 19, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300018\", \"accountNumber\": \"ACC-100018\", \"cartId\": \"C-118\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 19, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300018\", \"accountNumber\": \"ACC-100018\", \"cartId\": \"C-118\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 19, \"email\": \"user18@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 19, \"email\": \"user18@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0019\", \"x-request-id\": \"222b7ce8-26d8-4245-abcc-60ca0803a1df\", \"mfaf-transaction\": \"TX-DEMO-004\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"e34088d6-8bd5-4e5e-a8f2-0d3400fa7d5a\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "sale-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:02:06.766Z",
+      19
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "b4e99c7a4f0a4b368cce",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/promotion/check"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/promotion/check"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:02:13.803"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:02:13.803"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:02:13.803Z"
+      ],
+      "RESPONSE_TIME": [
+        690
+      ],
+      "REQUEST_ID": [
+        "REQ-0020"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0020"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "promotion-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "promotion-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 20, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300019\", \"accountNumber\": \"ACC-100019\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 20, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300019\", \"accountNumber\": \"ACC-100019\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 20, \"email\": \"user19@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 20, \"email\": \"user19@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0020\", \"x-request-id\": \"52d50e0c-e531-4e53-9d73-f440c59753f7\", \"mfaf-transaction\": \"TX-DEMO-004\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"c3d4e906-e482-4138-bb17-3d4e9845ae2d\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "promotion-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:02:13.803Z",
+      20
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "cf342b88ca7f42ecaec3",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        500
+      ],
+      "REQUEST_URI": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:02:20.840"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:02:20.840"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:02:20.840Z"
+      ],
+      "RESPONSE_TIME": [
+        3200
+      ],
+      "REQUEST_ID": [
+        "REQ-0021"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0021"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "payment-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "payment-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 21, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300020\", \"accountNumber\": \"ACC-100020\", \"orderId\": \"O-9020\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 21, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300020\", \"accountNumber\": \"ACC-100020\", \"orderId\": \"O-9020\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"50001\", \"resultDescription\": \"Internal Server Error\", \"developerMessage\": \"Payment gateway timeout\"}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"50001\", \"resultDescription\": \"Internal Server Error\", \"developerMessage\": \"Payment gateway timeout\"}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0021\", \"x-request-id\": \"68dedc33-01af-40b0-a914-99662bd75cfa\", \"mfaf-transaction\": \"TX-DEMO-004\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"c775e8ff-e721-4ec1-b9d1-24fd71b45c1f\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "payment-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:02:20.840Z",
+      21
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "b9e612b1bcd9452fa64e",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:02:27.877"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:02:27.877"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:02:27.877Z"
+      ],
+      "RESPONSE_TIME": [
+        180
+      ],
+      "REQUEST_ID": [
+        "REQ-0022"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0022"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "order-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "order-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 22, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300021\", \"accountNumber\": \"ACC-100021\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 22, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300021\", \"accountNumber\": \"ACC-100021\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 22, \"email\": \"user21@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 22, \"email\": \"user21@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0022\", \"x-request-id\": \"50f2646e-4d7f-4ee3-97c1-1bf67e29a274\", \"mfaf-transaction\": \"TX-DEMO-004\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"edfbccbe-0217-4ac1-a1cb-2181aa663f2a\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "order-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:02:27.877Z",
+      22
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "6538f6b7351e46719d35",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/catalog/products"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/catalog/products"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:02:34.914"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:02:34.914"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:02:34.914Z"
+      ],
+      "RESPONSE_TIME": [
+        1300
+      ],
+      "REQUEST_ID": [
+        "REQ-0023"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0023"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Home"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Home"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/home"
+      ],
+      "kafka_topic_name": [
+        "catalog-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "catalog-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 23, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300022\", \"accountNumber\": \"ACC-100022\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 23, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300022\", \"accountNumber\": \"ACC-100022\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 23, \"email\": \"user22@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 23, \"email\": \"user22@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0023\", \"x-request-id\": \"7f75531f-411b-4ad8-a5de-3b51e699f695\", \"mfaf-transaction\": \"TX-DEMO-004\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"efcf019c-a94e-45e7-9108-82b5f78e5a16\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "catalog-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:02:34.914Z",
+      23
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "67b9f2e2e51848b68011",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/admin/report"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/admin/report"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:02:41.951"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:02:41.951"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:02:41.951Z"
+      ],
+      "RESPONSE_TIME": [
+        240
+      ],
+      "REQUEST_ID": [
+        "REQ-0024"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0024"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Admin Report"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Admin Report"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/admin-report"
+      ],
+      "kafka_topic_name": [
+        "report-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "report-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 24, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300023\", \"accountNumber\": \"ACC-100023\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 24, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300023\", \"accountNumber\": \"ACC-100023\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 24, \"email\": \"user23@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 24, \"email\": \"user23@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0024\", \"x-request-id\": \"c95d955b-152c-4afc-9e72-3c1c9946eca0\", \"mfaf-transaction\": \"TX-DEMO-004\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"88e70897-0f7c-466c-9f01-d6096704ec7c\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "report-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:02:41.951Z",
+      24
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "a50b05aad48d439f9be1",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/home/config"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/home/config"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:02:48.988"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:02:48.988"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:02:48.988Z"
+      ],
+      "RESPONSE_TIME": [
+        280
+      ],
+      "REQUEST_ID": [
+        "REQ-0025"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0025"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Home"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Home"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/home"
+      ],
+      "kafka_topic_name": [
+        "config-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "config-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 25, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300024\", \"accountNumber\": \"ACC-100024\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 25, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300024\", \"accountNumber\": \"ACC-100024\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 25, \"email\": \"user24@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 25, \"email\": \"user24@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0025\", \"x-request-id\": \"92758eeb-b756-4397-845d-3b6b20e2701e\", \"mfaf-transaction\": \"TX-DEMO-005\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"86596022-1f73-4bef-a938-d34617ca3169\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "config-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:02:48.988Z",
+      25
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "effc0b64d6f44c848ef7",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/profile"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/profile"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:02:55.125"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:02:55.125"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:02:55.125Z"
+      ],
+      "RESPONSE_TIME": [
+        380
+      ],
+      "REQUEST_ID": [
+        "REQ-0026"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0026"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Profile"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Profile"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/profile"
+      ],
+      "kafka_topic_name": [
+        "profile-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "profile-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 26, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300025\", \"accountNumber\": \"ACC-100025\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 26, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300025\", \"accountNumber\": \"ACC-100025\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 26, \"email\": \"user25@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 26, \"email\": \"user25@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0026\", \"x-request-id\": \"6fde8a3f-5f28-47d6-9417-dcdf75ec856a\", \"mfaf-transaction\": \"TX-DEMO-005\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"382643cf-bd8f-4164-9bc4-08f04722d3d8\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "profile-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:02:55.125Z",
+      26
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "f9f7637ca3c142068c6d",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:03:02.162"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:03:02.162"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:03:02.162Z"
+      ],
+      "RESPONSE_TIME": [
+        830
+      ],
+      "REQUEST_ID": [
+        "REQ-0027"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0027"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "sale-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "sale-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 27, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300026\", \"accountNumber\": \"ACC-100026\", \"cartId\": \"C-126\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 27, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300026\", \"accountNumber\": \"ACC-100026\", \"cartId\": \"C-126\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 27, \"email\": \"user26@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 27, \"email\": \"user26@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0027\", \"x-request-id\": \"c55af48e-ef83-45aa-87a0-2097f27a6f9b\", \"mfaf-transaction\": \"TX-DEMO-005\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"8c98bf42-fff8-4456-b93f-eb1856cb9567\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "sale-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:03:02.162Z",
+      27
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "473d07c3e99e4f50ad3d",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/promotion/check"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/promotion/check"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:03:09.199"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:03:09.199"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:03:09.199Z"
+      ],
+      "RESPONSE_TIME": [
+        870
+      ],
+      "REQUEST_ID": [
+        "REQ-0028"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0028"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "promotion-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "promotion-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 28, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300027\", \"accountNumber\": \"ACC-100027\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 28, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300027\", \"accountNumber\": \"ACC-100027\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 28, \"email\": \"user27@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 28, \"email\": \"user27@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0028\", \"x-request-id\": \"c1889711-6b85-4f0f-93ee-d63e700f445b\", \"mfaf-transaction\": \"TX-DEMO-005\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"c8ab37ff-f993-4a21-98e5-1a95ba157399\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "promotion-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:03:09.199Z",
+      28
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "84a34c9a359c41c7b300",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        500
+      ],
+      "REQUEST_URI": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:03:16.236"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:03:16.236"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:03:16.236Z"
+      ],
+      "RESPONSE_TIME": [
+        3200
+      ],
+      "REQUEST_ID": [
+        "REQ-0029"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0029"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "payment-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "payment-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 29, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300028\", \"accountNumber\": \"ACC-100028\", \"orderId\": \"O-9028\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 29, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300028\", \"accountNumber\": \"ACC-100028\", \"orderId\": \"O-9028\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"50001\", \"resultDescription\": \"Internal Server Error\", \"developerMessage\": \"Payment gateway timeout\"}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"50001\", \"resultDescription\": \"Internal Server Error\", \"developerMessage\": \"Payment gateway timeout\"}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0029\", \"x-request-id\": \"4525fa00-037c-48b9-be2b-bedca934e776\", \"mfaf-transaction\": \"TX-DEMO-005\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"d3d674a4-7818-47f2-b693-1314e703fb3c\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "payment-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:03:16.236Z",
+      29
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "1108397ffc5b47da91d6",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:03:23.273"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:03:23.273"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:03:23.273Z"
+      ],
+      "RESPONSE_TIME": [
+        330
+      ],
+      "REQUEST_ID": [
+        "REQ-0030"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0030"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "order-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "order-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 30, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300029\", \"accountNumber\": \"ACC-100029\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 30, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300029\", \"accountNumber\": \"ACC-100029\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 30, \"email\": \"user29@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 30, \"email\": \"user29@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0030\", \"x-request-id\": \"1556e270-d47d-45e7-a915-dfa8669daf52\", \"mfaf-transaction\": \"TX-DEMO-005\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"28f89806-1d46-47a3-bfeb-49f9c65c7de1\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "order-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:03:23.273Z",
+      30
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "4b4090a7b1c84da3b28a",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/catalog/products"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/catalog/products"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:03:30.310"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:03:30.310"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:03:30.310Z"
+      ],
+      "RESPONSE_TIME": [
+        1300
+      ],
+      "REQUEST_ID": [
+        "REQ-0031"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0031"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Home"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Home"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/home"
+      ],
+      "kafka_topic_name": [
+        "catalog-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "catalog-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 31, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300030\", \"accountNumber\": \"ACC-100030\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 31, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300030\", \"accountNumber\": \"ACC-100030\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 31, \"email\": \"user30@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 31, \"email\": \"user30@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0031\", \"x-request-id\": \"80eb2019-9f9b-4907-a17c-7dc34833362b\", \"mfaf-transaction\": \"TX-DEMO-006\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"742b2b5e-637a-46af-866e-945cdfd11955\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "catalog-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:03:30.310Z",
+      31
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "7a1eb2a19ad5441d82d1",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/admin/report"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/admin/report"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:03:37.347"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:03:37.347"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:03:37.347Z"
+      ],
+      "RESPONSE_TIME": [
+        240
+      ],
+      "REQUEST_ID": [
+        "REQ-0032"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0032"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Admin Report"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Admin Report"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/admin-report"
+      ],
+      "kafka_topic_name": [
+        "report-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "report-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 32, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300031\", \"accountNumber\": \"ACC-100031\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 32, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300031\", \"accountNumber\": \"ACC-100031\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 32, \"email\": \"user31@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 32, \"email\": \"user31@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0032\", \"x-request-id\": \"e5201e40-f426-482a-aad1-1c6f38407315\", \"mfaf-transaction\": \"TX-DEMO-006\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"7a1f0e4a-6865-40fc-88bf-0d6680d9a55f\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "report-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:03:37.347Z",
+      32
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "567fe1ab3ea74133af55",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/home/config"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/home/config"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:03:44.384"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:03:44.384"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:03:44.384Z"
+      ],
+      "RESPONSE_TIME": [
+        200
+      ],
+      "REQUEST_ID": [
+        "REQ-0033"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0033"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Home"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Home"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/home"
+      ],
+      "kafka_topic_name": [
+        "config-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "config-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 33, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300032\", \"accountNumber\": \"ACC-100032\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 33, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300032\", \"accountNumber\": \"ACC-100032\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 33, \"email\": \"user32@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 33, \"email\": \"user32@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0033\", \"x-request-id\": \"80638f83-7275-4596-82f3-e00ad839ec85\", \"mfaf-transaction\": \"TX-DEMO-006\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"5971758d-1faf-4f54-b95d-e53182b40c20\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "config-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:03:44.384Z",
+      33
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "5a14b2428ad741d78e9c",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/profile"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/profile"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:03:51.421"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:03:51.421"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:03:51.421Z"
+      ],
+      "RESPONSE_TIME": [
+        430
+      ],
+      "REQUEST_ID": [
+        "REQ-0034"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0034"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Profile"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Profile"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/profile"
+      ],
+      "kafka_topic_name": [
+        "profile-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "profile-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 34, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300033\", \"accountNumber\": \"ACC-100033\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 34, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300033\", \"accountNumber\": \"ACC-100033\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 34, \"email\": \"user33@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 34, \"email\": \"user33@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0034\", \"x-request-id\": \"336220ed-aede-4847-ae02-fccf6de443ab\", \"mfaf-transaction\": \"TX-DEMO-006\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"454125f4-89d2-41b4-baf7-95b07441dae9\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "profile-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:03:51.421Z",
+      34
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "048ad45c0aa54aeeadf8",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:03:58.458"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:03:58.458"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:03:58.458Z"
+      ],
+      "RESPONSE_TIME": [
+        770
+      ],
+      "REQUEST_ID": [
+        "REQ-0035"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0035"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "sale-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "sale-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 35, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300034\", \"accountNumber\": \"ACC-100034\", \"cartId\": \"C-134\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 35, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300034\", \"accountNumber\": \"ACC-100034\", \"cartId\": \"C-134\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 35, \"email\": \"user34@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 35, \"email\": \"user34@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0035\", \"x-request-id\": \"3e833d8c-ddaf-4ab0-8baa-21976e42b865\", \"mfaf-transaction\": \"TX-DEMO-006\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"5a99392b-000c-4e04-b255-343dfafd313a\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "sale-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:03:58.458Z",
+      35
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "89e8a82147ed43ba8f83",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/promotion/check"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/promotion/check"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:04:05.495"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:04:05.495"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:04:05.495Z"
+      ],
+      "RESPONSE_TIME": [
+        1050
+      ],
+      "REQUEST_ID": [
+        "REQ-0036"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0036"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "promotion-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "promotion-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 36, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300035\", \"accountNumber\": \"ACC-100035\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 36, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300035\", \"accountNumber\": \"ACC-100035\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 36, \"email\": \"user35@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 36, \"email\": \"user35@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0036\", \"x-request-id\": \"99e92c19-19f9-4788-a78f-03308cc2b0d4\", \"mfaf-transaction\": \"TX-DEMO-006\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"864767f5-2e5d-419f-a76a-d79f998ebe9e\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "promotion-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:04:05.495Z",
+      36
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "415230b1c3f940ab892a",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        500
+      ],
+      "REQUEST_URI": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:04:12.532"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:04:12.532"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:04:12.532Z"
+      ],
+      "RESPONSE_TIME": [
+        3200
+      ],
+      "REQUEST_ID": [
+        "REQ-0037"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0037"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "payment-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "payment-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 37, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300036\", \"accountNumber\": \"ACC-100036\", \"orderId\": \"O-9036\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 37, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300036\", \"accountNumber\": \"ACC-100036\", \"orderId\": \"O-9036\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"50001\", \"resultDescription\": \"Internal Server Error\", \"developerMessage\": \"Payment gateway timeout\"}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"50001\", \"resultDescription\": \"Internal Server Error\", \"developerMessage\": \"Payment gateway timeout\"}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0037\", \"x-request-id\": \"d7cd488c-d195-4933-9d00-84ee2aa31eff\", \"mfaf-transaction\": \"TX-DEMO-007\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"515f9ef7-bf35-4673-8ba5-5dc0f7bc1147\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "payment-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:04:12.532Z",
+      37
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "dd4e41c61a2a43729216",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:04:19.569"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:04:19.569"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:04:19.569Z"
+      ],
+      "RESPONSE_TIME": [
+        230
+      ],
+      "REQUEST_ID": [
+        "REQ-0038"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0038"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "order-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "order-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 38, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300037\", \"accountNumber\": \"ACC-100037\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 38, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300037\", \"accountNumber\": \"ACC-100037\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 38, \"email\": \"user37@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 38, \"email\": \"user37@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0038\", \"x-request-id\": \"4441f068-9cb1-4490-9fc8-24ac5f6ee118\", \"mfaf-transaction\": \"TX-DEMO-007\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"6b8738fe-1fa8-4767-9163-0af8b31d7f2f\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "order-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:04:19.569Z",
+      38
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "ef815155b92c458dadf3",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/catalog/products"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/catalog/products"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:04:26.606"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:04:26.606"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:04:26.606Z"
+      ],
+      "RESPONSE_TIME": [
+        1300
+      ],
+      "REQUEST_ID": [
+        "REQ-0039"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0039"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Home"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Home"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/home"
+      ],
+      "kafka_topic_name": [
+        "catalog-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "catalog-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 39, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300038\", \"accountNumber\": \"ACC-100038\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 39, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300038\", \"accountNumber\": \"ACC-100038\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 39, \"email\": \"user38@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 39, \"email\": \"user38@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0039\", \"x-request-id\": \"376793cc-bb7e-4243-9e9e-632a957ac093\", \"mfaf-transaction\": \"TX-DEMO-007\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"d74c7daa-ef33-439e-bc6f-c1e3c0d41b4a\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "catalog-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:04:26.606Z",
+      39
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "3f5e1fc8812d46699574",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/admin/report"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/admin/report"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:04:33.643"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:04:33.643"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:04:33.643Z"
+      ],
+      "RESPONSE_TIME": [
+        240
+      ],
+      "REQUEST_ID": [
+        "REQ-0040"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0040"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Admin Report"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Admin Report"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/admin-report"
+      ],
+      "kafka_topic_name": [
+        "report-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "report-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 40, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300039\", \"accountNumber\": \"ACC-100039\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 40, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300039\", \"accountNumber\": \"ACC-100039\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 40, \"email\": \"user39@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 40, \"email\": \"user39@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0040\", \"x-request-id\": \"d4cdbcc2-9c13-4667-ac60-e965347ed784\", \"mfaf-transaction\": \"TX-DEMO-007\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"98e297c3-6433-40a6-8b85-e479fc29276a\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "report-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:04:33.643Z",
+      40
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "d58f71a0bee94b13819f",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/home/config"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/home/config"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:04:40.680"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:04:40.680"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:04:40.680Z"
+      ],
+      "RESPONSE_TIME": [
+        120
+      ],
+      "REQUEST_ID": [
+        "REQ-0041"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0041"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Home"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Home"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/home"
+      ],
+      "kafka_topic_name": [
+        "config-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "config-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 41, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300040\", \"accountNumber\": \"ACC-100040\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 41, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300040\", \"accountNumber\": \"ACC-100040\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 41, \"email\": \"user40@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 41, \"email\": \"user40@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0041\", \"x-request-id\": \"81e7c371-d418-4395-9555-0e08e7f29920\", \"mfaf-transaction\": \"TX-DEMO-007\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"241accc0-143e-438c-8822-340c7ac3f8b0\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "config-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:04:40.680Z",
+      41
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "6eaba88d16e04701a7cf",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/profile"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/profile"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:04:47.717"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:04:47.717"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:04:47.717Z"
+      ],
+      "RESPONSE_TIME": [
+        480
+      ],
+      "REQUEST_ID": [
+        "REQ-0042"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0042"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Profile"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Profile"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/profile"
+      ],
+      "kafka_topic_name": [
+        "profile-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "profile-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 42, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300041\", \"accountNumber\": \"ACC-100041\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 42, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300041\", \"accountNumber\": \"ACC-100041\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 42, \"email\": \"user41@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 42, \"email\": \"user41@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0042\", \"x-request-id\": \"d7164653-7e63-4c2f-82d6-2c3dbdc330cf\", \"mfaf-transaction\": \"TX-DEMO-007\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"b954d6e9-f92f-4e16-a51c-678a32f22341\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "profile-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:04:47.717Z",
+      42
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "acefe2949b6a4ce9a72f",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:04:54.754"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:04:54.754"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:04:54.754Z"
+      ],
+      "RESPONSE_TIME": [
+        710
+      ],
+      "REQUEST_ID": [
+        "REQ-0043"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0043"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "sale-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "sale-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 43, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300042\", \"accountNumber\": \"ACC-100042\", \"cartId\": \"C-142\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 43, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300042\", \"accountNumber\": \"ACC-100042\", \"cartId\": \"C-142\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 43, \"email\": \"user42@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 43, \"email\": \"user42@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0043\", \"x-request-id\": \"d376507f-55c2-41f9-bdf7-3ec2c4407d0f\", \"mfaf-transaction\": \"TX-DEMO-008\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"f9e151f3-70a7-4782-9587-8243a1043248\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "sale-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:04:54.754Z",
+      43
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "614c40eb6f9b4a488403",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/promotion/check"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/promotion/check"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:05:01.791"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:05:01.791"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:05:01.791Z"
+      ],
+      "RESPONSE_TIME": [
+        690
+      ],
+      "REQUEST_ID": [
+        "REQ-0044"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0044"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "promotion-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "promotion-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 44, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300043\", \"accountNumber\": \"ACC-100043\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 44, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300043\", \"accountNumber\": \"ACC-100043\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 44, \"email\": \"user43@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 44, \"email\": \"user43@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0044\", \"x-request-id\": \"6b81bd42-3bf7-4680-be27-2bc427f50a55\", \"mfaf-transaction\": \"TX-DEMO-008\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"39d9c7c1-903d-4b88-b26c-86b7264cf59e\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "promotion-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:05:01.791Z",
+      44
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "bb2c11382b7f46e6816d",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        500
+      ],
+      "REQUEST_URI": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:05:08.828"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:05:08.828"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:05:08.828Z"
+      ],
+      "RESPONSE_TIME": [
+        3200
+      ],
+      "REQUEST_ID": [
+        "REQ-0045"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0045"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "payment-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "payment-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 45, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300044\", \"accountNumber\": \"ACC-100044\", \"orderId\": \"O-9044\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 45, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300044\", \"accountNumber\": \"ACC-100044\", \"orderId\": \"O-9044\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"50001\", \"resultDescription\": \"Internal Server Error\", \"developerMessage\": \"Payment gateway timeout\"}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"50001\", \"resultDescription\": \"Internal Server Error\", \"developerMessage\": \"Payment gateway timeout\"}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0045\", \"x-request-id\": \"c30a1dbe-dd21-4223-a7bd-3b3293d2edfa\", \"mfaf-transaction\": \"TX-DEMO-008\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"ece5f0be-fe7b-4412-a581-0abdd206ba3b\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "payment-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:05:08.828Z",
+      45
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "fa0c3197e6f14180993a",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:05:15.865"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:05:15.865"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:05:15.865Z"
+      ],
+      "RESPONSE_TIME": [
+        130
+      ],
+      "REQUEST_ID": [
+        "REQ-0046"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0046"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "order-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "order-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 46, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300045\", \"accountNumber\": \"ACC-100045\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 46, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300045\", \"accountNumber\": \"ACC-100045\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 46, \"email\": \"user45@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 46, \"email\": \"user45@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0046\", \"x-request-id\": \"f809a02e-aa66-4344-9121-8bd7d77f7af8\", \"mfaf-transaction\": \"TX-DEMO-008\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"4b51e979-7478-439d-8fe2-648d7a705e53\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "order-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:05:15.865Z",
+      46
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "dad9fb0d6d7448f6ae18",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/catalog/products"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/catalog/products"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:05:22.902"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:05:22.902"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:05:22.902Z"
+      ],
+      "RESPONSE_TIME": [
+        1300
+      ],
+      "REQUEST_ID": [
+        "REQ-0047"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0047"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Home"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Home"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/home"
+      ],
+      "kafka_topic_name": [
+        "catalog-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "catalog-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 47, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300046\", \"accountNumber\": \"ACC-100046\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 47, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300046\", \"accountNumber\": \"ACC-100046\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 47, \"email\": \"user46@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 47, \"email\": \"user46@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0047\", \"x-request-id\": \"412d8dab-4d88-478b-9587-1cd601809382\", \"mfaf-transaction\": \"TX-DEMO-008\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"4747089b-8e74-4e4b-8879-159210f9b003\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "catalog-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:05:22.902Z",
+      47
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "9ef5e88bb946422a944d",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/admin/report"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/admin/report"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:05:29.939"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:05:29.939"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:05:29.939Z"
+      ],
+      "RESPONSE_TIME": [
+        240
+      ],
+      "REQUEST_ID": [
+        "REQ-0048"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0048"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Admin Report"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Admin Report"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/admin-report"
+      ],
+      "kafka_topic_name": [
+        "report-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "report-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 48, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300047\", \"accountNumber\": \"ACC-100047\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 48, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300047\", \"accountNumber\": \"ACC-100047\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 48, \"email\": \"user47@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 48, \"email\": \"user47@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0048\", \"x-request-id\": \"e849b715-2160-4dd1-90bb-e5fcdc84b6d4\", \"mfaf-transaction\": \"TX-DEMO-008\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"424f6329-c1b2-4f6d-a876-f43ccd50c6a3\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "report-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:05:29.939Z",
+      48
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "381884a7db6e41ac8293",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/home/config"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/home/config"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:05:36.976"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:05:36.976"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:05:36.976Z"
+      ],
+      "RESPONSE_TIME": [
+        240
+      ],
+      "REQUEST_ID": [
+        "REQ-0049"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0049"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Home"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Home"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/home"
+      ],
+      "kafka_topic_name": [
+        "config-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "config-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 49, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300048\", \"accountNumber\": \"ACC-100048\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 49, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300048\", \"accountNumber\": \"ACC-100048\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 49, \"email\": \"user48@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 49, \"email\": \"user48@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0049\", \"x-request-id\": \"fe9c25fa-514b-41b5-bae8-602b668f72e8\", \"mfaf-transaction\": \"TX-DEMO-009\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"f7a068c6-ec0c-4523-8ae9-522d0278e9e6\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "config-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:05:36.976Z",
+      49
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "7cf07966e7d94f0e835f",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/profile"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/profile"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:05:43.113"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:05:43.113"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:05:43.113Z"
+      ],
+      "RESPONSE_TIME": [
+        180
+      ],
+      "REQUEST_ID": [
+        "REQ-0050"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0050"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Profile"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Profile"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/profile"
+      ],
+      "kafka_topic_name": [
+        "profile-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "profile-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 50, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300049\", \"accountNumber\": \"ACC-100049\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 50, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300049\", \"accountNumber\": \"ACC-100049\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 50, \"email\": \"user49@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 50, \"email\": \"user49@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0050\", \"x-request-id\": \"462ed048-2b29-49cf-9c23-aa41b241cd79\", \"mfaf-transaction\": \"TX-DEMO-009\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"19aaaa50-6de5-4b92-b974-4f65934f4d09\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "profile-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:05:43.113Z",
+      50
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "c97d7dad5af548ceb590",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:05:50.150"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:05:50.150"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:05:50.150Z"
+      ],
+      "RESPONSE_TIME": [
+        650
+      ],
+      "REQUEST_ID": [
+        "REQ-0051"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0051"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "sale-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "sale-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 51, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300050\", \"accountNumber\": \"ACC-100050\", \"cartId\": \"C-150\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 51, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300050\", \"accountNumber\": \"ACC-100050\", \"cartId\": \"C-150\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 51, \"email\": \"user50@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 51, \"email\": \"user50@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0051\", \"x-request-id\": \"092bf6f5-3a72-46d6-8913-d0c707054d7f\", \"mfaf-transaction\": \"TX-DEMO-009\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"53950986-e127-480f-b4c0-224951f7ff05\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "sale-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:05:50.150Z",
+      51
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "9f96c564b5214b8bb8a5",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/promotion/check"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/promotion/check"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:05:57.187"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:05:57.187"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:05:57.187Z"
+      ],
+      "RESPONSE_TIME": [
+        870
+      ],
+      "REQUEST_ID": [
+        "REQ-0052"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0052"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "promotion-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "promotion-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 52, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300051\", \"accountNumber\": \"ACC-100051\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 52, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300051\", \"accountNumber\": \"ACC-100051\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 52, \"email\": \"user51@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 52, \"email\": \"user51@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0052\", \"x-request-id\": \"c651390e-926b-408b-8843-9ad160972847\", \"mfaf-transaction\": \"TX-DEMO-009\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"8af616fe-5905-47cb-a607-dfebff6af244\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "promotion-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:05:57.187Z",
+      52
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "9ec35b71cd5b40528683",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        500
+      ],
+      "REQUEST_URI": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:06:04.224"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:06:04.224"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:06:04.224Z"
+      ],
+      "RESPONSE_TIME": [
+        3200
+      ],
+      "REQUEST_ID": [
+        "REQ-0053"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0053"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "payment-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "payment-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 53, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300052\", \"accountNumber\": \"ACC-100052\", \"orderId\": \"O-9052\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 53, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300052\", \"accountNumber\": \"ACC-100052\", \"orderId\": \"O-9052\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"50001\", \"resultDescription\": \"Internal Server Error\", \"developerMessage\": \"Payment gateway timeout\"}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"50001\", \"resultDescription\": \"Internal Server Error\", \"developerMessage\": \"Payment gateway timeout\"}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0053\", \"x-request-id\": \"03be07df-3b68-4cae-bdf3-c57ac39c5ae4\", \"mfaf-transaction\": \"TX-DEMO-009\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"a1687d12-c0d3-4112-86c5-ebde0110661a\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "payment-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:06:04.224Z",
+      53
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "a0787810cc454c05a8bb",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:06:11.261"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:06:11.261"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:06:11.261Z"
+      ],
+      "RESPONSE_TIME": [
+        280
+      ],
+      "REQUEST_ID": [
+        "REQ-0054"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0054"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "order-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "order-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 54, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300053\", \"accountNumber\": \"ACC-100053\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 54, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300053\", \"accountNumber\": \"ACC-100053\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 54, \"email\": \"user53@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 54, \"email\": \"user53@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0054\", \"x-request-id\": \"80205e58-1d82-46af-b89f-0bfeda805bc4\", \"mfaf-transaction\": \"TX-DEMO-009\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"0b2004ff-ffed-404e-acc6-0a1026fd1aa6\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "order-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:06:11.261Z",
+      54
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "c2a876013d3c4881a33c",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/catalog/products"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/catalog/products"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:06:18.298"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:06:18.298"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:06:18.298Z"
+      ],
+      "RESPONSE_TIME": [
+        1300
+      ],
+      "REQUEST_ID": [
+        "REQ-0055"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0055"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Home"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Home"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/home"
+      ],
+      "kafka_topic_name": [
+        "catalog-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "catalog-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 55, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300054\", \"accountNumber\": \"ACC-100054\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 55, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300054\", \"accountNumber\": \"ACC-100054\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 55, \"email\": \"user54@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 55, \"email\": \"user54@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0055\", \"x-request-id\": \"d78ae334-4272-477f-b948-2b50265e2312\", \"mfaf-transaction\": \"TX-DEMO-010\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"c761ceb8-d8ec-4a30-b284-a1afe2aa20e3\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "catalog-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:06:18.298Z",
+      55
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "9c4abe673e744d2c9854",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/admin/report"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/admin/report"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:06:25.335"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:06:25.335"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:06:25.335Z"
+      ],
+      "RESPONSE_TIME": [
+        240
+      ],
+      "REQUEST_ID": [
+        "REQ-0056"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0056"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Admin Report"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Admin Report"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/admin-report"
+      ],
+      "kafka_topic_name": [
+        "report-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "report-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 56, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300055\", \"accountNumber\": \"ACC-100055\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 56, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300055\", \"accountNumber\": \"ACC-100055\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 56, \"email\": \"user55@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 56, \"email\": \"user55@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0056\", \"x-request-id\": \"1e35e2fd-6b2b-4b5f-8a76-74ba79043dcb\", \"mfaf-transaction\": \"TX-DEMO-010\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"4ef8e626-0276-4d82-b89a-6ac132d4ea9a\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "report-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:06:25.335Z",
+      56
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "7bbbc5dbcf81453b9670",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/home/config"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/home/config"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:06:32.372"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:06:32.372"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:06:32.372Z"
+      ],
+      "RESPONSE_TIME": [
+        160
+      ],
+      "REQUEST_ID": [
+        "REQ-0057"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0057"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Home"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Home"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/home"
+      ],
+      "kafka_topic_name": [
+        "config-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "config-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 57, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300056\", \"accountNumber\": \"ACC-100056\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 57, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300056\", \"accountNumber\": \"ACC-100056\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 57, \"email\": \"user56@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 57, \"email\": \"user56@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0057\", \"x-request-id\": \"cf64e71e-6075-4460-a739-ac933a56a5c8\", \"mfaf-transaction\": \"TX-DEMO-010\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"c53b9f28-ffb8-423c-9cec-b1c6ca2c90fa\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "config-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:06:32.372Z",
+      57
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "8e6c1c3cf3e14b23bda6",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/profile"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/profile"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:06:39.409"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:06:39.409"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:06:39.409Z"
+      ],
+      "RESPONSE_TIME": [
+        230
+      ],
+      "REQUEST_ID": [
+        "REQ-0058"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0058"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Profile"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Profile"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/profile"
+      ],
+      "kafka_topic_name": [
+        "profile-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "profile-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 58, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300057\", \"accountNumber\": \"ACC-100057\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 58, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300057\", \"accountNumber\": \"ACC-100057\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 58, \"email\": \"user57@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 58, \"email\": \"user57@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0058\", \"x-request-id\": \"82c022d5-3bd9-4372-a770-284fd04719b0\", \"mfaf-transaction\": \"TX-DEMO-010\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"1d3fbaf0-b75c-43b6-9ae8-4dc075b2bd3a\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "profile-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:06:39.409Z",
+      58
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "ed4c941c303743f6adf7",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:06:46.446"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:06:46.446"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:06:46.446Z"
+      ],
+      "RESPONSE_TIME": [
+        590
+      ],
+      "REQUEST_ID": [
+        "REQ-0059"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0059"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "sale-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "sale-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 59, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300058\", \"accountNumber\": \"ACC-100058\", \"cartId\": \"C-158\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 59, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300058\", \"accountNumber\": \"ACC-100058\", \"cartId\": \"C-158\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 59, \"email\": \"user58@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 59, \"email\": \"user58@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0059\", \"x-request-id\": \"0ff8b14e-d6e2-438a-8ef8-6453fa0eec87\", \"mfaf-transaction\": \"TX-DEMO-010\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"7b609852-12d1-4fc1-a7b2-65b5351003ec\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "sale-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:06:46.446Z",
+      59
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "7f819a538f9448a8b5d4",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/promotion/check"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/promotion/check"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:06:53.483"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:06:53.483"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:06:53.483Z"
+      ],
+      "RESPONSE_TIME": [
+        1050
+      ],
+      "REQUEST_ID": [
+        "REQ-0060"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0060"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "promotion-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "promotion-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 60, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300059\", \"accountNumber\": \"ACC-100059\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 60, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300059\", \"accountNumber\": \"ACC-100059\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 60, \"email\": \"user59@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 60, \"email\": \"user59@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0060\", \"x-request-id\": \"d6e192f5-0639-40e2-a121-cbed782b100a\", \"mfaf-transaction\": \"TX-DEMO-010\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"8f73599a-3863-4750-8c6a-f8d6dbcf62b1\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "promotion-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:06:53.483Z",
+      60
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "bc4379d2cda54443914d",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        500
+      ],
+      "REQUEST_URI": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:07:00.520"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:07:00.520"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:07:00.520Z"
+      ],
+      "RESPONSE_TIME": [
+        3200
+      ],
+      "REQUEST_ID": [
+        "REQ-0061"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0061"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "payment-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "payment-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 61, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300060\", \"accountNumber\": \"ACC-100060\", \"orderId\": \"O-9060\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 61, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300060\", \"accountNumber\": \"ACC-100060\", \"orderId\": \"O-9060\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"50001\", \"resultDescription\": \"Internal Server Error\", \"developerMessage\": \"Payment gateway timeout\"}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"50001\", \"resultDescription\": \"Internal Server Error\", \"developerMessage\": \"Payment gateway timeout\"}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0061\", \"x-request-id\": \"66e6b350-1bb1-4fc8-86ec-c728538c905e\", \"mfaf-transaction\": \"TX-DEMO-011\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"81f1913f-dc85-4dca-afe9-212030e52e49\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "payment-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:07:00.520Z",
+      61
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "e61cd3af06a64f62a748",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:07:07.557"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:07:07.557"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:07:07.557Z"
+      ],
+      "RESPONSE_TIME": [
+        180
+      ],
+      "REQUEST_ID": [
+        "REQ-0062"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0062"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "order-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "order-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 62, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300061\", \"accountNumber\": \"ACC-100061\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 62, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300061\", \"accountNumber\": \"ACC-100061\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 62, \"email\": \"user61@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 62, \"email\": \"user61@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0062\", \"x-request-id\": \"44d5f9c7-d478-45e9-b4a3-4ed59fbf5465\", \"mfaf-transaction\": \"TX-DEMO-011\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"bdfe1cd8-13b4-43e2-93f2-7014323f983d\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "order-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:07:07.557Z",
+      62
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "297021456f924ec9a959",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/catalog/products"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/catalog/products"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:07:14.594"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:07:14.594"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:07:14.594Z"
+      ],
+      "RESPONSE_TIME": [
+        1300
+      ],
+      "REQUEST_ID": [
+        "REQ-0063"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0063"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Home"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Home"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/home"
+      ],
+      "kafka_topic_name": [
+        "catalog-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "catalog-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 63, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300062\", \"accountNumber\": \"ACC-100062\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 63, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300062\", \"accountNumber\": \"ACC-100062\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 63, \"email\": \"user62@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 63, \"email\": \"user62@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0063\", \"x-request-id\": \"8b283223-8956-4811-bf2e-3247914b22a9\", \"mfaf-transaction\": \"TX-DEMO-011\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"9357e73d-9df5-4ad0-89ff-c0670c2c452b\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "catalog-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:07:14.594Z",
+      63
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "e4e8f3972bf74700bad6",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/admin/report"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/admin/report"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:07:21.631"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:07:21.631"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:07:21.631Z"
+      ],
+      "RESPONSE_TIME": [
+        240
+      ],
+      "REQUEST_ID": [
+        "REQ-0064"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0064"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Admin Report"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Admin Report"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/admin-report"
+      ],
+      "kafka_topic_name": [
+        "report-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "report-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 64, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300063\", \"accountNumber\": \"ACC-100063\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 64, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300063\", \"accountNumber\": \"ACC-100063\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 64, \"email\": \"user63@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 64, \"email\": \"user63@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0064\", \"x-request-id\": \"d9598ed0-fa12-4215-9c88-77b9f899f592\", \"mfaf-transaction\": \"TX-DEMO-011\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"7dc1096b-dcac-4d7c-bd15-abfbf7cd8ba4\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "report-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:07:21.631Z",
+      64
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "d0dcaaeea31f4e2a8048",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/home/config"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/home/config"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:07:28.668"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:07:28.668"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:07:28.668Z"
+      ],
+      "RESPONSE_TIME": [
+        280
+      ],
+      "REQUEST_ID": [
+        "REQ-0065"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0065"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Home"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Home"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/home"
+      ],
+      "kafka_topic_name": [
+        "config-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "config-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 65, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300064\", \"accountNumber\": \"ACC-100064\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 65, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300064\", \"accountNumber\": \"ACC-100064\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 65, \"email\": \"user64@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 65, \"email\": \"user64@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0065\", \"x-request-id\": \"2865c0da-e20f-4df5-8948-20ff48a43c97\", \"mfaf-transaction\": \"TX-DEMO-011\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"ed7c233d-6dda-4445-bfc4-7a1b65053eb6\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "config-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:07:28.668Z",
+      65
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "b9e81325facd4c51bf12",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/profile"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/profile"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:07:35.705"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:07:35.705"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:07:35.705Z"
+      ],
+      "RESPONSE_TIME": [
+        280
+      ],
+      "REQUEST_ID": [
+        "REQ-0066"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0066"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Profile"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Profile"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/profile"
+      ],
+      "kafka_topic_name": [
+        "profile-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "profile-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 66, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300065\", \"accountNumber\": \"ACC-100065\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 66, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300065\", \"accountNumber\": \"ACC-100065\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 66, \"email\": \"user65@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 66, \"email\": \"user65@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0066\", \"x-request-id\": \"48ae6d89-311d-4a12-a5d3-094e53366168\", \"mfaf-transaction\": \"TX-DEMO-011\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"24fc20bf-fb01-4dad-8290-09b9739e9808\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "profile-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:07:35.705Z",
+      66
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "f053a7df2f89437aaf31",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:07:42.742"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:07:42.742"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:07:42.742Z"
+      ],
+      "RESPONSE_TIME": [
+        530
+      ],
+      "REQUEST_ID": [
+        "REQ-0067"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0067"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "sale-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "sale-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 67, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300066\", \"accountNumber\": \"ACC-100066\", \"cartId\": \"C-166\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 67, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300066\", \"accountNumber\": \"ACC-100066\", \"cartId\": \"C-166\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 67, \"email\": \"user66@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 67, \"email\": \"user66@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0067\", \"x-request-id\": \"2f6b1b44-29e7-4ba7-acbb-c128557a92ba\", \"mfaf-transaction\": \"TX-DEMO-012\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"f4ec3e72-b3b6-4957-ab22-7158bdee2d98\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "sale-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:07:42.742Z",
+      67
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "2c03a5508b55482a9837",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/promotion/check"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/promotion/check"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:07:49.779"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:07:49.779"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:07:49.779Z"
+      ],
+      "RESPONSE_TIME": [
+        690
+      ],
+      "REQUEST_ID": [
+        "REQ-0068"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0068"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "promotion-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "promotion-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 68, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300067\", \"accountNumber\": \"ACC-100067\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 68, \"username\": \"tester3\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300067\", \"accountNumber\": \"ACC-100067\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 68, \"email\": \"user67@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 68, \"email\": \"user67@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0068\", \"x-request-id\": \"36334bd6-3e8b-4f5a-b944-abf5be9c4888\", \"mfaf-transaction\": \"TX-DEMO-012\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"47b4be2d-417f-4251-b4a1-992a8040513c\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "promotion-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:07:49.779Z",
+      68
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "890dc330691e41babf27",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        500
+      ],
+      "REQUEST_URI": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "POST"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:07:56.816"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:07:56.816"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:07:56.816Z"
+      ],
+      "RESPONSE_TIME": [
+        3200
+      ],
+      "REQUEST_ID": [
+        "REQ-0069"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0069"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "payment-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "payment-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 69, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300068\", \"accountNumber\": \"ACC-100068\", \"orderId\": \"O-9068\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 69, \"username\": \"tester4\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300068\", \"accountNumber\": \"ACC-100068\", \"orderId\": \"O-9068\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"50001\", \"resultDescription\": \"Internal Server Error\", \"developerMessage\": \"Payment gateway timeout\"}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"50001\", \"resultDescription\": \"Internal Server Error\", \"developerMessage\": \"Payment gateway timeout\"}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0069\", \"x-request-id\": \"deba4b28-4a74-4aa9-ba1e-d4efcac3591e\", \"mfaf-transaction\": \"TX-DEMO-012\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"424af519-7b2a-4323-af82-fa59416d95d7\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "payment-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:07:56.816Z",
+      69
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "bd1d6b33fa5648f68f1d",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:08:03.853"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:08:03.853"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:08:03.853Z"
+      ],
+      "RESPONSE_TIME": [
+        330
+      ],
+      "REQUEST_ID": [
+        "REQ-0070"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0070"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Checkout"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/checkout"
+      ],
+      "kafka_topic_name": [
+        "order-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "order-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 70, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300069\", \"accountNumber\": \"ACC-100069\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 70, \"username\": \"tester5\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300069\", \"accountNumber\": \"ACC-100069\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 70, \"email\": \"user69@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 70, \"email\": \"user69@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0070\", \"x-request-id\": \"016f8604-6f35-4b68-836c-ea5c314060e8\", \"mfaf-transaction\": \"TX-DEMO-012\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"783306b5-e9d1-4775-8a68-9896432be79d\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "order-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:08:03.853Z",
+      70
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "ef3ddc00513843bda263",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/catalog/products"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/catalog/products"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:08:10.890"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:08:10.890"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:08:10.890Z"
+      ],
+      "RESPONSE_TIME": [
+        1300
+      ],
+      "REQUEST_ID": [
+        "REQ-0071"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0071"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Home"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Home"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/home"
+      ],
+      "kafka_topic_name": [
+        "catalog-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "catalog-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 71, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300070\", \"accountNumber\": \"ACC-100070\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 71, \"username\": \"tester1\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300070\", \"accountNumber\": \"ACC-100070\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 71, \"email\": \"user70@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 71, \"email\": \"user70@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0071\", \"x-request-id\": \"dcdce38e-434c-4b0e-8cb2-6e0651940056\", \"mfaf-transaction\": \"TX-DEMO-012\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"07d15cc8-6a49-4811-bd58-2b76b732282b\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "catalog-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:08:10.890Z",
+      71
+    ]
+  },
+  {
+    "_index": ".ds-sub-qa-demo-sit-info-logs-2026.08.21-000001",
+    "_id": "4e87b72382544416ae59",
+    "_version": 1,
+    "_score": null,
+    "fields": {
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "REQUEST_URI": [
+        "/api/v1/admin/report"
+      ],
+      "REQUEST_URI.keyword": [
+        "/api/v1/admin/report"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "REQUEST_METHOD.keyword": [
+        "GET"
+      ],
+      "TIMESTAMP": [
+        "2026-08-21 09:08:17.927"
+      ],
+      "TIMESTAMP.keyword": [
+        "2026-08-21 09:08:17.927"
+      ],
+      "@timestamp": [
+        "2026-08-21T02:08:17.927Z"
+      ],
+      "RESPONSE_TIME": [
+        240
+      ],
+      "REQUEST_ID": [
+        "REQ-0072"
+      ],
+      "REQUEST_ID.keyword": [
+        "REQ-0072"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Admin Report"
+      ],
+      "CLIENT_PAGE_NAME.keyword": [
+        "Admin Report"
+      ],
+      "CLIENT_PAGE_URL": [
+        "/demo/admin-report"
+      ],
+      "kafka_topic_name": [
+        "report-service"
+      ],
+      "kafka_topic_name.keyword": [
+        "report-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"sequence\": 72, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300071\", \"accountNumber\": \"ACC-100071\"}"
+      ],
+      "REQUEST_BODY.keyword": [
+        "{\"sequence\": 72, \"username\": \"tester2\", \"password\": \"DemoPassword123\", \"mobileNo\": \"0812300071\", \"accountNumber\": \"ACC-100071\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 72, \"email\": \"user71@example.com\"}}"
+      ],
+      "RESPONSE_BODY.keyword": [
+        "{\"resultCode\": \"20000\", \"resultDescription\": \"Success\", \"data\": {\"sequence\": 72, \"email\": \"user71@example.com\"}}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"content-type\": \"application/json\", \"x-api-request-id\": \"REQ-0072\", \"x-request-id\": \"2e021117-14d7-409f-a991-ec5c24333001\", \"mfaf-transaction\": \"TX-DEMO-012\", \"x-authorization\": \"Bearer eyJhbGciOiJIUzI1NiJ9.demo.signature\", \"mfaf-device\": \"953e3609-c22b-4e4a-ab31-5583b7bab3d8\", \"user-agent\": \"QA-Demo-App/1.0\"}"
+      ],
+      "REQUEST_PARAMS": [
+        "{}"
+      ],
+      "REGION": [
+        "asse"
+      ],
+      "tags": [
+        "report-service"
+      ]
+    },
+    "sort": [
+      "2026-08-21T02:08:17.927Z",
+      72
+    ]
+  }
+]

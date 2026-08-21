@@ -154,7 +154,7 @@ class App(tk.Tk):
             "About QA Evidence Builder",
             (
                 "QA Evidence Builder\n"
-                "Version 0.3.2\n\n"
+                "Version 1.0.0\n\n"
                 "Local-only QA log analysis and evidence tool."
             ),
         )
@@ -470,7 +470,7 @@ class App(tk.Tk):
 
         ttk.Label(
             footer_tools,
-            text="QA Evidence Builder V3.2 0.3.2",
+            text="QA Evidence Builder v1.0",
             anchor="center",
         ).pack(
             fill="x",

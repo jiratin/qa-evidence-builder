@@ -1,0 +1,175 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release tag to build, e.g. v1.0.0"
+        required: true
+        default: "v1.0.0"
+
+permissions:
+  contents: write
+
+jobs:
+  build-macos:
+    name: Build macOS app
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pyinstaller
+
+      - name: Build macOS app
+        run: |
+          pyinstaller \
+            --noconfirm \
+            --clean \
+            --windowed \
+            --name "QA Evidence Builder" \
+            --paths src \
+            run.py
+
+      - name: Package macOS app
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent \
+            "dist/QA Evidence Builder.app" \
+            "QA-Evidence-Builder-macOS.zip"
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-evidence-builder-macos
+          path: QA-Evidence-Builder-macOS.zip
+          if-no-files-found: error
+
+  build-windows:
+    name: Build Windows executable
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install build dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pyinstaller
+
+      - name: Build Windows executable
+        shell: pwsh
+        run: |
+          pyinstaller `
+            --noconfirm `
+            --clean `
+            --onefile `
+            --windowed `
+            --name "QA-Evidence-Builder-Windows" `
+            --paths src `
+            run.py
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-evidence-builder-windows
+          path: dist/QA-Evidence-Builder-Windows.exe
+          if-no-files-found: error
+
+  release:
+    name: Create GitHub Release
+    needs:
+      - build-macos
+      - build-windows
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Resolve release tag
+        id: version
+        shell: bash
+        run: |
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            echo "tag=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: qa-evidence-builder-macos
+          path: release-assets
+
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: qa-evidence-builder-windows
+          path: release-assets
+
+      - name: Prepare release notes
+        shell: bash
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          {
+            echo "# QA Evidence Builder ${TAG}"
+            echo
+            echo "## Downloads"
+            echo
+            echo "- **macOS:** \`QA-Evidence-Builder-macOS.zip\`"
+            echo "  - Extract the ZIP and open \`QA Evidence Builder.app\`."
+            echo "- **Windows:** \`QA-Evidence-Builder-Windows.exe\`"
+            echo "  - Download and run the executable directly."
+            echo
+            echo "## Notes"
+            echo
+            echo "- Processing is local-only."
+            echo "- Sensitive-data masking is enabled by default."
+            echo "- Raw log export is optional and disabled by default."
+            echo
+            echo "See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for detailed changes."
+          } > RELEASE_NOTES.md
+
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists. Uploading/replacing assets."
+            gh release upload "$TAG" \
+              release-assets/QA-Evidence-Builder-macOS.zip \
+              release-assets/QA-Evidence-Builder-Windows.exe \
+              --clobber
+            gh release edit "$TAG" \
+              --title "QA Evidence Builder $TAG" \
+              --notes-file RELEASE_NOTES.md
+          else
+            gh release create "$TAG" \
+              release-assets/QA-Evidence-Builder-macOS.zip \
+              release-assets/QA-Evidence-Builder-Windows.exe \
+              --title "QA Evidence Builder $TAG" \
+              --notes-file RELEASE_NOTES.md
+          fi

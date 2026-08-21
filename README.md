@@ -1,149 +1,99 @@
-# QA Evidence Builder — V3.1.1 0.3.1.1
+# QA Evidence Builder
 
-Local-only desktop tool for converting API logs into ticket-ready QA evidence.
+QA Evidence Builder is a local desktop tool for QA, Testers, and Developers to turn API/network logs into focused evidence for defects, tickets, and technical investigation.
 
-## Major V3 changes
+## Version
 
-### Explicit export selection
-V3 no longer exports every currently filtered log by default.
+**v1.0.0**
 
-In the Timeline:
-1. Select one or more rows.
-2. Click `Include Selected`.
-3. Included rows display `☑` in the Export column.
-4. Only included rows are used by:
-   - Copy Included for Ticket
-   - Copy Included as Markdown
-   - Export Included Evidence
+## Key features
 
-Other controls:
-- Exclude Selected
-- Include All Filtered
-- Clear Included
-- Double-click a Timeline row to toggle Include/Exclude
+- Import Elasticsearch/Kibana-style JSON arrays
+- Import HAR network logs
+- Paste JSON directly into the application
+- Timeline view with API, status, response time, request ID, transaction, and error fingerprint
+- Search and filtering by method, status, page, Kafka topic, transaction, errors, and slow APIs
+- Explicit log selection with Include/Exclude, Select All, and Deselect All
+- Transaction grouping
+- Expected Result / Actual Result evidence
+- Sensitive-data masking and custom mask keys
+- Plain-text and Markdown ticket evidence
+- Selective evidence ZIP export
+- Error fingerprinting and repeated-error analysis
+- Built-in Help / User Guide
+- Responsive/scrollable desktop UI
 
-### Select package contents
-Choose exactly what the ZIP contains:
-- summary.txt
-- summary.md
-- Raw log files
-- Sanitized log files
+## Requirements
 
-Raw logs are OFF by default.
+- Python 3
+- Tkinter
 
-### Responsive / dynamic UI
-The previous single-screen layout has been replaced by:
-- Scrollable left sidebar for controls/actions
-- Main Notebook tabs:
-  - Timeline
-  - Transactions
-  - Evidence
-  - Analysis
-- Timeline has horizontal/vertical scrollbars
-- Sidebar remains usable at small window sizes by scrolling instead of hiding buttons
-- Minimum supported window size is 840x560
+On macOS with Homebrew Python 3.14, Tkinter can be installed with:
 
-### V3 analysis
-- Error Fingerprint
-- Duplicate/Similar error detection inside the current log set
-- Auto Defect Summary
-- Configurable additional masking keys
+```bash
+brew install python-tk@3.14
+```
 
-## Supported input
-- Elasticsearch/Kibana-style JSON Array
-- HAR
+## Run locally
 
-## Run on macOS
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python run.py
+```
 
-If Homebrew Python has no Tkinter:
+On Windows, activate the virtual environment with:
 
-    brew install python-tk@3.14
+```powershell
+.venv\Scripts\activate
+python run.py
+```
 
-Then:
+## Basic workflow
 
-    python3 -m venv .venv
-    source .venv/bin/activate
-    python run.py
+1. Import a JSON Array or HAR file.
+2. Filter/search for relevant API logs.
+3. Select the required rows.
+4. Include selected logs, or use Select All for the current filtered result.
+5. Review Evidence and optionally enter Expected/Actual results.
+6. Keep sensitive-data masking enabled.
+7. Copy the evidence for a ticket or export an evidence ZIP.
 
-## Run on Windows
+## Security
 
-    py -m venv .venv
-    .venv\Scripts\activate
-    python run.py
+The application is designed to work locally. Logs may contain tokens, authorization headers, session identifiers, customer information, and other sensitive data. Review evidence before sharing it and prefer sanitized exports.
 
-## Test
+Raw log export is disabled by default.
 
-    python tests/test_core.py
+## Tests
 
-Expected:
+Core tests are located in `tests/`.
 
-    ALL_V3_TESTS_PASSED
+## Repository
 
-## Build standalone
+GitHub: `jiratinteean/qa-evidence-builder`
 
-macOS:
+## Release
 
-    ./build_macos.command
+Initial public release: **v1.0.0**
 
-Windows:
+## Download ready-to-run builds
 
-    build_windows.bat
+Prebuilt binaries are published under **GitHub Releases**.
 
-## Security note
+- **macOS:** download `QA-Evidence-Builder-macOS.zip`, extract it, then open `QA Evidence Builder.app`.
+- **Windows:** download `QA-Evidence-Builder-Windows.exe` and run it directly.
 
-All analysis is local-only.
+Users of these release builds do not need VS Code or a separate Python installation.
 
-Sensitive-data masking is enabled by default. Raw log files are now excluded from
-export by default and must be explicitly enabled in `Package Contents`.
+> macOS and Windows builds are currently unsigned. Gatekeeper or SmartScreen may display a warning until code signing is configured.
 
-Jira integration is intentionally not enabled in V3 because endpoint/auth/project
-schema must be supplied by the organization before a safe implementation can be made.
+## Automated releases
 
+GitHub Actions builds both operating-system versions whenever a version tag such as `v1.0.1` is pushed.
 
-## V3.1 — Help / User Guide
+See [`docs/RELEASING.md`](docs/RELEASING.md) for the release process and manual rebuild instructions.
 
-A new `Help / User Guide` button is available in the Source section.
+## Changelog
 
-The guide contains 30 beginner-friendly topics covering:
-- Getting started
-- JSON / HAR import
-- Timeline
-- Explicit export selection
-- Every filter
-- Transactions
-- Expected / Actual
-- Evidence Preview
-- Masking and extra mask keys
-- Package contents
-- Copy / Markdown / Export
-- Auto Defect Summary
-- Error Fingerprint
-- Duplicate error detection
-- Example QA workflows
-- Troubleshooting
-- Security guidance
-- Quick Start
-
-The Help window is responsive:
-- Resizable
-- Minimum size protection
-- Searchable
-- Scrollable topic list
-- Scrollable article content
-
-
-## V3.1.1 Help visibility fix
-
-The User Guide can now be opened from THREE places:
-
-1. Persistent `Help / User Guide` button in the top-right header.
-2. Application menu: `Help > User Guide`.
-3. Sidebar: `Source > Help / User Guide`.
-
-The header button stays visible independently of sidebar scrolling.
-
-## V3.2
-- Larger checkbox rows/click targets.
-- Added Select All and Deselect All for log export selection.
-- Help / User Guide moved to the bottom of the sidebar directly above the version label.
-- Help menu remains as a secondary access path.
+See [`CHANGELOG.md`](CHANGELOG.md).

@@ -1,0 +1,113 @@
+[
+  {
+    "fields": {
+      "TIMESTAMP": [
+        "2026-08-21 11:03:35.110"
+      ],
+      "REQUEST_URI": [
+        "/api/v1/cart/validate"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "RESPONSE_STATUS": [
+        200
+      ],
+      "RESPONSE_TIME": [
+        420
+      ],
+      "REQUEST_ID": [
+        "REQ-1001"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "kafka_topic_name": [
+        "sale-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"cartId\":\"C-100\",\"token\":\"secret-token\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\":\"20000\",\"resultDescription\":\"Success\"}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"mfaf-transaction\":\"TX-CHECKOUT-001\"}"
+      ]
+    }
+  },
+  {
+    "fields": {
+      "TIMESTAMP": [
+        "2026-08-21 11:03:36.230"
+      ],
+      "REQUEST_URI": [
+        "/api/v1/payment"
+      ],
+      "REQUEST_METHOD": [
+        "POST"
+      ],
+      "RESPONSE_STATUS": [
+        500
+      ],
+      "RESPONSE_TIME": [
+        3211
+      ],
+      "REQUEST_ID": [
+        "REQ-1002"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "kafka_topic_name": [
+        "payment-service"
+      ],
+      "REQUEST_BODY": [
+        "{\"orderId\":\"O-9001\",\"password\":\"secret\"}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\":\"50001\",\"resultDescription\":\"Internal Server Error\"}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"mfaf-transaction\":\"TX-CHECKOUT-001\",\"x-authorization\":\"Bearer abc.def.ghi\"}"
+      ]
+    }
+  },
+  {
+    "fields": {
+      "TIMESTAMP": [
+        "2026-08-21 11:03:38.000"
+      ],
+      "REQUEST_URI": [
+        "/api/v1/order/status"
+      ],
+      "REQUEST_METHOD": [
+        "GET"
+      ],
+      "RESPONSE_STATUS": [
+        404
+      ],
+      "RESPONSE_TIME": [
+        130
+      ],
+      "REQUEST_ID": [
+        "REQ-1003"
+      ],
+      "CLIENT_PAGE_NAME": [
+        "Checkout"
+      ],
+      "kafka_topic_name": [
+        "order-service"
+      ],
+      "REQUEST_BODY": [
+        "{}"
+      ],
+      "RESPONSE_BODY": [
+        "{\"resultCode\":\"40401\",\"resultDescription\":\"Order not found\"}"
+      ],
+      "REQUEST_HEADER": [
+        "{\"mfaf-transaction\":\"TX-CHECKOUT-001\"}"
+      ]
+    }
+  }
+]

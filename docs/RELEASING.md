@@ -11,7 +11,9 @@ The workflow builds the application on both operating systems:
 - macOS GitHub runner -> `QA Evidence Builder.app`
 - Windows GitHub runner -> `QA-Evidence-Builder-Windows.exe`
 
-It then creates or updates the matching GitHub Release.
+It then creates or updates the matching GitHub Release. The description is
+generated from the commits and pull requests since the previous tag, followed
+by the project's download and security notes.
 
 ## Normal release flow
 
@@ -19,7 +21,7 @@ Example for v1.0.1:
 
 ```bash
 git add .
-git commit -m "Release v1.0.1"
+git commit -m "feat: describe the user-visible change"
 git push
 
 git tag -a v1.0.1 -m "QA Evidence Builder v1.0.1"
@@ -27,6 +29,24 @@ git push origin v1.0.1
 ```
 
 Pushing the tag triggers the GitHub Actions release workflow.
+
+## Release description
+
+GitHub generates the `What's Changed` section automatically. Pull requests are
+grouped using `.github/release.yml`; direct commits are also included in the
+comparison. Use meaningful Conventional Commit subjects so the generated notes
+remain useful:
+
+```text
+feat: add responsive evidence inspector
+fix: preserve transaction filter after refresh
+docs: update the release guide
+ci: validate the PySide6 application before packaging
+```
+
+Add the `skip-changelog` label to a pull request only when it should be omitted
+from public release notes. Re-running an existing release updates both its
+assets and its generated description.
 
 ## Rebuild an existing tag manually
 

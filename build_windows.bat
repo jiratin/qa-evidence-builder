@@ -8,7 +8,8 @@ if not exist ".venv" (
 )
 
 call .venv\Scripts\activate
-python -m pip install --upgrade pip pyinstaller
+python -m pip install --upgrade pip
+python -m pip install -r requirements-dev.txt
 
 pyinstaller --noconfirm --windowed --name "QA Evidence Builder" --paths src run.py
 

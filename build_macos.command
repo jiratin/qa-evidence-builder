@@ -8,7 +8,8 @@ if [ ! -d ".venv" ]; then
 fi
 
 source .venv/bin/activate
-python -m pip install --upgrade pip pyinstaller
+python -m pip install --upgrade pip
+python -m pip install -r requirements-dev.txt
 
 pyinstaller \
     --noconfirm \

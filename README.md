@@ -21,24 +21,19 @@ QA Evidence Builder is a local desktop tool for QA, Testers, and Developers to t
 - Selective evidence ZIP export
 - Error fingerprinting and repeated-error analysis
 - Built-in Help / User Guide
-- Responsive/scrollable desktop UI
+- Modern custom-styled PySide6 dashboard with responsive navigation and inspector
 
 ## Requirements
 
-- Python 3
-- Tkinter
-
-On macOS with Homebrew Python 3.14, Tkinter can be installed with:
-
-```bash
-brew install python-tk@3.14
-```
+- Python 3.10 or newer
+- Dependencies from `requirements.txt` (including PySide6)
 
 ## Run locally
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
+python -m pip install -r requirements.txt
 python run.py
 ```
 
@@ -46,6 +41,7 @@ On Windows, activate the virtual environment with:
 
 ```powershell
 .venv\Scripts\activate
+python -m pip install -r requirements.txt
 python run.py
 ```
 
@@ -65,9 +61,18 @@ The application is designed to work locally. Logs may contain tokens, authorizat
 
 Raw log export is disabled by default.
 
-## Tests
+## Checks
 
-Core tests are located in `tests/`.
+```bash
+python -m compileall -q src run.py tests
+python tests/test_core.py
+python tests/test_help.py
+python tests/test_ui_source.py
+python tests/test_ui_smoke.py
+python tests/test_release_workflow.py
+```
+
+Tests are deliberately runnable without a display server; packaged UI smoke checks run in CI.
 
 ## Repository
 

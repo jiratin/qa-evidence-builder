@@ -1,1253 +1,431 @@
+"""Modern PySide6 desktop interface for QA Evidence Builder."""
+
+import sys
 from datetime import datetime
 from pathlib import Path
-import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
-from tkinter.scrolledtext import ScrolledText
 
-from .parser import parse_auto
-from .filtering import filter_entries, group_by_transaction
-from .evidence import build_ticket, build_markdown
-from .exporter import export_package
-from .help_dialog import HelpDialog
-from .analyzer import (
-    error_fingerprint,
-    find_duplicate_errors,
-    build_auto_summary,
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QColor, QKeySequence, QShortcut
+from PySide6.QtWidgets import (
+    QApplication, QCheckBox, QComboBox, QDialog, QFileDialog, QFrame,
+    QGridLayout, QHBoxLayout, QHeaderView, QLabel, QLineEdit, QMainWindow,
+    QMessageBox, QPlainTextEdit, QPushButton, QScrollArea, QSizePolicy,
+    QSplitter, QStackedWidget, QTableWidget, QTableWidgetItem, QTabWidget,
+    QVBoxLayout, QWidget,
 )
 
-class ScrollableSidebar(ttk.Frame):
-    def __init__(self, master, width=300):
-        super().__init__(master)
-        self.canvas = tk.Canvas(
-            self,
-            width=width,
-            highlightthickness=0,
-            borderwidth=0,
-        )
-        self.scrollbar = ttk.Scrollbar(
-            self,
-            orient="vertical",
-            command=self.canvas.yview,
-        )
-        self.inner = ttk.Frame(self.canvas)
+from .analyzer import build_auto_summary, error_fingerprint, find_duplicate_errors
+from .evidence import build_markdown, build_ticket
+from .exporter import export_package
+from .filtering import filter_entries, group_by_transaction
+from .help_dialog import HelpDialog
+from .parser import parse_auto
+from .theme import COLORS, stylesheet
 
-        self.inner.bind(
-            "<Configure>",
-            lambda _event: self.canvas.configure(
-                scrollregion=self.canvas.bbox("all")
-            ),
-        )
 
-        self.window_id = self.canvas.create_window(
-            (0, 0),
-            window=self.inner,
-            anchor="nw",
-        )
+def button(text, slot=None, primary=False, name=None):
+    widget = QPushButton(text)
+    widget.setCursor(Qt.PointingHandCursor)
+    if primary:
+        widget.setObjectName("primary")
+    elif name:
+        widget.setObjectName(name)
+    if slot:
+        widget.clicked.connect(slot)
+    return widget
 
-        self.canvas.configure(
-            yscrollcommand=self.scrollbar.set
-        )
 
-        self.canvas.bind(
-            "<Configure>",
-            self._resize_inner,
-        )
+def panel(layout=None):
+    frame = QFrame()
+    frame.setObjectName("panel")
+    frame.setLayout(layout or QVBoxLayout())
+    return frame
 
-        self.canvas.pack(
-            side="left",
-            fill="both",
-            expand=True,
-        )
 
-        self.scrollbar.pack(
-            side="right",
-            fill="y",
-        )
+class PasteDialog(QDialog):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.setWindowTitle("Paste JSON Array / HAR")
+        self.resize(850, 560)
+        root = QVBoxLayout(self)
+        title = QLabel("Paste JSON")
+        title.setObjectName("pageTitle")
+        root.addWidget(title)
+        self.editor = QPlainTextEdit()
+        self.editor.setPlaceholderText("Paste a JSON array or HAR object here…")
+        root.addWidget(self.editor, 1)
+        actions = QHBoxLayout()
+        actions.addStretch()
+        actions.addWidget(button("Cancel", self.reject))
+        actions.addWidget(button("Load logs", self.accept, primary=True))
+        root.addLayout(actions)
 
-        self.canvas.bind_all(
-            "<MouseWheel>",
-            self._on_mousewheel,
-            add="+",
-        )
 
-    def _resize_inner(self, event):
-        self.canvas.itemconfigure(
-            self.window_id,
-            width=max(event.width, 250),
-        )
-
-    def _on_mousewheel(self, event):
-        if self.winfo_containing(
-            self.winfo_pointerx(),
-            self.winfo_pointery(),
-        ) in self._descendants():
-            delta = -1 if event.delta > 0 else 1
-            self.canvas.yview_scroll(delta, "units")
-
-    def _descendants(self):
-        widgets = {self, self.canvas, self.inner}
-        stack = list(self.inner.winfo_children())
-        while stack:
-            widget = stack.pop()
-            widgets.add(widget)
-            stack.extend(widget.winfo_children())
-        return widgets
-
-class App(tk.Tk):
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-
-        self.title("QA Evidence Builder — V3.1.1 0.3.1.1")
-        self.geometry("1360x820")
-        self.minsize(840, 560)
-
-        self.entries = []
-        self.filtered = []
+        self.setWindowTitle("QA Evidence Builder")
+        self.resize(1480, 900)
+        self.setMinimumSize(860, 620)
+        self.entries, self.filtered = [], []
         self.included_indexes = set()
-
-        self.search_var = tk.StringVar()
-        self.error_only_var = tk.BooleanVar(value=False)
-        self.slow_only_var = tk.BooleanVar(value=False)
-        self.mask_var = tk.BooleanVar(value=True)
-        self.method_var = tk.StringVar(value="ALL")
-        self.status_var = tk.StringVar(value="ALL")
-        self.min_ms_var = tk.StringVar()
-        self.page_var = tk.StringVar()
-        self.topic_var = tk.StringVar()
-        self.transaction_var = tk.StringVar()
-        self.extra_mask_var = tk.StringVar()
-
-        self.export_summary_txt_var = tk.BooleanVar(value=True)
-        self.export_summary_md_var = tk.BooleanVar(value=True)
-        self.export_raw_var = tk.BooleanVar(value=False)
-        self.export_sanitized_var = tk.BooleanVar(value=True)
-
         self._build()
-        self._build_menu()
-
-    def _build_menu(self):
-        menu_bar = tk.Menu(self)
-
-        help_menu = tk.Menu(
-            menu_bar,
-            tearoff=0,
-        )
-        help_menu.add_command(
-            label="User Guide",
-            command=self.open_help,
-        )
-        help_menu.add_separator()
-        help_menu.add_command(
-            label="About",
-            command=self.show_about,
-        )
-
-        menu_bar.add_cascade(
-            label="Help",
-            menu=help_menu,
-        )
-
-        self.config(menu=menu_bar)
-
-    def show_about(self):
-        messagebox.showinfo(
-            "About QA Evidence Builder",
-            (
-                "QA Evidence Builder\n"
-                "Version 1.0.0\n\n"
-                "Local-only QA log analysis and evidence tool."
-            ),
-        )
-
-    def _build(self):
-        self.columnconfigure(1, weight=1)
-        self.rowconfigure(0, weight=1)
-
-        sidebar = ScrollableSidebar(self, width=310)
-        sidebar.grid(
-            row=0,
-            column=0,
-            sticky="nsew",
-        )
-
-        main = ttk.Frame(self, padding=(8, 8, 8, 8))
-        main.grid(
-            row=0,
-            column=1,
-            sticky="nsew",
-        )
-        main.columnconfigure(0, weight=1)
-        main.rowconfigure(1, weight=1)
-
-        self._build_sidebar(sidebar.inner)
-        self._build_main(main)
-
-    def _section(self, parent, title):
-        frame = ttk.LabelFrame(
-            parent,
-            text=title,
-            padding=8,
-        )
-        frame.pack(
-            fill="x",
-            padx=8,
-            pady=(8, 0),
-        )
-        return frame
-
-    def _large_checkbutton(
-        self,
-        parent,
-        text,
-        variable,
-        command=None,
-    ):
-        """Large checkbox row with a bigger click target."""
-        return tk.Checkbutton(
-            parent,
-            text=text,
-            variable=variable,
-            command=command,
-            anchor="w",
-            justify="left",
-            font=("TkDefaultFont", 12),
-            padx=10,
-            pady=8,
-            borderwidth=0,
-            highlightthickness=0,
-            cursor="hand2",
-        )
-
-    def _build_sidebar(self, parent):
-        source = self._section(parent, "Source")
-
-        ttk.Button(
-            source,
-            text="Import JSON / HAR",
-            command=self.import_file,
-        ).pack(fill="x")
-
-        ttk.Button(
-            source,
-            text="Paste JSON",
-            command=self.paste_json,
-        ).pack(fill="x", pady=(6, 0))
-
-        ttk.Button(
-            source,
-            text="Clear",
-            command=self.clear_all,
-        ).pack(fill="x", pady=(6, 0))
-
-        filters = self._section(parent, "Filters")
-
-        for label, var in [
-            ("Search API / ID", self.search_var),
-            ("Minimum response ms", self.min_ms_var),
-            ("Page", self.page_var),
-            ("Kafka Topic", self.topic_var),
-            ("Transaction ID", self.transaction_var),
-        ]:
-            ttk.Label(filters, text=label).pack(
-                anchor="w",
-                pady=(4, 0),
-            )
-            ttk.Entry(
-                filters,
-                textvariable=var,
-            ).pack(fill="x")
-
-        ttk.Label(
-            filters,
-            text="HTTP Method",
-        ).pack(anchor="w", pady=(4, 0))
-
-        ttk.Combobox(
-            filters,
-            textvariable=self.method_var,
-            values=[
-                "ALL", "GET", "POST",
-                "PUT", "PATCH", "DELETE",
-            ],
-            state="readonly",
-        ).pack(fill="x")
-
-        ttk.Label(
-            filters,
-            text="HTTP Status",
-        ).pack(anchor="w", pady=(4, 0))
-
-        ttk.Combobox(
-            filters,
-            textvariable=self.status_var,
-            values=[
-                "ALL", "2xx", "3xx",
-                "4xx", "5xx", "Other",
-            ],
-            state="readonly",
-        ).pack(fill="x")
-
-        self._large_checkbutton(
-            filters,
-            text="Errors only",
-            variable=self.error_only_var,
-            command=self.refresh,
-        ).pack(fill="x", pady=(4, 0))
-
-        self._large_checkbutton(
-            filters,
-            text="Slow only",
-            variable=self.slow_only_var,
-            command=self.refresh,
-        ).pack(fill="x")
-
-        ttk.Button(
-            filters,
-            text="Reset Filters",
-            command=self.reset_filters,
-        ).pack(fill="x", pady=(6, 0))
-
-        selection = self._section(
-            parent,
-            "Export Selection",
-        )
-
-        ttk.Label(
-            selection,
-            text=(
-                "เลือก row ใน Timeline ก่อน แล้วใช้ปุ่มด้านล่าง\n"
-                "ไฟล์ที่ Include เท่านั้นที่จะถูก Export"
-            ),
-            wraplength=260,
-        ).pack(anchor="w")
-
-        ttk.Button(
-            selection,
-            text="Include Selected",
-            command=self.include_selected,
-        ).pack(fill="x", pady=(6, 0))
-
-        ttk.Button(
-            selection,
-            text="Exclude Selected",
-            command=self.exclude_selected,
-        ).pack(fill="x", pady=(4, 0))
-
-        bulk_row = ttk.Frame(selection)
-        bulk_row.pack(fill="x", pady=(8, 0))
-        bulk_row.columnconfigure(0, weight=1)
-        bulk_row.columnconfigure(1, weight=1)
-
-        ttk.Button(
-            bulk_row,
-            text="Select All",
-            command=self.include_all_filtered,
-        ).grid(
-            row=0,
-            column=0,
-            sticky="ew",
-            padx=(0, 3),
-        )
-
-        ttk.Button(
-            bulk_row,
-            text="Deselect All",
-            command=self.clear_included,
-        ).grid(
-            row=0,
-            column=1,
-            sticky="ew",
-            padx=(3, 0),
-        )
-
-        ttk.Label(
-            selection,
-            text=(
-                "Select All: เลือกทุก log ที่ผ่าน Filter ปัจจุบัน\n"
-                "Deselect All: ยกเลิก Included ทั้งหมด"
-            ),
-            wraplength=260,
-        ).pack(anchor="w", pady=(6, 0))
-
-        self.included_label = ttk.Label(
-            selection,
-            text="Included: 0",
-        )
-        self.included_label.pack(
-            anchor="w",
-            pady=(6, 0),
-        )
-
-        evidence = self._section(
-            parent,
-            "Evidence Options",
-        )
-
-        self._large_checkbutton(
-            evidence,
-            text="Mask sensitive data",
-            variable=self.mask_var,
-            command=self.update_preview,
-        ).pack(fill="x")
-
-        ttk.Label(
-            evidence,
-            text="Extra mask keys (comma separated)",
-        ).pack(anchor="w", pady=(4, 0))
-
-        ttk.Entry(
-            evidence,
-            textvariable=self.extra_mask_var,
-        ).pack(fill="x")
-
-        export_content = self._section(
-            parent,
-            "Package Contents",
-        )
-
-        self._large_checkbutton(
-            export_content,
-            text="summary.txt",
-            variable=self.export_summary_txt_var,
-        ).pack(fill="x")
-
-        self._large_checkbutton(
-            export_content,
-            text="summary.md",
-            variable=self.export_summary_md_var,
-        ).pack(fill="x")
-
-        self._large_checkbutton(
-            export_content,
-            text="Raw log files",
-            variable=self.export_raw_var,
-        ).pack(fill="x")
-
-        self._large_checkbutton(
-            export_content,
-            text="Sanitized log files",
-            variable=self.export_sanitized_var,
-        ).pack(fill="x")
-
-        actions = self._section(
-            parent,
-            "Actions",
-        )
-
-        ttk.Button(
-            actions,
-            text="Copy Included for Ticket",
-            command=self.copy_ticket,
-        ).pack(fill="x")
-
-        ttk.Button(
-            actions,
-            text="Copy Included as Markdown",
-            command=self.copy_markdown,
-        ).pack(fill="x", pady=(4, 0))
-
-        ttk.Button(
-            actions,
-            text="Export Included Evidence",
-            command=self.export,
-        ).pack(fill="x", pady=(4, 0))
-
-        footer_tools = ttk.Frame(parent)
-        footer_tools.pack(
-            fill="x",
-            padx=8,
-            pady=(14, 10),
-        )
-
-        ttk.Button(
-            footer_tools,
-            text="Help / User Guide",
-            command=self.open_help,
-        ).pack(
-            fill="x",
-            ipady=5,
-        )
-
-        ttk.Label(
-            footer_tools,
-            text="QA Evidence Builder v1.0",
-            anchor="center",
-        ).pack(
-            fill="x",
-            pady=(8, 0),
-        )
-
-        for var in [
-            self.search_var,
-            self.method_var,
-            self.status_var,
-            self.min_ms_var,
-            self.page_var,
-            self.topic_var,
-            self.transaction_var,
-        ]:
-            var.trace_add(
-                "write",
-                lambda *_: self.refresh(),
-            )
-
-        self.extra_mask_var.trace_add(
-            "write",
-            lambda *_: self.update_preview(),
-        )
-
-    def _build_main(self, main):
-        header = ttk.Frame(main)
-        header.grid(
-            row=0,
-            column=0,
-            sticky="ew",
-            pady=(0, 8),
-        )
-        header.columnconfigure(1, weight=1)
-
-        ttk.Label(
-            header,
-            text="QA Evidence Builder",
-            font=("TkDefaultFont", 16, "bold"),
-        ).grid(row=0, column=0, sticky="w")
-
-        self.status = ttk.Label(
-            header,
-            text="Import JSON Array or HAR to begin.",
-        )
-        self.status.grid(
-            row=0,
-            column=1,
-            sticky="e",
-        )
-
-        notebook = ttk.Notebook(main)
-        notebook.grid(
-            row=1,
-            column=0,
-            sticky="nsew",
-        )
-
-        timeline_tab = ttk.Frame(notebook)
-        transactions_tab = ttk.Frame(notebook)
-        evidence_tab = ttk.Frame(notebook)
-        analysis_tab = ttk.Frame(notebook)
-
-        notebook.add(
-            timeline_tab,
-            text="Timeline",
-        )
-        notebook.add(
-            transactions_tab,
-            text="Transactions",
-        )
-        notebook.add(
-            evidence_tab,
-            text="Evidence",
-        )
-        notebook.add(
-            analysis_tab,
-            text="Analysis",
-        )
-
-        self._build_timeline(timeline_tab)
-        self._build_transactions(transactions_tab)
-        self._build_evidence(evidence_tab)
-        self._build_analysis(analysis_tab)
-
-    def _build_timeline(self, parent):
-        parent.columnconfigure(0, weight=1)
-        parent.rowconfigure(0, weight=1)
-
-        columns = (
-            "include",
-            "time",
-            "severity",
-            "fingerprint",
-            "method",
-            "api",
-            "status",
-            "ms",
-            "request_id",
-            "transaction",
-        )
-
-        self.tree = ttk.Treeview(
-            parent,
-            columns=columns,
-            show="headings",
-            selectmode="extended",
-        )
-
-        definitions = [
-            ("include", "Export", 60),
-            ("time", "Timestamp", 155),
-            ("severity", "Flag", 65),
-            ("fingerprint", "Fingerprint", 95),
-            ("method", "Method", 65),
-            ("api", "API", 300),
-            ("status", "Status", 60),
-            ("ms", "ms", 70),
-            ("request_id", "Request ID", 160),
-            ("transaction", "Transaction", 180),
-        ]
-
-        for column, title, width in definitions:
-            self.tree.heading(column, text=title)
-            self.tree.column(
-                column,
-                width=width,
-                minwidth=50,
-                anchor="w",
-                stretch=(column == "api"),
-            )
-
-        xscroll = ttk.Scrollbar(
-            parent,
-            orient="horizontal",
-            command=self.tree.xview,
-        )
-        yscroll = ttk.Scrollbar(
-            parent,
-            orient="vertical",
-            command=self.tree.yview,
-        )
-
-        self.tree.configure(
-            xscrollcommand=xscroll.set,
-            yscrollcommand=yscroll.set,
-        )
-
-        self.tree.grid(
-            row=0,
-            column=0,
-            sticky="nsew",
-        )
-        yscroll.grid(
-            row=0,
-            column=1,
-            sticky="ns",
-        )
-        xscroll.grid(
-            row=1,
-            column=0,
-            sticky="ew",
-        )
-
-        self.tree.bind(
-            "<Double-1>",
-            self.toggle_include_from_row,
-        )
-
-    def _build_transactions(self, parent):
-        parent.columnconfigure(0, weight=1)
-        parent.rowconfigure(0, weight=1)
-
-        tx_columns = (
-            "transaction",
-            "count",
-            "errors",
-            "slow",
-        )
-
-        self.tx_tree = ttk.Treeview(
-            parent,
-            columns=tx_columns,
-            show="headings",
-            selectmode="browse",
-        )
-
-        for column, title, width in [
-            ("transaction", "Transaction ID", 420),
-            ("count", "APIs", 80),
-            ("errors", "Errors", 80),
-            ("slow", "Slow", 80),
-        ]:
-            self.tx_tree.heading(
-                column,
-                text=title,
-            )
-            self.tx_tree.column(
-                column,
-                width=width,
-                anchor="w",
-            )
-
-        self.tx_tree.grid(
-            row=0,
-            column=0,
-            sticky="nsew",
-        )
-
-        ttk.Label(
-            parent,
-            text="Double-click a transaction to apply it as a filter.",
-        ).grid(
-            row=1,
-            column=0,
-            sticky="w",
-            pady=6,
-        )
-
-        self.tx_tree.bind(
-            "<Double-1>",
-            self.apply_transaction_group,
-        )
-
-    def _build_evidence(self, parent):
-        parent.columnconfigure(0, weight=1)
-        parent.rowconfigure(2, weight=1)
-
-        expected_actual = ttk.Panedwindow(
-            parent,
-            orient="horizontal",
-        )
-        expected_actual.grid(
-            row=0,
-            column=0,
-            sticky="ew",
-            pady=(0, 8),
-        )
-
-        expected_frame = ttk.LabelFrame(
-            expected_actual,
-            text="Expected Result",
-            padding=6,
-        )
-        actual_frame = ttk.LabelFrame(
-            expected_actual,
-            text="Actual Result",
-            padding=6,
-        )
-
-        expected_actual.add(
-            expected_frame,
-            weight=1,
-        )
-        expected_actual.add(
-            actual_frame,
-            weight=1,
-        )
-
-        self.expected = tk.Text(
-            expected_frame,
-            height=5,
-            wrap="word",
-        )
-        self.expected.pack(
-            fill="both",
-            expand=True,
-        )
-
-        self.actual = tk.Text(
-            actual_frame,
-            height=5,
-            wrap="word",
-        )
-        self.actual.pack(
-            fill="both",
-            expand=True,
-        )
-
-        self.expected.bind(
-            "<KeyRelease>",
-            lambda _event: self.update_preview(),
-        )
-        self.actual.bind(
-            "<KeyRelease>",
-            lambda _event: self.update_preview(),
-        )
-
-        ttk.Label(
-            parent,
-            text="Included Evidence Preview",
-        ).grid(
-            row=1,
-            column=0,
-            sticky="w",
-        )
-
-        self.preview = ScrolledText(
-            parent,
-            wrap="word",
-            font=("Menlo", 10),
-        )
-        self.preview.grid(
-            row=2,
-            column=0,
-            sticky="nsew",
-            pady=(4, 0),
-        )
-
-    def _build_analysis(self, parent):
-        parent.columnconfigure(0, weight=1)
-        parent.rowconfigure(1, weight=1)
-
-        ttk.Label(
-            parent,
-            text="Auto Defect Analysis",
-        ).grid(
-            row=0,
-            column=0,
-            sticky="w",
-            pady=(0, 4),
-        )
-
-        self.analysis_text = ScrolledText(
-            parent,
-            wrap="word",
-            font=("Menlo", 10),
-        )
-        self.analysis_text.grid(
-            row=1,
-            column=0,
-            sticky="nsew",
-        )
-
-    def open_help(self):
-        HelpDialog(self)
-
-    def _read_expected_actual(self):
-        return (
-            self.expected.get("1.0", "end").strip(),
-            self.actual.get("1.0", "end").strip(),
-        )
-
-    def _extra_mask_keys(self):
-        return [
-            item.strip()
-            for item in self.extra_mask_var.get().split(",")
-            if item.strip()
-        ]
-
-    def import_file(self):
-        path = filedialog.askopenfilename(
-            filetypes=[
-                ("JSON / HAR", "*.json *.har"),
-                ("JSON files", "*.json"),
-                ("HAR files", "*.har"),
-                ("All files", "*.*"),
-            ]
-        )
-
-        if not path:
-            return
-
-        try:
-            payload = Path(path).read_text(
-                encoding="utf-8"
-            )
-            self.entries = parse_auto(payload)
-            self.included_indexes.clear()
-            self.refresh()
-        except Exception as exc:
-            messagebox.showerror(
-                "Import failed",
-                str(exc),
-            )
-
-    def paste_json(self):
-        win = tk.Toplevel(self)
-        win.title("Paste JSON Array / HAR JSON")
-        win.geometry("850x560")
-        win.minsize(600, 400)
-
-        text = ScrolledText(
-            win,
-            wrap="none",
-            font=("Menlo", 10),
-        )
-        text.pack(
-            fill="both",
-            expand=True,
-            padx=10,
-            pady=10,
-        )
-
-        button_frame = ttk.Frame(win)
-        button_frame.pack(
-            fill="x",
-            padx=10,
-            pady=(0, 10),
-        )
-
-        def load():
-            try:
-                self.entries = parse_auto(
-                    text.get("1.0", "end").strip()
-                )
-                self.included_indexes.clear()
-                win.destroy()
-                self.refresh()
-            except Exception as exc:
-                messagebox.showerror(
-                    "Invalid input",
-                    str(exc),
-                    parent=win,
-                )
-
-        ttk.Button(
-            button_frame,
-            text="Load Logs",
-            command=load,
-        ).pack(side="right")
-
-    def clear_all(self):
-        self.entries = []
-        self.filtered = []
-        self.included_indexes.clear()
-        self.expected.delete("1.0", "end")
-        self.actual.delete("1.0", "end")
-        self.reset_filters()
-
-    def reset_filters(self):
-        self.search_var.set("")
-        self.error_only_var.set(False)
-        self.slow_only_var.set(False)
-        self.method_var.set("ALL")
-        self.status_var.set("ALL")
-        self.min_ms_var.set("")
-        self.page_var.set("")
-        self.topic_var.set("")
-        self.transaction_var.set("")
+        self._connect_filters()
+        QShortcut(QKeySequence("Ctrl+O"), self, activated=self.import_file)
+        QShortcut(QKeySequence("Ctrl+E"), self, activated=self.export)
         self.refresh()
 
+    def _build(self):
+        root = QWidget()
+        self.setCentralWidget(root)
+        layout = QHBoxLayout(root)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+        self.sidebar = self._sidebar()
+        layout.addWidget(self.sidebar)
+        body = QWidget()
+        body_layout = QVBoxLayout(body)
+        body_layout.setContentsMargins(24, 18, 24, 14)
+        body_layout.setSpacing(14)
+        body_layout.addLayout(self._header())
+        self.pages = QStackedWidget()
+        self.pages.addWidget(self._dashboard_page())
+        self.pages.addWidget(self._transactions_page())
+        self.pages.addWidget(self._evidence_page())
+        self.pages.addWidget(self._analysis_page())
+        body_layout.addWidget(self.pages, 1)
+        self.status_label = QLabel("Ready — import JSON or HAR to begin")
+        self.status_label.setObjectName("muted")
+        body_layout.addWidget(self.status_label)
+        layout.addWidget(body, 1)
+
+    def _sidebar(self):
+        side = QFrame()
+        side.setObjectName("sidebar")
+        side.setFixedWidth(220)
+        lay = QVBoxLayout(side)
+        lay.setContentsMargins(16, 22, 16, 16)
+        brand = QLabel("◈  QA Evidence")
+        brand.setObjectName("brand")
+        lay.addWidget(brand)
+        subtitle = QLabel("Local evidence workspace")
+        subtitle.setObjectName("muted")
+        lay.addWidget(subtitle)
+        lay.addSpacing(22)
+        self.nav_buttons = []
+        for index, label in enumerate(("▦  Dashboard", "↔  Transactions", "◇  Evidence", "⌁  Analysis")):
+            nav = button(label, name="nav")
+            nav.setCheckable(True)
+            nav.clicked.connect(lambda checked=False, i=index: self._navigate(i))
+            self.nav_buttons.append(nav)
+            lay.addWidget(nav)
+        self.nav_buttons[0].setChecked(True)
+        lay.addStretch()
+        lay.addWidget(button("?  Help / User Guide", self.open_help, name="nav"))
+        version = QLabel("v1.1.0  •  Local only")
+        version.setObjectName("muted")
+        lay.addWidget(version)
+        return side
+
+    def _header(self):
+        lay = QHBoxLayout()
+        titles = QVBoxLayout()
+        self.page_title = QLabel("Dashboard")
+        self.page_title.setObjectName("pageTitle")
+        self.page_subtitle = QLabel("Inspect logs, isolate failures, and build shareable evidence.")
+        self.page_subtitle.setObjectName("muted")
+        titles.addWidget(self.page_title)
+        titles.addWidget(self.page_subtitle)
+        lay.addLayout(titles)
+        lay.addStretch()
+        lay.addWidget(button("Import JSON / HAR", self.import_file))
+        lay.addWidget(button("Paste JSON", self.paste_json))
+        lay.addWidget(button("Export Evidence", self.export, primary=True))
+        return lay
+
+    def _dashboard_page(self):
+        page = QWidget()
+        root = QVBoxLayout(page)
+        root.setContentsMargins(0, 0, 0, 0)
+        root.setSpacing(12)
+        cards = QHBoxLayout()
+        self.metrics = {}
+        for key, label, color in (
+            ("total", "Total logs", COLORS["primary"]), ("success", "Successful", "#42d392"),
+            ("errors", "Errors", "#ff6b7a"), ("slow", "Slow APIs", "#f6c85f"),
+            ("included", "Included", "#72b7ff"),
+        ):
+            card_layout = QVBoxLayout()
+            cap = QLabel(label)
+            cap.setObjectName("cardLabel")
+            value = QLabel("0")
+            value.setObjectName("metric")
+            value.setStyleSheet(f"color: {color};")
+            card_layout.addWidget(cap)
+            card_layout.addWidget(value)
+            card_layout.setContentsMargins(15, 12, 15, 12)
+            cards.addWidget(panel(card_layout), 1)
+            self.metrics[key] = value
+        root.addLayout(cards)
+        root.addWidget(self._filters())
+        split = QSplitter(Qt.Horizontal)
+        split.addWidget(self._timeline_panel())
+        split.addWidget(self._inspector_panel())
+        split.setSizes([980, 340])
+        split.setCollapsible(1, True)
+        root.addWidget(split, 1)
+        return page
+
+    def _filters(self):
+        lay = QGridLayout()
+        lay.setContentsMargins(12, 10, 12, 10)
+        self.search = QLineEdit(); self.search.setPlaceholderText("Search API, request ID…")
+        self.method = QComboBox(); self.method.addItems(["ALL", "GET", "POST", "PUT", "PATCH", "DELETE"])
+        self.status = QComboBox(); self.status.addItems(["ALL", "2xx", "3xx", "4xx", "5xx", "Other"])
+        self.min_ms = QLineEdit(); self.min_ms.setPlaceholderText("Minimum ms")
+        self.page_filter = QLineEdit(); self.page_filter.setPlaceholderText("Page")
+        self.topic = QLineEdit(); self.topic.setPlaceholderText("Kafka topic")
+        self.transaction = QLineEdit(); self.transaction.setPlaceholderText("Transaction ID")
+        self.errors_only = QCheckBox("Errors only")
+        self.slow_only = QCheckBox("Slow only")
+        controls = [self.search, self.method, self.status, self.min_ms, self.page_filter, self.topic, self.transaction]
+        for col, widget in enumerate(controls):
+            lay.addWidget(widget, 0, col)
+        lay.addWidget(self.errors_only, 1, 0)
+        lay.addWidget(self.slow_only, 1, 1)
+        lay.addWidget(button("Reset filters", self.reset_filters), 1, 6)
+        return panel(lay)
+
+    def _timeline_panel(self):
+        lay = QVBoxLayout()
+        header = QHBoxLayout()
+        title = QLabel("Timeline"); title.setObjectName("sectionTitle")
+        self.result_count = QLabel("0 results"); self.result_count.setObjectName("muted")
+        header.addWidget(title); header.addWidget(self.result_count); header.addStretch()
+        header.addWidget(button("Include selected", self.include_selected))
+        header.addWidget(button("Exclude selected", self.exclude_selected))
+        header.addWidget(button("Select all", self.include_all_filtered))
+        header.addWidget(button("Deselect all", self.clear_included))
+        lay.addLayout(header)
+        columns = ("Export", "Timestamp", "Flag", "Fingerprint", "Method", "API", "Status", "ms", "Request ID", "Transaction")
+        self.table = QTableWidget(0, len(columns))
+        self.table.setHorizontalHeaderLabels(columns)
+        self.table.setSelectionBehavior(QTableWidget.SelectRows)
+        self.table.setSelectionMode(QTableWidget.ExtendedSelection)
+        self.table.setEditTriggers(QTableWidget.NoEditTriggers)
+        self.table.setAlternatingRowColors(True)
+        self.table.verticalHeader().setVisible(False)
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.table.horizontalHeader().setSectionResizeMode(5, QHeaderView.Stretch)
+        self.table.cellDoubleClicked.connect(self.toggle_include_from_row)
+        self.table.itemSelectionChanged.connect(self.update_inspector)
+        lay.addWidget(self.table, 1)
+        return panel(lay)
+
+    def _inspector_panel(self):
+        lay = QVBoxLayout()
+        title = QLabel("Log inspector"); title.setObjectName("sectionTitle")
+        hint = QLabel("Select a timeline row to inspect its normalized fields and raw payload.")
+        hint.setWordWrap(True); hint.setObjectName("muted")
+        self.inspector = QPlainTextEdit(); self.inspector.setReadOnly(True)
+        lay.addWidget(title); lay.addWidget(hint); lay.addWidget(self.inspector, 1)
+        return panel(lay)
+
+    def _transactions_page(self):
+        page = QWidget(); root = QVBoxLayout(page); root.setContentsMargins(0, 0, 0, 0)
+        info = QLabel("Transaction journeys — double-click a row to apply it to the Dashboard filter."); info.setObjectName("muted")
+        root.addWidget(info)
+        self.tx_table = QTableWidget(0, 4)
+        self.tx_table.setHorizontalHeaderLabels(("Transaction ID", "APIs", "Errors", "Slow"))
+        self.tx_table.setSelectionBehavior(QTableWidget.SelectRows); self.tx_table.setEditTriggers(QTableWidget.NoEditTriggers)
+        self.tx_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.tx_table.doubleClicked.connect(self.apply_transaction_group)
+        root.addWidget(panel_with_widget(self.tx_table), 1)
+        return page
+
+    def _evidence_page(self):
+        page = QWidget(); root = QHBoxLayout(page); root.setContentsMargins(0, 0, 0, 0)
+        left = QVBoxLayout()
+        ea = QSplitter(Qt.Horizontal)
+        self.expected = QPlainTextEdit(); self.expected.setPlaceholderText("Expected result")
+        self.actual = QPlainTextEdit(); self.actual.setPlaceholderText("Actual result")
+        ea.addWidget(self.expected); ea.addWidget(self.actual)
+        left.addWidget(ea)
+        preview_title = QLabel("Included evidence preview"); preview_title.setObjectName("sectionTitle")
+        self.preview = QPlainTextEdit(); self.preview.setReadOnly(True)
+        left.addWidget(preview_title); left.addWidget(self.preview, 1)
+        root.addWidget(panel_from_layout(left), 3)
+        options = QVBoxLayout(); options.setContentsMargins(15, 15, 15, 15)
+        opt_title = QLabel("Evidence options"); opt_title.setObjectName("sectionTitle")
+        options.addWidget(opt_title)
+        self.mask = QCheckBox("Mask sensitive data"); self.mask.setChecked(True)
+        self.extra_mask = QLineEdit(); self.extra_mask.setPlaceholderText("Extra mask keys, comma separated")
+        options.addWidget(self.mask); options.addWidget(self.extra_mask); options.addSpacing(12)
+        pkg = QLabel("Package contents"); pkg.setObjectName("sectionTitle"); options.addWidget(pkg)
+        self.summary_txt = QCheckBox("summary.txt"); self.summary_txt.setChecked(True)
+        self.summary_md = QCheckBox("summary.md"); self.summary_md.setChecked(True)
+        self.raw = QCheckBox("Raw log files")
+        self.sanitized = QCheckBox("Sanitized log files"); self.sanitized.setChecked(True)
+        for check in (self.summary_txt, self.summary_md, self.raw, self.sanitized): options.addWidget(check)
+        options.addStretch()
+        options.addWidget(button("Copy for ticket", self.copy_ticket))
+        options.addWidget(button("Copy as Markdown", self.copy_markdown))
+        options.addWidget(button("Export evidence", self.export, primary=True))
+        root.addWidget(panel(options), 1)
+        self.expected.textChanged.connect(self.update_preview); self.actual.textChanged.connect(self.update_preview)
+        self.mask.toggled.connect(self.update_preview); self.extra_mask.textChanged.connect(self.update_preview)
+        return page
+
+    def _analysis_page(self):
+        page = QWidget(); root = QVBoxLayout(page); root.setContentsMargins(0, 0, 0, 0)
+        note = QLabel("Auto defect analysis, error fingerprints, and duplicate detection for the current filtered logs."); note.setObjectName("muted")
+        self.analysis = QPlainTextEdit(); self.analysis.setReadOnly(True)
+        root.addWidget(note); root.addWidget(panel_with_widget(self.analysis), 1)
+        return page
+
+    def _connect_filters(self):
+        for edit in (self.search, self.min_ms, self.page_filter, self.topic, self.transaction): edit.textChanged.connect(self.refresh)
+        self.method.currentTextChanged.connect(self.refresh); self.status.currentTextChanged.connect(self.refresh)
+        self.errors_only.toggled.connect(self.refresh); self.slow_only.toggled.connect(self.refresh)
+
+    def _navigate(self, index):
+        titles = ("Dashboard", "Transactions", "Evidence", "Analysis")
+        subtitles = ("Inspect logs, isolate failures, and build shareable evidence.", "Follow related API calls across a transaction journey.", "Write expected/actual results and review the exact export.", "Find repeated failure signatures in the current result set.")
+        self.pages.setCurrentIndex(index); self.page_title.setText(titles[index]); self.page_subtitle.setText(subtitles[index])
+        for i, nav in enumerate(self.nav_buttons): nav.setChecked(i == index)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.sidebar.setFixedWidth(76 if self.width() < 1050 else 220)
+        for nav in self.nav_buttons:
+            full = nav.property("fullText") or nav.text(); nav.setProperty("fullText", full)
+            nav.setText(full[:1] if self.width() < 1050 else full)
+
+    def import_file(self):
+        path, _ = QFileDialog.getOpenFileName(self, "Import logs", "", "JSON / HAR (*.json *.har);;All files (*)")
+        if not path: return
+        try:
+            self.entries = parse_auto(Path(path).read_text(encoding="utf-8")); self.included_indexes.clear(); self.refresh()
+            self.status_label.setText(f"Imported {len(self.entries)} logs from {Path(path).name}")
+        except Exception as exc: QMessageBox.critical(self, "Import failed", str(exc))
+
+    def paste_json(self):
+        dialog = PasteDialog(self)
+        if dialog.exec() != QDialog.Accepted: return
+        try:
+            self.entries = parse_auto(dialog.editor.toPlainText().strip()); self.included_indexes.clear(); self.refresh()
+        except Exception as exc: QMessageBox.critical(self, "Invalid input", str(exc))
+
+    def reset_filters(self):
+        for edit in (self.search, self.min_ms, self.page_filter, self.topic, self.transaction): edit.clear()
+        self.method.setCurrentText("ALL"); self.status.setCurrentText("ALL"); self.errors_only.setChecked(False); self.slow_only.setChecked(False); self.refresh()
+
     def refresh(self):
-        self.filtered = filter_entries(
-            self.entries,
-            search=self.search_var.get(),
-            errors_only=self.error_only_var.get(),
-            slow_only=self.slow_only_var.get(),
-            method=self.method_var.get(),
-            status_class=self.status_var.get(),
-            min_ms=self.min_ms_var.get(),
-            page=self.page_var.get(),
-            topic=self.topic_var.get(),
-            transaction=self.transaction_var.get(),
-        )
+        self.filtered = filter_entries(self.entries, search=self.search.text(), errors_only=self.errors_only.isChecked(), slow_only=self.slow_only.isChecked(), method=self.method.currentText(), status_class=self.status.currentText(), min_ms=self.min_ms.text(), page=self.page_filter.text(), topic=self.topic.text(), transaction=self.transaction.text())
+        self.table.setRowCount(len(self.filtered))
+        for row, entry in enumerate(self.filtered):
+            values = ("●" if entry.index in self.included_indexes else "○", entry.timestamp_display, entry.severity, error_fingerprint(entry), entry.request_method, entry.request_uri, entry.response_status, entry.response_time, entry.request_id, entry.transaction_id)
+            for col, value in enumerate(values):
+                item = QTableWidgetItem(str(value)); item.setData(Qt.UserRole, entry.index)
+                if col == 0: item.setForeground(QColor("#7c6df2" if entry.index in self.included_indexes else "#62708e"))
+                if col == 2 and entry.is_error: item.setForeground(QColor("#ff6b7a"))
+                self.table.setItem(row, col, item)
+        groups = group_by_transaction(self.filtered); self.tx_table.setRowCount(len(groups))
+        for row, (tx, items) in enumerate(groups.items()):
+            for col, value in enumerate((tx, len(items), sum(x.is_error for x in items), sum(x.is_slow for x in items))): self.tx_table.setItem(row, col, QTableWidgetItem(str(value)))
+        success = sum(1 for x in self.entries if not x.is_error)
+        for key, value in (("total", len(self.entries)), ("success", success), ("errors", sum(x.is_error for x in self.entries)), ("slow", sum(x.is_slow for x in self.entries)), ("included", len(self.included_indexes))): self.metrics[key].setText(str(value))
+        self.result_count.setText(f"{len(self.filtered)} results"); self.status_label.setText(f"Showing {len(self.filtered)} / {len(self.entries)} logs  •  Included {len(self.included_indexes)}  •  Sensitive data {'masked' if self.mask.isChecked() else 'visible'}")
+        self.update_preview(); self.update_analysis()
 
-        for item in self.tree.get_children():
-            self.tree.delete(item)
-
-        for display_index, entry in enumerate(self.filtered):
-            included = (
-                "☑"
-                if entry.index in self.included_indexes
-                else "☐"
-            )
-
-            self.tree.insert(
-                "",
-                "end",
-                iid=str(display_index),
-                values=(
-                    included,
-                    entry.timestamp_display,
-                    entry.severity,
-                    error_fingerprint(entry),
-                    entry.request_method,
-                    entry.request_uri,
-                    entry.response_status,
-                    entry.response_time,
-                    entry.request_id,
-                    entry.transaction_id,
-                ),
-            )
-
-        for item in self.tx_tree.get_children():
-            self.tx_tree.delete(item)
-
-        groups = group_by_transaction(self.filtered)
-
-        for i, (transaction_id, items) in enumerate(groups.items()):
-            self.tx_tree.insert(
-                "",
-                "end",
-                iid=f"tx{i}",
-                values=(
-                    transaction_id,
-                    len(items),
-                    sum(
-                        1
-                        for entry in items
-                        if entry.is_error
-                    ),
-                    sum(
-                        1
-                        for entry in items
-                        if entry.is_slow
-                    ),
-                ),
-            )
-
-        self._update_counts()
-        self.update_preview()
-        self.update_analysis()
-
-    def _update_counts(self):
-        self.included_label.config(
-            text=f"Included: {len(self.included_indexes)}"
-        )
-        self.status.config(
-            text=(
-                f"Showing {len(self.filtered)} / "
-                f"{len(self.entries)} logs • "
-                f"Included {len(self.included_indexes)}"
-            )
-        )
-
-    def selected_filtered_entries(self):
-        ids = self.tree.selection()
-        return [
-            self.filtered[int(item_id)]
-            for item_id in ids
-        ]
-
-    def included_entries(self):
-        return [
-            entry
-            for entry in self.entries
-            if entry.index in self.included_indexes
-        ]
+    def selected_filtered_entries(self): return [self.filtered[i.row()] for i in self.table.selectionModel().selectedRows()]
+    def included_entries(self): return [e for e in self.entries if e.index in self.included_indexes]
 
     def include_selected(self):
         selected = self.selected_filtered_entries()
-        if not selected:
-            messagebox.showinfo(
-                "No rows selected",
-                "Select one or more rows in Timeline first.",
-            )
-            return
-
-        for entry in selected:
-            self.included_indexes.add(entry.index)
-
-        self.refresh()
+        if not selected: QMessageBox.information(self, "No rows selected", "Select one or more Timeline rows first."); return
+        self.included_indexes.update(e.index for e in selected); self.refresh()
 
     def exclude_selected(self):
         selected = self.selected_filtered_entries()
-        if not selected:
-            messagebox.showinfo(
-                "No rows selected",
-                "Select one or more rows in Timeline first.",
-            )
-            return
+        if not selected: QMessageBox.information(self, "No rows selected", "Select one or more Timeline rows first."); return
+        self.included_indexes.difference_update(e.index for e in selected); self.refresh()
 
-        for entry in selected:
-            self.included_indexes.discard(entry.index)
-
+    def include_all_filtered(self): self.included_indexes.update(e.index for e in self.filtered); self.refresh()
+    def clear_included(self): self.included_indexes.clear(); self.refresh()
+    def toggle_include_from_row(self, row, _column):
+        index = self.filtered[row].index
+        self.included_indexes.discard(index) if index in self.included_indexes else self.included_indexes.add(index)
         self.refresh()
 
-    def include_all_filtered(self):
-        for entry in self.filtered:
-            self.included_indexes.add(entry.index)
-        self.refresh()
+    def apply_transaction_group(self):
+        row = self.tx_table.currentRow()
+        if row < 0: return
+        value = self.tx_table.item(row, 0).text(); self.transaction.setText("" if value == "(no transaction)" else value); self._navigate(0)
 
-    def clear_included(self):
-        self.included_indexes.clear()
-        self.refresh()
+    def update_inspector(self):
+        selected = self.selected_filtered_entries()
+        if not selected: self.inspector.clear(); return
+        e = selected[0]
+        self.inspector.setPlainText(f"{e.request_method} {e.request_uri}\nHTTP {e.response_status}  •  {e.response_time} ms\nRequest ID: {e.request_id}\nTransaction: {e.transaction_id}\nPage: {e.page_name}\nKafka topic: {e.kafka_topic}\n\nREQUEST HEADERS\n{e.request_header}\n\nREQUEST BODY\n{e.request_body}\n\nRESPONSE BODY\n{e.response_body}")
 
-    def toggle_include_from_row(self, event):
-        row_id = self.tree.identify_row(event.y)
-        if not row_id:
-            return
-
-        entry = self.filtered[int(row_id)]
-
-        if entry.index in self.included_indexes:
-            self.included_indexes.discard(entry.index)
-        else:
-            self.included_indexes.add(entry.index)
-
-        self.refresh()
-
-    def apply_transaction_group(self, _event=None):
-        selection = self.tx_tree.selection()
-        if not selection:
-            return
-
-        values = self.tx_tree.item(
-            selection[0],
-            "values",
-        )
-
-        if not values:
-            return
-
-        transaction_id = values[0]
-
-        self.transaction_var.set(
-            ""
-            if transaction_id == "(no transaction)"
-            else transaction_id
-        )
-
-    def update_preview(self):
-        expected, actual = self._read_expected_actual()
-        entries = self.included_entries()
-
-        self.preview.delete("1.0", "end")
-        self.preview.insert(
-            "1.0",
-            build_ticket(
-                entries,
-                self.mask_var.get(),
-                expected,
-                actual,
-                self._extra_mask_keys(),
-            ),
-        )
-
+    def _extra_mask_keys(self): return [x.strip() for x in self.extra_mask.text().split(",") if x.strip()]
+    def update_preview(self): self.preview.setPlainText(build_ticket(self.included_entries(), self.mask.isChecked(), self.expected.toPlainText().strip(), self.actual.toPlainText().strip(), self._extra_mask_keys()))
     def update_analysis(self):
-        duplicate_groups = find_duplicate_errors(
-            self.filtered
-        )
-
-        lines = [
-            build_auto_summary(self.filtered),
-            "",
-            "Duplicate / Similar Error Signatures",
-            "=" * 72,
-        ]
-
-        if not duplicate_groups:
-            lines.append(
-                "No repeated error fingerprints found in current filtered logs."
-            )
-        else:
-            for fingerprint, items in duplicate_groups.items():
-                lines.append(
-                    f"{fingerprint}: {len(items)} occurrence(s)"
-                )
-
-                for entry in items:
-                    lines.append(
-                        f"  - {entry.timestamp_display} "
-                        f"{entry.request_method} "
-                        f"{entry.request_uri} "
-                        f"HTTP {entry.response_status}"
-                    )
-
-                lines.append("")
-
-        self.analysis_text.delete(
-            "1.0",
-            "end",
-        )
-        self.analysis_text.insert(
-            "1.0",
-            "\n".join(lines),
-        )
+        duplicates = find_duplicate_errors(self.filtered); lines = [build_auto_summary(self.filtered), "", "Duplicate / Similar Error Signatures", "=" * 72]
+        if not duplicates: lines.append("No repeated error fingerprints found in current filtered logs.")
+        for fingerprint, items in duplicates.items():
+            lines.append(f"{fingerprint}: {len(items)} occurrence(s)")
+            lines.extend(f"  - {e.timestamp_display} {e.request_method} {e.request_uri} HTTP {e.response_status}" for e in items)
+            lines.append("")
+        self.analysis.setPlainText("\n".join(lines))
 
     def _require_included(self):
         entries = self.included_entries()
-
-        if not entries:
-            messagebox.showinfo(
-                "Nothing included",
-                (
-                    "No logs are marked for export.\n\n"
-                    "Select rows in Timeline and click "
-                    "'Include Selected', or use "
-                    "'Include All Filtered'."
-                ),
-            )
-            return []
-
+        if not entries: QMessageBox.information(self, "Nothing included", "Include Timeline rows before copying or exporting evidence.")
         return entries
 
     def copy_ticket(self):
         entries = self._require_included()
-        if not entries:
-            return
-
-        expected, actual = self._read_expected_actual()
-
-        text = build_ticket(
-            entries,
-            self.mask_var.get(),
-            expected,
-            actual,
-            self._extra_mask_keys(),
-        )
-
-        self.clipboard_clear()
-        self.clipboard_append(text)
-        self.status.config(
-            text=f"Copied {len(entries)} included log(s) for ticket."
-        )
+        if entries: QApplication.clipboard().setText(build_ticket(entries, self.mask.isChecked(), self.expected.toPlainText().strip(), self.actual.toPlainText().strip(), self._extra_mask_keys())); self.status_label.setText(f"Copied {len(entries)} logs for ticket")
 
     def copy_markdown(self):
         entries = self._require_included()
-        if not entries:
-            return
-
-        expected, actual = self._read_expected_actual()
-
-        text = build_markdown(
-            entries,
-            self.mask_var.get(),
-            expected,
-            actual,
-            self._extra_mask_keys(),
-        )
-
-        self.clipboard_clear()
-        self.clipboard_append(text)
-        self.status.config(
-            text=f"Copied {len(entries)} included log(s) as Markdown."
-        )
+        if entries: QApplication.clipboard().setText(build_markdown(entries, self.mask.isChecked(), self.expected.toPlainText().strip(), self.actual.toPlainText().strip(), self._extra_mask_keys())); self.status_label.setText(f"Copied {len(entries)} logs as Markdown")
 
     def export(self):
         entries = self._require_included()
-        if not entries:
-            return
-
-        parent = filedialog.askdirectory()
-
-        if not parent:
-            return
-
-        folder_name = (
-            "QA_Evidence_"
-            + datetime.now().strftime(
-                "%Y%m%d_%H%M%S"
-            )
-        )
-
-        expected, actual = self._read_expected_actual()
-
+        if not entries: return
+        parent = QFileDialog.getExistingDirectory(self, "Choose export folder")
+        if not parent: return
+        destination = Path(parent) / ("QA_Evidence_" + datetime.now().strftime("%Y%m%d_%H%M%S"))
         try:
-            path = export_package(
-                entries=entries,
-                destination=Path(parent) / folder_name,
-                mask=self.mask_var.get(),
-                expected=expected,
-                actual=actual,
-                extra_mask_keys=self._extra_mask_keys(),
-                include_summary_txt=self.export_summary_txt_var.get(),
-                include_summary_md=self.export_summary_md_var.get(),
-                include_raw=self.export_raw_var.get(),
-                include_sanitized=self.export_sanitized_var.get(),
-            )
+            path = export_package(entries=entries, destination=destination, mask=self.mask.isChecked(), expected=self.expected.toPlainText().strip(), actual=self.actual.toPlainText().strip(), extra_mask_keys=self._extra_mask_keys(), include_summary_txt=self.summary_txt.isChecked(), include_summary_md=self.summary_md.isChecked(), include_raw=self.raw.isChecked(), include_sanitized=self.sanitized.isChecked())
+            QMessageBox.information(self, "Export complete", f"Exported {len(entries)} logs.\n\nCreated:\n{path}")
+        except Exception as exc: QMessageBox.critical(self, "Export failed", str(exc))
 
-            messagebox.showinfo(
-                "Export complete",
-                (
-                    f"Exported {len(entries)} selected log(s).\n\n"
-                    f"Created:\n{path}"
-                ),
-            )
+    def open_help(self): HelpDialog(self).exec()
 
-        except Exception as exc:
-            messagebox.showerror(
-                "Export failed",
-                str(exc),
-            )
+
+def panel_with_widget(widget):
+    lay = QVBoxLayout(); lay.setContentsMargins(1, 1, 1, 1); lay.addWidget(widget); return panel(lay)
+
+
+def panel_from_layout(layout):
+    frame = QFrame(); frame.setObjectName("panel"); frame.setLayout(layout); return frame
+
+
+App = MainWindow
+
 
 def main():
-    App().mainloop()
+    application = QApplication.instance() or QApplication(sys.argv)
+    application.setApplicationName("QA Evidence Builder")
+    application.setStyle("Fusion")
+    application.setStyleSheet(stylesheet())
+    window = MainWindow(); window.show()
+    return application.exec()
+
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

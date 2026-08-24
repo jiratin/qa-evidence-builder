@@ -1,44 +1,73 @@
 HELP_SECTIONS = [
     (
-        "1. เริ่มต้นใช้งาน",
+        "1. ภาพรวมและ Flow ปัจจุบัน",
         """
-QA Evidence Builder คือเครื่องมือสำหรับช่วย QA / Tester / Developer
-นำ Log API จำนวนมากมาจัดให้อยู่ในรูปแบบที่อ่านง่าย ค้นหาได้ และเลือกเฉพาะ
-Log ที่ต้องการไปใช้เป็นหลักฐานประกอบ Ticket / Defect ได้
+QA Evidence Builder v1.0 เป็นเครื่องมือ Local-only สำหรับ QA / Tester / Developer
+เพื่ออ่าน Log จำนวนมาก คัดเฉพาะรายการที่เกี่ยวข้องกับ Defect และสร้าง Evidence
+สำหรับ Ticket โดยไม่ต้อง Copy Request/Response ทีละรายการ
 
-สิ่งที่โปรแกรมทำได้:
-• Import JSON Array จากระบบ Log เช่น Kibana / Elasticsearch
-• Import HAR จาก Browser / Network tools
-• ดู API ตามลำดับเวลา
-• Filter หา API ที่สนใจ
-• รวม API ตาม Transaction
-• เลือกเฉพาะ Log ที่ต้องการ Export
-• Mask ข้อมูลสำคัญ เช่น Token / Password / Email
-• สร้าง Evidence สำหรับแปะ Ticket
-• Export เป็น ZIP พร้อม summary และ log ที่เลือก
-• วิเคราะห์ Error Fingerprint และหา Error ที่เกิดซ้ำ
+Flow หลักของเวอร์ชันปัจจุบัน:
 
-ตัวอย่างการใช้งานแบบง่าย:
-1) เปิดโปรแกรม
-2) กด Import JSON / HAR
-3) เลือกไฟล์ sample_logs.json
-4) ไปที่ Timeline
-5) เลือก API ที่ต้องการ
-6) กด Include Selected
-7) ไปที่ Evidence เพื่อดู Preview
-8) กด Copy Included for Ticket หรือ Export Included Evidence
+Import / Paste
+→ Filter
+→ Include Logs
+→ Review Transaction / Analysis
+→ กรอก Expected / Actual
+→ ตรวจ Mask และ Preview
+→ Copy หรือ Export Evidence
+
+ข้อมูลที่ Import เข้ามาจะใช้เพื่อวิเคราะห์ภายในโปรแกรมเท่านั้น โปรแกรมไม่ได้แก้ไข
+ไฟล์ต้นฉบับ และจาก source ปัจจุบันไม่มีขั้นตอน Upload Log ไป Server ภายนอก
+
+หน้าหลักแบ่งเป็น:
+• Sidebar ซ้าย — Source, Filters, Export Selection, Evidence Options,
+  Package Contents และ Actions
+• Timeline — รายการ API ตามลำดับเวลา
+• Transactions — รวม API ตาม Transaction ID
+• Evidence — Expected / Actual และ Evidence Preview
+• Analysis — Auto Summary และ Duplicate Error Fingerprint
 """,
     ),
     (
-        "2. Source — Import JSON / HAR",
+        "2. Quick Start — ใช้งานครั้งแรก",
         """
-ปุ่ม Import JSON / HAR ใช้สำหรับเปิดไฟล์ Log จากเครื่อง
+วิธีใช้งานที่สั้นที่สุด:
 
-รองรับ:
-• JSON Array
-• HAR
+1) เปิด QA Evidence Builder
+2) กด Import JSON / HAR หรือ Paste JSON
+3) ดูรายการที่ Tab Timeline
+4) ใช้ Filters ด้านซ้ายเพื่อหา Log ที่เกี่ยวข้อง
+5) เลือก Row ที่ต้องการ
+6) กด Include Selected
+7) ตรวจว่า Column Export เปลี่ยนเป็น ☑
+8) ถ้าต้องการ ให้ดู Transactions และ Analysis เพิ่มเติม
+9) ไป Tab Evidence
+10) กรอก Expected Result และ Actual Result
+11) เปิด Mask sensitive data ไว้
+12) ตรวจ Included Evidence Preview
+13) เลือก Copy Included for Ticket, Copy Included as Markdown
+    หรือ Export Included Evidence
 
-JSON Array ต้องมีรูปแบบประมาณนี้:
+จำง่าย ๆ:
+Import → Filter → Include → Review → Copy / Export
+""",
+    ),
+    (
+        "3. Source — Import JSON / HAR",
+        """
+กด Import JSON / HAR เพื่อเลือกไฟล์จากเครื่อง
+
+File dialog รองรับ:
+• *.json
+• *.har
+• All files
+
+JSON ที่เหมาะกับโปรแกรมเป็น JSON Array จากระบบ Log เช่น Kibana /
+Elasticsearch โดยแต่ละรายการอาจมี fields เช่น TIMESTAMP, REQUEST_URI,
+REQUEST_METHOD, RESPONSE_STATUS, RESPONSE_TIME, REQUEST_ID,
+CLIENT_PAGE_NAME, kafka_topic_name, REQUEST_BODY และ RESPONSE_BODY
+
+ตัวอย่างแบบย่อ:
 
 [
   {
@@ -48,767 +77,647 @@ JSON Array ต้องมีรูปแบบประมาณนี้:
       "REQUEST_METHOD": ["POST"],
       "RESPONSE_STATUS": [500],
       "RESPONSE_TIME": [3211],
-      "REQUEST_ID": ["REQ-1002"],
-      "CLIENT_PAGE_NAME": ["Checkout"],
-      "kafka_topic_name": ["payment-service"],
-      "REQUEST_BODY": ["{\\"orderId\\":\\"O-9001\\"}"],
-      "RESPONSE_BODY": ["{\\"resultCode\\":\\"50001\\"}"]
+      "REQUEST_ID": ["REQ-1002"]
     }
   }
 ]
 
-HAR เป็นไฟล์ที่ Browser หรือ Network tool export ออกมา
-โปรแกรมจะอ่าน URL, Method, Status, Response Time, Headers,
-Request Body และ Response Body ที่มีใน HAR
+HAR ใช้ข้อมูล Network เช่น URL, Method, Status, Timing, Headers,
+Request Body และ Response Body ตามข้อมูลที่มีอยู่ในไฟล์
 
-วิธีใช้:
-1) กด Import JSON / HAR
-2) เลือกไฟล์
-3) ถ้าอ่านได้ โปรแกรมจะแสดง Log ใน Timeline
-4) ด้านบนจะแสดงจำนวน Log ที่โหลดเข้ามา
+เมื่อ Import สำเร็จ:
+• Timeline จะถูกเติมข้อมูล
+• Filter/Analysis จะคำนวณใหม่
+• Status ด้านบนจะแสดงจำนวน Log
 
-ถ้าไฟล์ไม่ถูกต้อง โปรแกรมจะแจ้ง Import failed
-และจะไม่แก้ไขไฟล์ต้นฉบับของคุณ
+ถ้า Parse ไม่สำเร็จ โปรแกรมจะแสดง Import failed
 """,
     ),
     (
-        "3. Source — Paste JSON",
+        "4. Source — Paste JSON",
         """
-Paste JSON ใช้กรณีที่ไม่ได้มีไฟล์ แต่ Copy JSON จากระบบ Log มาแล้ว
+ใช้เมื่อ Copy JSON มาแล้วและไม่ต้องการสร้างไฟล์ก่อน
 
-วิธีใช้:
 1) กด Paste JSON
-2) จะมีหน้าต่างใหม่เปิดขึ้น
-3) วาง JSON Array หรือ HAR JSON ลงในช่อง
+2) หน้าต่าง Paste JSON Array / HAR JSON จะเปิด
+3) วาง JSON
 4) กด Load Logs
-5) ถ้ารูปแบบถูกต้อง Log จะเข้า Timeline
+5) ถ้า Parse สำเร็จ ข้อมูลจะเข้าสู่ Timeline
 
-ตัวอย่าง:
-สมมติ Copy Log จาก Kibana มา 3 รายการ
-ให้วางโดยมี [ และ ] ครอบทั้งหมด
+สามารถวาง JSON Array หรือ HAR JSON ที่ parser รองรับได้
 
-[
-  { "fields": { ... } },
-  { "fields": { ... } },
-  { "fields": { ... } }
-]
-
-ถ้าวางเฉพาะ Object เดียวแบบนี้:
-
-{
-  "fields": { ... }
-}
-
-โปรแกรมจะไม่ถือว่าเป็น JSON Array
+สำหรับ Log หลายรายการ แนะนำให้ Copy เป็น Array ที่มี [ ... ] ครอบรายการทั้งหมด
+เพื่อให้โครงสร้างชัดเจนและลดความผิดพลาดจาก JSON ไม่สมบูรณ์
 """,
     ),
     (
-        "4. Clear",
+        "5. Source — Clear",
         """
-Clear ใช้ล้างข้อมูลที่โหลดเข้ามาและเริ่มใหม่
+Clear ใช้เริ่มงานใหม่โดยล้าง state ของงานปัจจุบัน
 
-สิ่งที่จะถูกล้าง:
-• Log ที่ Import
-• Filter
-• รายการ Included
+สิ่งที่ถูกล้าง:
+• Imported Logs
+• Included Logs
 • Expected Result
 • Actual Result
+• Filters
 
-ไฟล์ต้นฉบับบนเครื่องจะไม่ถูกลบ
+ไฟล์ JSON/HAR ต้นฉบับบนเครื่องไม่ถูกลบหรือแก้ไข
 """,
     ),
     (
-        "5. Timeline",
+        "6. Timeline — อ่านรายการ API",
         """
-Timeline เป็นหน้าหลักสำหรับดู API ทั้งหมดตามลำดับเวลา
+Timeline คือหน้าหลักสำหรับตรวจ Log
 
-Column สำคัญ:
+Column ปัจจุบัน:
+• Export — ☐ ยังไม่ Include / ☑ Include แล้ว
+• Timestamp — เวลาของ Log
+• Flag — Severity ที่ parser/analyzer กำหนด
+• Fingerprint — Error Fingerprint ถ้ามี
+• Method — GET / POST / PUT / PATCH / DELETE
+• API — Request URI
+• Status — HTTP Status
+• ms — Response Time
+• Request ID — Request identifier
+• Transaction — Transaction ID ที่ตรวจพบ
 
-Export
-• ☐ = ยังไม่ได้เลือกสำหรับ Export
-• ☑ = ถูก Include แล้ว
+Timeline รองรับ Multi-select และมี Scrollbar แนวตั้ง/แนวนอน
 
-Timestamp
-• เวลาที่ API เกิดขึ้น
-
-Flag
-• OK = ไม่เข้าเงื่อนไข Error/Slow
-• ERROR = HTTP Status >= 400
-• SLOW = Response Time >= 3000 ms
-
-Fingerprint
-• รหัสสำหรับ Error Signature เช่น ERR-A14F93C2
-• ใช้ช่วยดูว่า Error หลายรายการเป็นปัญหาแบบเดียวกันหรือไม่
-
-Method
-• GET / POST / PUT / PATCH / DELETE
-
-API
-• Endpoint เช่น /api/v1/payment
-
-Status
-• HTTP Status เช่น 200 / 400 / 404 / 500
-
-ms
-• Response Time หน่วย millisecond
-
-Request ID
-• ID ของ request ถ้ามี
-
-Transaction
-• Transaction ID ที่โปรแกรมตรวจพบจาก Log
-
-Timeline มี Scrollbar แนวนอนและแนวตั้ง
-ดังนั้นถ้าหน้าต่างเล็ก Column จะไม่หาย เพียงเลื่อนดูได้
+Double-click Row:
+สลับสถานะ Include / Exclude ของ Log นั้นทันที
 """,
     ),
     (
-        "6. การเลือก Log เพื่อ Export",
+        "7. Filters — วิธีกรอง Log",
         """
-V3 ขึ้นไปจะไม่ Export ทุก Log อัตโนมัติ
-ผู้ใช้ต้องกำหนดเองว่า Log ไหนจะถูก Include
+Filters ด้านซ้ายทำงานร่วมกันได้ และ Timeline จะ Refresh เมื่อค่าเปลี่ยน
 
-วิธีที่ 1 — Include Selected
-1) ไป Timeline
-2) คลิกเลือก Row
-3) ถ้าจะเลือกหลาย Row:
-   • macOS ใช้ Command หรือ Shift
-   • Windows ใช้ Ctrl หรือ Shift
-4) กด Include Selected
-5) Column Export จะเปลี่ยนจาก ☐ เป็น ☑
-
-วิธีที่ 2 — Double-click
-• Double-click ที่ Row เพื่อสลับ Include / Exclude
-
-Select All
-• Include ทุก Log ที่ผ่าน Filter ปัจจุบัน
-• ไม่ได้หมายถึงทุก Log ทั้งหมดเสมอไป
-
-ตัวอย่าง:
-Import มา 1,000 Logs
-Filter Status = 5xx เหลือ 12 Logs
-กด Select All
-=> Include แค่ 12 Logs
-
-Exclude Selected
-• เอา Row ที่เลือกออกจาก Included
-
-Deselect All
-• ล้าง Included ทั้งหมด
-• ไม่ได้ลบ Log จาก Timeline
-
-ข้อความ Included: N
-จะบอกว่าตอนนี้มีกี่ Log ที่พร้อมใช้ Copy / Export
-""",
-    ),
-    (
-        "7. Filters — Search",
-        """
-Search ใช้ค้นหาคำจากข้อมูลหลัก เช่น:
-• API
-• Request ID
-• Transaction ID
+มี Filter:
+• Search API / ID
+• Minimum response ms
 • Page
 • Kafka Topic
+• Transaction ID
+• HTTP Method
+• HTTP Status
+• Errors only
+• Slow only
 
-ตัวอย่าง:
-พิมพ์ payment
+Search API / ID ใช้ค้นจากข้อมูลที่ filtering layer รองรับ เช่น API/ID
+และข้อมูลสำคัญที่เกี่ยวข้องกับ Log
 
-อาจเหลือ:
-POST /api/v1/payment
-GET /api/v1/payment/status
+Minimum response ms:
+ใส่ 1000 เพื่อดูรายการที่ Response Time >= 1000 ms
 
-Search ไม่แก้ไขข้อมูลต้นฉบับ
-และสามารถใช้ร่วมกับ Filter อื่นได้
-""",
-    ),
-    (
-        "8. Filters — Minimum response ms",
-        """
-ใช้กรองเฉพาะ API ที่ใช้เวลามากกว่าหรือเท่ากับค่าที่กำหนด
-
-ตัวอย่าง:
-ใส่ 1000
-
-จะแสดงเฉพาะ API ที่ Response Time >= 1000 ms
-
-เหมาะสำหรับ:
-• หา API ช้า
-• Performance investigation
-• ตรวจ request ที่เกิน SLA
-
-ถ้าไม่ต้องการกรอง ให้เว้นว่าง
-""",
-    ),
-    (
-        "9. Filters — Page / Kafka Topic / Transaction",
-        """
-Page
-ใช้ค้นจาก CLIENT_PAGE_NAME
-
-ตัวอย่าง:
-Checkout
-
-จะเหลือ Log ที่ Page มีคำว่า Checkout
-
-Kafka Topic
-ใช้ค้นจาก kafka_topic_name
-
-ตัวอย่าง:
-payment-service
-
-Transaction ID
-ใช้ดูเฉพาะ API ใน Transaction เดียวกัน
-
-ตัวอย่าง:
-TX-CHECKOUT-001
-
-Filter ทั้งหมดสามารถใช้พร้อมกันได้
-
-ตัวอย่าง:
-Page = Checkout
-Method = POST
-Status = 5xx
-Minimum response ms = 1000
-
-ผลคือ:
-เฉพาะ POST API ในหน้า Checkout
-ที่ Error 5xx และใช้เวลา >= 1000 ms
-""",
-    ),
-    (
-        "10. Filters — HTTP Method / HTTP Status",
-        """
 HTTP Method:
-• ALL
-• GET
-• POST
-• PUT
-• PATCH
-• DELETE
+ALL, GET, POST, PUT, PATCH, DELETE
 
 HTTP Status:
-• ALL
-• 2xx
-• 3xx
-• 4xx
-• 5xx
-• Other
+ALL, 2xx, 3xx, 4xx, 5xx, Other
+
+Errors only:
+ใช้ดู Error ตาม rule ของโปรแกรม
+
+Slow only:
+ใช้ดู Slow API ตาม rule ของโปรแกรม
+
+Reset Filters:
+คืน Filter ทุกตัวกลับค่าเริ่มต้น โดยไม่ลบ Imported Logs หรือ Included Logs
+""",
+    ),
+    (
+        "8. ตัวอย่าง Filter หลายเงื่อนไข",
+        """
+ตัวอย่างหา Payment API ที่มีปัญหา:
+
+Search API / ID = payment
+HTTP Method = POST
+HTTP Status = 5xx
+
+ตัวอย่างหา API ช้าในหน้า Checkout:
+
+Page = Checkout
+Minimum response ms = 2000
+
+ตัวอย่างดู Journey เดียว:
+
+Transaction ID = TX-CHECKOUT-001
+
+Filter สามารถใช้พร้อมกันได้ ดังนั้นถ้าเงื่อนไขเข้มเกินไปจน Timeline ว่าง
+ให้กด Reset Filters แล้วค่อยเพิ่มเงื่อนไขทีละตัว
+""",
+    ),
+    (
+        "9. Export Selection — Include / Exclude",
+        """
+โปรแกรมไม่ Export ทุก Log ที่ Import มาโดยอัตโนมัติ
+เฉพาะ Log ที่อยู่ใน Included set เท่านั้นที่จะถูก Copy/Export
+
+Include Selected:
+1) เลือก Row ใน Timeline
+2) เลือกหลาย Row ได้ด้วย Shift และปุ่ม modifier ของระบบ
+3) กด Include Selected
+4) Column Export จะเป็น ☑
+
+Exclude Selected:
+เอา Row ที่เลือกออกจาก Included set
+
+Double-click Row:
+สลับ Include / Exclude ได้โดยตรง
+
+Included: N:
+บอกจำนวน Log ทั้งหมดที่ Include อยู่ ไม่ใช่จำนวน Row ที่กำลังแสดงหลัง Filter
+""",
+    ),
+    (
+        "10. Select All / Deselect All",
+        """
+Select All ใน UI ปัจจุบันหมายถึง:
+Include ทุก Log ที่ผ่าน Filter ปัจจุบัน
 
 ตัวอย่าง:
-Status = 5xx
-จะแสดง 500, 501, 502, 503 ฯลฯ
+Import 1,000 Logs
+→ Filter HTTP Status = 5xx
+→ เหลือ 12 Logs
+→ กด Select All
+ผลคือ Include 12 Logs ที่กำลังผ่าน Filter
 
-Status = 4xx
-จะแสดง 400, 401, 403, 404 ฯลฯ
+Deselect All:
+ล้าง Included set ทั้งหมด ไม่ว่าจะกำลัง Filter อะไรอยู่
+
+Deselect All ไม่ได้ลบ Imported Logs
 """,
     ),
     (
-        "11. Errors only / Slow only",
+        "11. Transactions Tab",
         """
-Errors only
-แสดงเฉพาะ Log ที่ HTTP Status >= 400
+Transactions รวม Log ตาม Transaction ID ของรายการที่ผ่าน Filter ปัจจุบัน
 
-Slow only
-แสดงเฉพาะ Log ที่ Response Time >= 3000 ms
-
-สามารถเปิดพร้อมกันได้
-
-ถ้าเปิดทั้ง:
-✓ Errors only
-✓ Slow only
-
-จะแสดงเฉพาะ API ที่เป็น Error และช้าพร้อมกัน
-""",
-    ),
-    (
-        "12. Transactions",
-        """
-Transaction Tab ใช้ดูการจัดกลุ่ม API ตาม Transaction ID
-
-จะแสดง:
+Column:
 • Transaction ID
-• จำนวน API
-• จำนวน Error
-• จำนวน Slow API
+• APIs
+• Errors
+• Slow
 
-ตัวอย่าง:
+Double-click Transaction:
+โปรแกรมนำ Transaction ID ไปใส่ช่อง Transaction ID Filter
+เพื่อให้ Timeline แสดงเฉพาะ Journey นั้น
 
-TX-CHECKOUT-001
-APIs: 5
-Errors: 1
-Slow: 1
+ถ้าเป็นกลุ่ม (no transaction) โปรแกรมจะล้าง Transaction ID Filter
 
-Double-click Transaction
-โปรแกรมจะเอา Transaction ID ไปใส่ Filter อัตโนมัติ
-Timeline จึงเหลือเฉพาะ API ของ Transaction นั้น
-
-เหมาะสำหรับดู Journey เช่น:
-
-cart/validate
-→ payment
-→ payment/confirm
-→ order/status
+ตัวอย่าง Journey:
+POST /cart/validate
+→ POST /promotion/check
+→ POST /payment
+→ POST /order/create
+→ GET /order/status
 """,
     ),
     (
-        "13. Evidence — Expected Result",
+        "12. Evidence — Expected / Actual",
         """
-Expected Result คือผลที่ Tester คาดหวัง
+Tab Evidence มีช่อง Expected Result และ Actual Result
+
+Expected Result:
+ผลที่ควรเกิดขึ้นตาม requirement
 
 ตัวอย่าง:
-Payment should complete successfully and the order
-should be created with status CONFIRMED.
+Payment should complete successfully and the order should be CONFIRMED.
 
-หรือภาษาไทย:
-หลังจากกดชำระเงิน ระบบควรชำระเงินสำเร็จ
-และสร้าง Order สถานะ CONFIRMED
+Actual Result:
+สิ่งที่เกิดขึ้นจริง
 
-ข้อมูลนี้จะถูกใส่ลงใน Ticket Evidence
+ตัวอย่าง:
+POST /api/v1/payment returned HTTP 500 and the order was not created.
+
+สองช่องนี้ไม่บังคับ แต่เมื่อกรอกแล้วจะถูกนำไปใส่ Evidence Preview,
+Copy for Ticket, Markdown และ summary ที่ Export
 """,
     ),
     (
-        "14. Evidence — Actual Result",
+        "13. Included Evidence Preview",
         """
-Actual Result คือสิ่งที่เกิดขึ้นจริง
+Preview สร้างจาก Included Logs เท่านั้น ไม่ได้สร้างจากทุก Row ใน Timeline
 
 ตัวอย่าง:
-Payment API returned HTTP 500 and the order
-was not created.
+Import 500 Logs
+Filter เหลือ 20
+Include 4
+→ Preview ใช้ 4 Logs
 
-หรือ:
-เมื่อกดชำระเงิน API /payment ตอบ HTTP 500
-และไม่สามารถสร้าง Order ได้
-
-Expected / Actual ไม่บังคับ
-ถ้าไม่กรอก โปรแกรมยังสามารถสร้าง Evidence ได้
-""",
-    ),
-    (
-        "15. Included Evidence Preview",
-        """
-Preview แสดงเฉพาะ Log ที่ถูก Include
-
-นี่เป็นจุดสำคัญ:
-Timeline อาจมี 100 Logs
-แต่ Include 3 Logs
-Preview จะใช้เฉพาะ 3 Logs
-
-ใน Preview จะมี:
-• Summary
+Preview ปัจจุบันประกอบด้วยข้อมูล เช่น:
+• Selected log count
 • Error / Slow count
 • Transaction count
 • Auto Summary
-• Expected Result
-• Actual Result
+• Expected / Actual
 • Timeline
-• API Detail
-• Query
-• Request
-• Response
+• API details
+• Request ID / Transaction ID
 • Error Fingerprint
+• Page / Kafka Topic
+• Query / Request / Response
 
-ควรตรวจ Preview ก่อน Copy หรือ Export
+ควรตรวจ Preview ก่อน Copy หรือ Export ทุกครั้ง
 """,
     ),
     (
-        "16. Mask sensitive data",
+        "14. Evidence Options — Mask sensitive data",
         """
-Mask sensitive data เปิดไว้เป็น Default
+Mask sensitive data เปิดเป็นค่าเริ่มต้น
 
-โปรแกรมพยายามปิดบังข้อมูลประเภท:
-• Authorization
-• Bearer Token
-• JWT
+เมื่อเปิด โปรแกรมจะส่งข้อมูลผ่าน sanitizer ก่อนนำไปสร้าง Evidence
+และก่อนสร้าง Sanitized log files
+
+ข้อมูลที่ควรระวัง เช่น:
+• Authorization / Bearer Token / JWT
 • Cookie
-• Password
-• PIN
-• Access Token
-• Refresh Token
+• Password / PIN
+• Access / Refresh Token
 • Session
-• Mobile / Phone
-• Email
-• Device ID
+• Email / Phone
+• Device identifiers
+• Field ภายในองค์กรที่ถือเป็นข้อมูลสำคัญ
 
-ตัวอย่าง:
-
-ก่อน:
-{
-  "password": "MySecret123",
-  "authorization": "Bearer abcdef"
-}
-
-หลัง Mask:
-{
-  "password": "********",
-  "authorization": "********"
-}
-
-แนะนำให้เปิด Mask ไว้
-โดยเฉพาะก่อนนำ Evidence ไปใส่ Ticket
+แม้เปิด Mask แล้ว ควรตรวจ Preview ก่อนส่ง Ticket โดยเฉพาะ Log Production
+หรือ Log ที่มีข้อมูลลูกค้า
 """,
     ),
     (
-        "17. Extra mask keys",
+        "15. Evidence Options — Extra mask keys",
         """
-ใช้กรณีองค์กรมี Field Sensitive เพิ่มเติมที่โปรแกรมไม่รู้จัก
+Extra mask keys ใช้เพิ่มชื่อ Field ที่องค์กรต้องการ Mask เอง
+โดยไม่ต้องแก้ source code
 
-กรอกชื่อ Field คั่นด้วย comma
-
-ตัวอย่าง:
+กรอกแบบ comma separated:
 
 employeeId,citizenId,accountNumber
 
-ถ้า Log มี:
+โปรแกรมจะแยกด้วย comma และนำชื่อ Field ที่ไม่ว่างไปเพิ่มใน sanitizer
 
-{
-  "employeeId": "E00001",
-  "accountNumber": "1234567890"
-}
-
-หลัง Mask:
-
-{
-  "employeeId": "********",
-  "accountNumber": "********"
-}
-
-ไม่ต้องแก้ Source Code
+เหมาะกับ Field เฉพาะระบบภายในที่ default sanitizer อาจไม่รู้จัก
 """,
     ),
     (
-        "18. Package Contents",
+        "16. Package Contents",
         """
-เลือกได้ว่า ZIP ที่ Export จะมีอะไร
+ก่อน Export สามารถเลือกเนื้อหาใน Package ได้ 4 แบบ:
 
 summary.txt
-• Evidence แบบ Text
-• เหมาะกับเปิดอ่านง่าย
+• เปิดเป็นค่าเริ่มต้น
+• Evidence แบบ plain text
 
 summary.md
-• Evidence แบบ Markdown
-• เหมาะกับระบบ Ticket/Documentation ที่รองรับ Markdown
+• เปิดเป็นค่าเริ่มต้น
+• Evidence ที่ห่อใน Markdown code block
 
 Raw log files
-• Log ต้นฉบับที่ไม่ได้ Mask
-• OFF เป็น Default
-• ควรเปิดเฉพาะเมื่อจำเป็น
+• ปิดเป็นค่าเริ่มต้น
+• เขียน e.raw โดยตรง
+• ไม่มีการ Mask
+• เปิดเฉพาะเมื่อมีเหตุผลและได้รับอนุญาตให้แชร์ข้อมูลต้นฉบับ
 
 Sanitized log files
-• Log ที่ผ่าน Mask แล้ว
-• ON เป็น Default
+• เปิดเป็นค่าเริ่มต้น
+• Log JSON ที่ผ่าน sanitizer
 
-ตัวอย่าง Package:
+ต้องเลือกอย่างน้อย 1 ประเภท มิฉะนั้น Export จะถูกปฏิเสธ
+""",
+    ),
+    (
+        "17. Actions — Copy Included for Ticket",
+        """
+Copy Included for Ticket สร้าง plain-text Evidence จาก Included Logs
+แล้ว Copy เข้า Clipboard
 
-QA_Evidence_20260821_170000.zip
+Flow:
+1) Include Logs
+2) กรอก Expected / Actual ถ้าต้องการ
+3) ตรวจ Mask
+4) ตรวจ Preview
+5) กด Copy Included for Ticket
+6) Paste ลง Ticket / Email / Chat ที่ได้รับอนุญาต
+
+ถ้าไม่มี Included Log โปรแกรมจะแจ้ง Nothing included
+""",
+    ),
+    (
+        "18. Actions — Copy Included as Markdown",
+        """
+สร้าง Evidence ชุดเดียวกันในรูปแบบ Markdown code block แล้ว Copy เข้า Clipboard
+
+เหมาะกับปลายทางที่รองรับ Markdown เช่น GitHub/GitLab/Wiki
+หรือ Ticket system บางระบบ
+
+ถ้าปลายทางไม่ render Markdown ให้ใช้ Copy Included for Ticket
+""",
+    ),
+    (
+        "19. Actions — Export Included Evidence",
+        """
+Export Included Evidence ใช้ Included Logs เท่านั้น
+
+ขั้นตอน:
+1) Include Logs
+2) ตั้ง Expected / Actual
+3) ตั้ง Mask / Extra mask keys
+4) เลือก Package Contents
+5) กด Export Included Evidence
+6) เลือก Parent Folder
+7) โปรแกรมสร้าง Folder ชื่อประมาณ:
+   QA_Evidence_20260824_120000
+8) โปรแกรมสร้าง ZIP ชื่อเดียวกัน:
+   QA_Evidence_20260824_120000.zip
+
+ภายใน Folder/ZIP จะมีเฉพาะประเภทที่เลือก
+
+ตัวอย่าง:
+QA_Evidence_20260824_120000/
 ├── summary.txt
 ├── summary.md
 └── sanitized/
     ├── 001_payment.json
     └── 002_order_status.json
 
-ถ้าเปิด Raw จะเพิ่ม:
-
-raw/
-├── 001_payment.json
-└── 002_order_status.json
+ถ้าเปิด Raw log files จะมี raw/ เพิ่มด้วย
 """,
     ),
     (
-        "19. Copy Included for Ticket",
+        "20. ชื่อไฟล์ Log ภายใน Evidence Package",
         """
-Copy เฉพาะ Included Logs ไป Clipboard
+ไฟล์ JSON ภายใน raw/ และ sanitized/ ใช้รูปแบบ:
 
-วิธีใช้:
-1) Include Log ที่ต้องการ
-2) ตรวจ Preview
-3) กด Copy Included for Ticket
-4) ไป Jira / Ticket / Email
-5) Paste
-
-ถ้าไม่มี Included Log
-โปรแกรมจะแจ้งให้เลือก Log ก่อน
-""",
-    ),
-    (
-        "20. Copy Included as Markdown",
-        """
-เหมือน Copy for Ticket
-แต่ห่อ Evidence ใน Markdown code block
-
-เหมาะกับ:
-• Jira ที่เปิด Markdown
-• GitHub Issue
-• GitLab
-• Wiki
-• Markdown Documentation
-
-ถ้าระบบปลายทางไม่รองรับ Markdown
-ใช้ Copy Included for Ticket แทน
-""",
-    ),
-    (
-        "21. Export Included Evidence",
-        """
-สร้าง Evidence ZIP จาก Included Logs เท่านั้น
-
-ขั้นตอน:
-1) Include Logs
-2) เลือก Package Contents
-3) กด Export Included Evidence
-4) เลือก Folder ปลายทาง
-5) โปรแกรมสร้าง ZIP
-
-ชื่อประมาณ:
-QA_Evidence_20260821_170000.zip
-
-ถ้าไม่ Include Log
-โปรแกรมจะไม่ Export
-
-ถ้า Package Contents ไม่เลือกอะไรเลย
-โปรแกรมจะแจ้ง Error
-""",
-    ),
-    (
-        "22. Analysis — Auto Defect Summary",
-        """
-Analysis Tab สรุป Log แบบ Rule-based
-ไม่มีการส่งข้อมูลไป AI หรือ Internet
+ลำดับ 3 หลัก + ชื่อส่วนท้ายของ API
 
 ตัวอย่าง:
+/api/v1/payment
+→ 001_payment.json
 
-Observed 15 API logs across 2 transaction(s).
-Detected 3 HTTP error(s) and 2 slow API(s).
-First error: POST /api/v1/payment returned 500...
-Found 1 repeated error signature...
+/api/v1/order/status
+→ 002_status.json
 
-ใช้สำหรับช่วย QA มองภาพรวมเร็วขึ้น
-แต่ไม่ควรใช้แทนการวิเคราะห์โดยคนทั้งหมด
+ลำดับนี้อิงลำดับของ Included Entries ที่ถูกส่งเข้า Export Package
+
+หมายเหตุ:
+Flow Evidence Package ปัจจุบันไม่ได้ใช้ชื่อ timestamp_api แบบ ExportLogsToFiles
+รุ่นเก่า ดังนั้นควรอิงชื่อไฟล์ตามรูปแบบ 001_api.json ของ source ปัจจุบัน
 """,
     ),
     (
-        "23. Analysis — Error Fingerprint",
+        "21. Analysis — Auto Defect Analysis",
         """
-Error Fingerprint เป็นรหัสของรูปแบบ Error
+Tab Analysis วิเคราะห์รายการที่ผ่าน Filter ปัจจุบัน ไม่ใช่เฉพาะ Included Logs
 
-โปรแกรมสร้างจากข้อมูลเช่น:
-• HTTP Method
-• API URI
-• HTTP Status
-• resultCode
-• Error Message
+จะแสดง:
+• Auto Summary
+• Duplicate / Similar Error Signatures
+• Error Fingerprint ที่เกิดซ้ำ
+• Timestamp / Method / API / HTTP Status ของรายการในกลุ่มซ้ำ
 
-ตัวอย่าง:
+จุดสำคัญ:
+Analysis เป็น Rule-based จากข้อมูลในโปรแกรม
+ไม่ได้ส่ง Log ไป AI หรือ Internet
 
-POST /api/v1/payment
-HTTP 500
-resultCode = 50001
-Internal Server Error
-
-=> ERR-A14F93C2
-
-ถ้า Log อีกตัวมีรูปแบบ Error เหมือนกัน
-จะได้ Fingerprint เดียวกัน
-
-ประโยชน์:
-• หา Error เกิดซ้ำ
-• ช่วยดูว่าอาจเป็น Defect เดิม
-• ลดเวลานั่งเทียบ Error ทีละ Log
+ใช้เป็นตัวช่วยหา pattern แต่ควรให้ QA/Developer ตรวจบริบทจริงก่อนสรุป Root Cause
 """,
     ),
     (
-        "24. Analysis — Duplicate / Similar Errors",
+        "22. Error Fingerprint / Duplicate Errors",
         """
-Analysis จะรวม Error ที่มี Fingerprint เดียวกัน
+Error Fingerprint ใช้สร้าง Signature ของ Error เพื่อช่วยจัดกลุ่ม Error ที่คล้ายกัน
 
-ตัวอย่าง:
+ถ้า Analysis พบ Fingerprint เดิมหลายครั้ง จะแสดงประมาณ:
 
 ERR-A14F93C2: 3 occurrence(s)
   - 11:03:36 POST /payment HTTP 500
   - 11:04:02 POST /payment HTTP 500
   - 11:06:14 POST /payment HTTP 500
 
-ความหมาย:
-พบ Error Signature เดียวกัน 3 ครั้ง
+ประโยชน์:
+• มองเห็น Error ที่เกิดซ้ำในชุด Log
+• ลดเวลานั่งเทียบ Error ทีละรายการ
+• ช่วยเลือก Evidence ที่เป็นตัวแทนของปัญหา
 
-หมายเหตุ:
-เป็นการตรวจภายใน Log ที่โหลดอยู่ตอนนี้
-ยังไม่ได้ค้น Ticket เก่าใน Jira
+ไม่ได้หมายความว่า Fingerprint เดียวกันยืนยันว่าเป็น Jira Defect เดียวกันเสมอ
 """,
     ),
     (
-        "25. ตัวอย่าง Workflow — Payment Defect",
+        "23. Flow ตัวอย่าง — Payment Defect",
         """
 สถานการณ์:
-Tester กด Payment แล้วหน้าจอ Error
+Tester กด Payment แล้วเกิด Error
 
-ขั้นตอน:
-
-1) Export Log จากระบบ Log เป็น JSON Array
-2) เปิด QA Evidence Builder
-3) Import JSON
-4) Search = payment
-5) Status = 5xx
-6) เห็น:
-   POST /api/v1/payment
-   HTTP 500
-   3211 ms
-7) เลือก Row แล้วกด Include Selected
-8) ถ้าต้องการ API ก่อนหน้า:
-   Reset Filter
-   Transaction = TX-CHECKOUT-001
-9) Include:
-   cart/validate
-   payment
-   order/status
+1) Import JSON / HAR
+2) Search API / ID = payment
+3) HTTP Status = 5xx
+4) ตรวจ Timeline
+5) Include POST /api/v1/payment ที่ผิดปกติ
+6) เปิด Transactions เพื่อหา Transaction เดียวกัน
+7) Double-click Transaction
+8) Include API ก่อน/หลัง Payment ที่จำเป็นต่อการอธิบาย Journey
+9) เปิด Analysis ดูว่ามี Error Signature ซ้ำหรือไม่
 10) ไป Evidence
-11) Expected:
-    Payment should succeed and order should be confirmed.
-12) Actual:
-    Payment returned HTTP 500 and order was not created.
-13) ตรวจ Mask sensitive data = ON
+11) Expected: Payment should succeed and order should be confirmed.
+12) Actual: Payment returned HTTP 500 and order was not created.
+13) เปิด Mask sensitive data
 14) ตรวจ Preview
 15) Copy Included for Ticket
-16) Paste ลง Defect
-17) ถ้าต้องแนบไฟล์ กด Export Included Evidence
-
-ผลคือ QA ส่ง Ticket ที่มี Technical Evidence ครบขึ้น
-โดยไม่ต้อง Copy Log ทีละไฟล์
+16) ถ้าต้องแนบไฟล์ ให้ Export Included Evidence
 """,
     ),
     (
-        "26. ตัวอย่าง Workflow — หา API ช้า",
+        "24. Flow ตัวอย่าง — Performance Issue",
         """
 สถานการณ์:
-ลูกค้าบอกว่าหน้า Checkout โหลดช้า
+หน้า Checkout ช้า
 
 1) Import Log
 2) Page = Checkout
 3) Minimum response ms = 2000
-4) หรือเปิด Slow only
-5) Timeline อาจพบ:
-
-GET /cart             350 ms
-POST /validate       2100 ms
-POST /payment        4100 ms
-
-6) Include /validate และ /payment
+   หรือเปิด Slow only
+4) ตรวจ Timeline
+5) Include API ที่ช้าและ API ที่ช่วยอธิบาย Journey
+6) ดู Transactions เพื่อเข้าใจลำดับการเรียก
 7) ไป Evidence
-8) Actual Result:
-   Checkout waits around 6 seconds before completion.
-9) Export Evidence
+8) กรอก Actual Result เช่น:
+   Checkout waits several seconds before completion.
+9) ตรวจ Preview
+10) Copy หรือ Export Evidence
 
-QA สามารถส่งให้ Developer ดู API ที่ช้าได้ตรงจุด
+ถ้าต้องการวิเคราะห์ทุก Slow Log ในชุดข้อมูล ให้ใช้ Analysis ร่วมด้วย
 """,
     ),
     (
-        "27. ตัวอย่าง Workflow — Transaction",
+        "25. Flow ตัวอย่าง — Transaction Journey",
         """
 สถานการณ์:
-ต้องการดู API ทั้ง Journey ของการ Checkout
+ต้องการแนบ API ทั้ง Journey ของ Checkout
 
 1) Import Log
 2) เปิด Transactions
-3) พบ TX-CHECKOUT-001
-4) APIs = 5, Errors = 1
-5) Double-click Transaction
-6) Timeline เหลือ 5 API:
-
-POST /cart/validate
-POST /promotion/check
-POST /payment
-POST /order/create
-GET  /order/status
-
-7) Select All
+3) หา Transaction ที่ต้องการ
+4) Double-click Transaction
+5) Timeline จะถูกกรองด้วย Transaction ID
+6) ตรวจว่ารายการที่เหลือถูกต้อง
+7) กด Select All
 8) ไป Evidence
-9) จะได้ Timeline ทั้ง Journey ใน Ticket
+9) ตรวจ Timeline ใน Preview
+10) Copy / Export
+
+Select All ณ จุดนี้จะ Include เฉพาะรายการที่ผ่าน Transaction Filter
 """,
     ),
     (
-        "28. ปัญหาที่พบบ่อย",
+        "26. Help / User Guide และ About",
+        """
+เปิดคู่มือได้ 2 ทาง:
+
+• ปุ่ม Help / User Guide ด้านล่างสุดของ Sidebar
+• Menu bar → Help → User Guide
+
+หน้าคู่มือมี:
+• รายการหัวข้อด้านซ้าย
+• เนื้อหาด้านขวา
+• Search ด้านบน
+
+Search สามารถใช้คำ เช่น:
+Export, Mask, Transaction, Error, HAR, Raw
+
+Menu bar → Help → About
+จะแสดงชื่อโปรแกรมและ Version 1.0.0
+""",
+    ),
+    (
+        "27. ปัญหาที่พบบ่อย",
         """
 Import failed
-• ตรวจว่า JSON เป็น JSON Array
-• ตรวจ comma / quote / bracket
-• ถ้าเป็น HAR ให้ใช้ไฟล์ HAR จริง
+• ตรวจ JSON/HAR ว่าสมบูรณ์
+• ลองเปิดไฟล์ด้วย text editor เพื่อตรวจ syntax
+• ถ้า Copy JSON มา ให้ลอง Paste JSON
 
-Timeline ว่าง
-• ตรวจ Filter ว่าค้างอยู่หรือไม่
+Timeline ว่างหลัง Import
 • กด Reset Filters
+• ตรวจ Status/Method/Minimum response ms
 
-Export แล้วไม่มี Log ที่ต้องการ
-• ตรวจ Column Export ว่าเป็น ☑ หรือไม่
-• Export ใช้ Included Logs ไม่ใช่ทุก Row
+Nothing included
+• เลือก Row แล้วกด Include Selected
+• หรือใช้ Select All หลังตั้ง Filter
 
-Copy แล้วขึ้น Nothing included
-• ต้อง Include Selected หรือ Select All ก่อน
+Export ไม่มี Log ที่ต้องการ
+• ตรวจ Column Export ว่าเป็น ☑
+• Preview ควรมีรายการเดียวกับที่จะ Export
 
-ข้อมูล Sensitive ยังแสดง
-• ตรวจ Mask sensitive data = ON
-• เพิ่ม Field ใน Extra mask keys
+Export failed เพราะไม่ได้เลือก Package Contents
+• เปิดอย่างน้อย summary.txt, summary.md, Raw หรือ Sanitized
 
-ปุ่มบางปุ่มหาไม่เจอเมื่อหน้าต่างเล็ก
-• Sidebar ด้านซ้าย Scroll ได้
-• Timeline มี Horizontal Scrollbar
-• Tabs ช่วยแยกฟังก์ชันออกจากกัน
-
-Tkinter error บน macOS:
-ModuleNotFoundError: No module named '_tkinter'
-
-ถ้าใช้ Homebrew Python 3.14:
-brew install python-tk@3.14
-""",
-    ),
-    (
-        "29. คำแนะนำด้าน Security",
-        """
-Log อาจมีข้อมูลสำคัญ เช่น:
-• Token
-• Authorization
-• Session
-• Customer information
-• Internal endpoint
-• Device ID
-• Personal information
-
-คำแนะนำ:
+Sensitive data ยังปรากฏ
 • เปิด Mask sensitive data
-• ใช้ Sanitized logs เป็นหลัก
-• Raw log files เปิดเฉพาะเมื่อจำเป็น
-• ตรวจ Evidence ก่อนส่ง
-• ปฏิบัติตาม Security Policy ขององค์กร
+• เพิ่มชื่อ Field ใน Extra mask keys
+• ตรวจ Preview ก่อนส่ง
 
-โปรแกรมทำงาน Local-only
-ไม่มี Code สำหรับ Upload Log ไป Server ภายนอก
+หน้าต่างเล็ก
+• Sidebar เลื่อนแนวตั้งได้
+• Timeline มี Scrollbar
+• เนื้อหาหลักแยกเป็น Tabs
 """,
     ),
     (
-        "30. Quick Start สรุปสั้น",
+        "28. macOS / Windows — การเปิดโปรแกรม",
         """
-สำหรับคนที่ไม่เคยใช้เลย:
+ถ้าใช้ Source Code:
+ต้องมี Python environment และ Tkinter ที่ทำงานได้
 
-1) Import JSON / HAR
-2) เปิด Timeline
-3) ใช้ Filter หา API
-4) เลือก Row
-5) Include Selected
-6) ดูว่า Export เป็น ☑
-7) ไป Evidence
-8) กรอก Expected / Actual ถ้าต้องการ
-9) เปิด Mask sensitive data
-10) ตรวจ Preview
-11) Copy Included for Ticket
-หรือ
-12) Export Included Evidence
+ถ้า macOS แจ้ง:
+ModuleNotFoundError: No module named '_tkinter'
+ให้ตรวจ Python/Tk installation ที่ใช้อยู่ก่อน
 
-จำง่าย ๆ:
+ถ้าใช้ไฟล์ .app หรือ .exe จาก Release:
+ไม่จำเป็นต้องเปิดผ่าน VS Code
 
-Import
-→ Filter
-→ Include
-→ Review
-→ Copy / Export
+macOS อาจแสดง Gatekeeper warning ถ้า build ยังไม่ได้ Developer ID sign/notarize
+Windows อาจแสดง SmartScreen/Unknown Publisher ถ้า build ยังไม่ได้ code-sign
+ด้วย certificate ที่ระบบเชื่อถือ
+
+Security warning ของระบบปฏิบัติการเป็นคนละส่วนกับ Log masking ภายในโปรแกรม
+""",
+    ),
+    (
+        "29. Security / Privacy ก่อนส่ง Evidence",
+        """
+Log สามารถมีข้อมูลสำคัญมากกว่าที่เห็นบนหน้าจอ เช่น Header หรือ Raw Payload
+
+แนวทางใช้งาน:
+• เปิด Mask sensitive data เป็นค่าเริ่มต้น
+• ใช้ Sanitized log files เป็นหลัก
+• Raw log files เปิดเฉพาะเมื่อจำเป็น
+• เพิ่ม Extra mask keys สำหรับ Field ภายในองค์กร
+• ตรวจ Included Evidence Preview
+• ถ้าเปิด Raw ให้ตรวจไฟล์ raw/ ก่อนแนบ Ticket
+• ปฏิบัติตาม Security / Data Classification Policy ขององค์กร
+
+โปรแกรมปัจจุบันประมวลผล Log แบบ Local-only ตาม source ที่ตรวจ
+แต่ผู้ใช้ยังต้องรับผิดชอบว่าปลายทางที่นำ Evidence ไปวางได้รับอนุญาตให้เห็นข้อมูลนั้น
+""",
+    ),
+    (
+        "30. Checklist ก่อนสร้าง Ticket",
+        """
+ก่อน Copy / Export แนะนำตรวจตามนี้:
+
+□ Import ชุด Log ถูกไฟล์
+□ Reset/ตั้ง Filter ถูกต้อง
+□ Include เฉพาะ Log ที่จำเป็น
+□ ตรวจ Transaction/Journey
+□ ตรวจ Analysis ถ้าต้องการหา Error ซ้ำ
+□ Expected Result ถูกต้อง
+□ Actual Result ถูกต้อง
+□ Mask sensitive data เปิดอยู่
+□ Extra mask keys ครบ
+□ Preview ไม่มีข้อมูลที่ไม่ควรส่ง
+□ Raw log files ปิดอยู่ถ้าไม่จำเป็น
+□ Package Contents ถูกต้อง
+□ Copy/Export แล้วตรวจผลลัพธ์อีกครั้ง
+""",
+    ),
+    (
+        "31. Quick Reference — ปุ่มสำคัญ",
+        """
+Import JSON / HAR
+→ โหลดไฟล์ Log
+
+Paste JSON
+→ วาง JSON โดยตรง
+
+Clear
+→ ล้างงานปัจจุบัน
+
+Reset Filters
+→ ล้าง Filter แต่เก็บ Log/Included
+
+Include Selected
+→ Include Row ที่เลือก
+
+Exclude Selected
+→ เอา Row ที่เลือกออกจาก Included
+
+Select All
+→ Include ทุก Row ที่ผ่าน Filter
+
+Deselect All
+→ ล้าง Included ทั้งหมด
+
+Copy Included for Ticket
+→ Copy Evidence แบบ Text
+
+Copy Included as Markdown
+→ Copy Evidence แบบ Markdown
+
+Export Included Evidence
+→ สร้าง Folder + ZIP ตาม Package Contents
+
+Help / User Guide
+→ เปิดคู่มือฉบับนี้
 """,
     ),
 ]

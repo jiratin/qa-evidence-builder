@@ -4,6 +4,12 @@ All notable changes to QA Evidence Builder are documented in this file.
 
 The project follows Semantic Versioning where practical.
 
+## [1.1.1] - 2026-08-24
+
+### Fixed
+
+- Install the Linux EGL/XCB runtime libraries required by the headless PySide6 UI smoke test in GitHub Actions.
+
 ## [1.1.0] - 2026-08-24
 
 ### Changed
@@ -13,6 +19,7 @@ The project follows Semantic Versioning where practical.
 - Preserved import, selection, filtering, masking, evidence, analysis, copy, and package export behavior.
 - Updated local build scripts and GitHub Actions for the Qt runtime.
 - Release descriptions are now generated from actual commits and pull requests, with categorized changes and stable download/security notes.
+
 
 ## [1.0.0] - 2026-08-21
 

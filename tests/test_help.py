@@ -17,9 +17,13 @@ for keyword in [
     "Transaction",
     "Expected Result",
     "Mask sensitive data",
-    "Export Included Evidence",
+    "Export evidence",
     "Error Fingerprint",
     "Security",
+    "Single JSON",
+    "Folder Grouping",
+    "Dark / Light Mode",
+    "Also create ZIP archive",
 ]:
     assert keyword.lower() in combined.lower(), keyword
 

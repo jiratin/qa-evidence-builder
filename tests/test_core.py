@@ -75,6 +75,23 @@ assert entries[0].transaction_id == "TX-001"
 assert entries[0].is_error
 assert entries[0].is_slow
 
+single = parse_auto(sample[0])
+assert len(single) == 1
+
+body_transaction = parse_auto({"fields": {
+    "REQUEST_URI": ["/api/fallback?transactionId=URI-TX"],
+    "REQUEST_BODY": ['{"payload":{"requestId":"BODY-REQ","transactionId":"BODY-TX"}}'],
+    "TRANSACTION_ID": ["FIELD-TX"],
+}})
+assert body_transaction[0].transaction_id == "BODY-TX"
+
+uri_transaction = parse_auto({"fields": {
+    "REQUEST_URI": ["/api/v1/orders/query-transaction?transactionId=SERVICE260824152809-NE12816&orderId=123"],
+    "REQUEST_BODY": ["{}"],
+    "TRANSACTION_ID": ["FIELD-TX"],
+}})
+assert uri_transaction[0].transaction_id == "SERVICE260824152809-NE12816"
+
 errors = filter_entries(entries, errors_only=True)
 assert len(errors) == 2
 
@@ -153,6 +170,7 @@ with tempfile.TemporaryDirectory() as directory:
         include_summary_md=False,
         include_raw=False,
         include_sanitized=True,
+        include_zip=True,
     )
 
     assert archive_path.exists()
@@ -164,5 +182,23 @@ with tempfile.TemporaryDirectory() as directory:
         assert not any(name.endswith("summary.md") for name in names)
         assert not any("/raw/" in name for name in names)
         assert sum("/sanitized/" in name for name in names) == 1
+
+with tempfile.TemporaryDirectory() as directory:
+    grouped_entries = parse_auto([
+        {"fields": {"REQUEST_URI": ["/a"], "kafka_topic_name": ["topic-a"]}},
+        {"fields": {"REQUEST_URI": ["/b"], "kafka_topic_name": ["topic-b"]}},
+        {"fields": {"REQUEST_URI": ["/c"], "kafka_topic_name": ["topic-a"]}},
+        {"fields": {"REQUEST_URI": ["/d"], "kafka_topic_name": ["topic-c"]}},
+    ])
+    destination = Path(directory) / "grouped"
+    result = export_package(
+        grouped_entries, destination, group_by="kafka", include_zip=False
+    )
+    assert result == destination
+    assert not destination.with_suffix(".zip").exists()
+    assert (destination / "topic-a" / "summary.txt").exists()
+    assert (destination / "topic-b" / "summary.txt").exists()
+    assert (destination / "topic-c" / "summary.txt").exists()
+    assert len(list((destination / "topic-a" / "sanitized").glob("*.json"))) == 2
 
 print("ALL_V3_TESTS_PASSED")

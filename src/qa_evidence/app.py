@@ -4,7 +4,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QSettings, Qt
 from PySide6.QtGui import QColor, QKeySequence, QShortcut
 from PySide6.QtWidgets import (
     QApplication, QCheckBox, QComboBox, QDialog, QFileDialog, QFrame,
@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout, QWidget,
 )
 
+from . import __version__
 from .analyzer import build_auto_summary, error_fingerprint, find_duplicate_errors
 from .evidence import build_markdown, build_ticket
 from .exporter import export_package
@@ -67,10 +68,13 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("QA Evidence Builder")
         self.resize(1480, 900)
         self.setMinimumSize(860, 620)
+        self.settings = QSettings("QA Evidence Builder", "QA Evidence Builder")
+        self.theme_mode = self.settings.value("theme", "dark")
         self.entries, self.filtered = [], []
         self.included_indexes = set()
         self._build()
         self._connect_filters()
+        self._apply_theme()
         QShortcut(QKeySequence("Ctrl+O"), self, activated=self.import_file)
         QShortcut(QKeySequence("Ctrl+E"), self, activated=self.export)
         self.refresh()
@@ -122,7 +126,7 @@ class MainWindow(QMainWindow):
         self.nav_buttons[0].setChecked(True)
         lay.addStretch()
         lay.addWidget(button("?  Help / User Guide", self.open_help, name="nav"))
-        version = QLabel("v1.1.0  •  Local only")
+        version = QLabel(f"v{__version__}  •  Local only")
         version.setObjectName("muted")
         lay.addWidget(version)
         return side
@@ -138,8 +142,11 @@ class MainWindow(QMainWindow):
         titles.addWidget(self.page_subtitle)
         lay.addLayout(titles)
         lay.addStretch()
+        self.theme_button = button("Light mode", self.toggle_theme)
+        lay.addWidget(self.theme_button)
         lay.addWidget(button("Import JSON / HAR", self.import_file))
         lay.addWidget(button("Paste JSON", self.paste_json))
+        lay.addWidget(button("Clear", self.clear_all))
         lay.addWidget(button("Export Evidence", self.export, primary=True))
         return lay
 
@@ -267,6 +274,18 @@ class MainWindow(QMainWindow):
         self.raw = QCheckBox("Raw log files")
         self.sanitized = QCheckBox("Sanitized log files"); self.sanitized.setChecked(True)
         for check in (self.summary_txt, self.summary_md, self.raw, self.sanitized): options.addWidget(check)
+        options.addSpacing(12)
+        grouping = QLabel("Folder grouping"); grouping.setObjectName("sectionTitle"); options.addWidget(grouping)
+        self.export_group = QComboBox()
+        self.export_group.addItem("No grouping", "none")
+        self.export_group.addItem("Kafka topic", "kafka")
+        self.export_group.addItem("Page name", "page")
+        self.export_group.addItem("Custom folder", "custom")
+        self.custom_group_name = QLineEdit(); self.custom_group_name.setPlaceholderText("Custom folder name")
+        self.custom_group_name.setVisible(False)
+        self.include_zip = QCheckBox("Also create ZIP archive")
+        options.addWidget(self.export_group); options.addWidget(self.custom_group_name); options.addWidget(self.include_zip)
+        self.export_group.currentIndexChanged.connect(self._update_grouping_options)
         options.addStretch()
         options.addWidget(button("Copy for ticket", self.copy_ticket))
         options.addWidget(button("Copy as Markdown", self.copy_markdown))
@@ -287,6 +306,18 @@ class MainWindow(QMainWindow):
         for edit in (self.search, self.min_ms, self.page_filter, self.topic, self.transaction): edit.textChanged.connect(self.refresh)
         self.method.currentTextChanged.connect(self.refresh); self.status.currentTextChanged.connect(self.refresh)
         self.errors_only.toggled.connect(self.refresh); self.slow_only.toggled.connect(self.refresh)
+
+    def _apply_theme(self):
+        QApplication.instance().setStyleSheet(stylesheet(self.theme_mode))
+        self.theme_button.setText("Dark mode" if self.theme_mode == "light" else "Light mode")
+
+    def toggle_theme(self):
+        self.theme_mode = "light" if self.theme_mode == "dark" else "dark"
+        self.settings.setValue("theme", self.theme_mode)
+        self._apply_theme()
+
+    def _update_grouping_options(self):
+        self.custom_group_name.setVisible(self.export_group.currentData() == "custom")
 
     def _navigate(self, index):
         titles = ("Dashboard", "Transactions", "Evidence", "Analysis")
@@ -315,6 +346,15 @@ class MainWindow(QMainWindow):
         try:
             self.entries = parse_auto(dialog.editor.toPlainText().strip()); self.included_indexes.clear(); self.refresh()
         except Exception as exc: QMessageBox.critical(self, "Invalid input", str(exc))
+
+    def clear_all(self):
+        self.entries = []
+        self.filtered = []
+        self.included_indexes.clear()
+        self.expected.clear()
+        self.actual.clear()
+        self.reset_filters()
+        self.status_label.setText("Cleared — import JSON or HAR to begin")
 
     def reset_filters(self):
         for edit in (self.search, self.min_ms, self.page_filter, self.topic, self.transaction): edit.clear()
@@ -400,7 +440,10 @@ class MainWindow(QMainWindow):
         if not parent: return
         destination = Path(parent) / ("QA_Evidence_" + datetime.now().strftime("%Y%m%d_%H%M%S"))
         try:
-            path = export_package(entries=entries, destination=destination, mask=self.mask.isChecked(), expected=self.expected.toPlainText().strip(), actual=self.actual.toPlainText().strip(), extra_mask_keys=self._extra_mask_keys(), include_summary_txt=self.summary_txt.isChecked(), include_summary_md=self.summary_md.isChecked(), include_raw=self.raw.isChecked(), include_sanitized=self.sanitized.isChecked())
+            if self.export_group.currentData() == "custom" and not self.custom_group_name.text().strip():
+                QMessageBox.information(self, "Folder name required", "Enter a custom folder name before exporting.")
+                return
+            path = export_package(entries=entries, destination=destination, mask=self.mask.isChecked(), expected=self.expected.toPlainText().strip(), actual=self.actual.toPlainText().strip(), extra_mask_keys=self._extra_mask_keys(), include_summary_txt=self.summary_txt.isChecked(), include_summary_md=self.summary_md.isChecked(), include_raw=self.raw.isChecked(), include_sanitized=self.sanitized.isChecked(), group_by=self.export_group.currentData(), custom_group_name=self.custom_group_name.text().strip(), include_zip=self.include_zip.isChecked())
             QMessageBox.information(self, "Export complete", f"Exported {len(entries)} logs.\n\nCreated:\n{path}")
         except Exception as exc: QMessageBox.critical(self, "Export failed", str(exc))
 

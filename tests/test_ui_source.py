@@ -17,5 +17,8 @@ assert "PySide6" in help_dialog
 assert "HELP_SECTIONS" in help_dialog
 assert "QFrame#sidebar" in theme
 assert "QPushButton#primary" in theme
+assert '"light"' in theme
+assert "Also create ZIP archive" in app
+assert "Kafka topic" in app
 
 print("ALL_UI_SOURCE_TESTS_PASSED")

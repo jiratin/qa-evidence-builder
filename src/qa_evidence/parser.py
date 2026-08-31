@@ -24,6 +24,28 @@ def _jsonish(value):
     except json.JSONDecodeError:
         return value
 
+def _find_nested(value, *names):
+    """Find the first non-empty key recursively, case-insensitively."""
+    value = _jsonish(value)
+    wanted = {name.casefold() for name in names}
+    if isinstance(value, dict):
+        for key, item in value.items():
+            if str(key).casefold() in wanted and item not in (None, "", [], {}):
+                return item
+        for item in value.values():
+            found = _find_nested(item, *names)
+            if found not in (None, "", [], {}):
+                return found
+    elif isinstance(value, list):
+        for item in value:
+            found = _find_nested(item, *names)
+            if found not in (None, "", [], {}):
+                return found
+    return ""
+
+def _preferred_identifier(value):
+    return _find_nested(value, "transactionId") or _find_nested(value, "requestId")
+
 def _parse_timestamp(value):
     if not value:
         return "", 0.0
@@ -49,6 +71,23 @@ def _parse_timestamp(value):
         return value, 0.0
 
 def _transaction_id(fields):
+    request_body = _first(fields, "REQUEST_BODY", "REQUEST_BODY.keyword")
+    body_value = _preferred_identifier(request_body)
+    if body_value:
+        return str(body_value)
+
+    request_uri = str(_first(fields, "REQUEST_URI", "REQUEST_URI.keyword"))
+    parsed_uri = urlparse(request_uri)
+    uri_query = parse_qs(parsed_uri.query)
+    query_value = _preferred_identifier(uri_query)
+    if query_value:
+        return str(query_value[0] if isinstance(query_value, list) else query_value)
+
+    request_params = _jsonish(_first(fields, "REQUEST_PARAMS", "REQUEST_PARAMS.keyword"))
+    params_value = _preferred_identifier(request_params)
+    if params_value:
+        return str(params_value[0] if isinstance(params_value, list) else params_value)
+
     direct = _first(fields, "TRANSACTION_ID", "TRANSACTION_ID.keyword")
     if direct:
         return str(direct)
@@ -78,7 +117,7 @@ def parse_json_array(payload):
         if not isinstance(raw, dict):
             continue
 
-        fields = raw.get("fields") or {}
+        fields = raw.get("fields") or raw.get("_source") or raw
         ts_raw = str(_first(fields, "TIMESTAMP", "TIMESTAMP.keyword", "@timestamp"))
         ts_display, ts_sort = _parse_timestamp(ts_raw)
 
@@ -136,11 +175,16 @@ def parse_har(payload):
             for h in req.get("headers", [])
             if isinstance(h, dict) and h.get("name")
         }
+        headers_lower = {str(key).lower(): value for key, value in headers.items()}
 
-        request_id = headers.get("x-request-id") or headers.get("x-api-request-id") or ""
+        request_id = headers_lower.get("x-request-id") or headers_lower.get("x-api-request-id") or ""
+        body_transaction = _preferred_identifier(req_body)
+        query_transaction = _preferred_identifier(query)
         transaction_id = (
-            headers.get("mfaf-transaction")
-            or headers.get("x-api-request-id")
+            body_transaction
+            or (query_transaction[0] if isinstance(query_transaction, list) else query_transaction)
+            or headers_lower.get("mfaf-transaction")
+            or headers_lower.get("x-api-request-id")
             or request_id
         )
 
@@ -171,4 +215,6 @@ def parse_auto(payload):
         return parse_json_array(parsed)
     if isinstance(parsed, dict) and isinstance(parsed.get("log"), dict):
         return parse_har(parsed)
-    raise ValueError("Unsupported input. Use JSON Array logs or HAR.")
+    if isinstance(parsed, dict):
+        return parse_json_array([parsed])
+    raise ValueError("Unsupported input. Use a JSON object, JSON Array, or HAR.")

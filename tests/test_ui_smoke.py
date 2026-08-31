@@ -18,6 +18,12 @@ window.refresh()
 assert window.table.rowCount() == len(window.entries)
 assert window.pages.count() == 4
 assert window.mask.isChecked()
+assert window.export_group.count() == 4
+assert not window.include_zip.isChecked()
+original_theme = window.theme_mode
+window.toggle_theme()
+assert window.theme_mode != original_theme
+window.toggle_theme()
 window.include_all_filtered()
 assert len(window.included_entries()) == len(window.entries)
 assert window.preview.toPlainText().strip()

@@ -7,7 +7,7 @@ QA Evidence Builder คือเครื่องมือสำหรับช
 Log ที่ต้องการไปใช้เป็นหลักฐานประกอบ Ticket / Defect ได้
 
 สิ่งที่โปรแกรมทำได้:
-• Import JSON Array จากระบบ Log เช่น Kibana / Elasticsearch
+• Import JSON object หรือ JSON Array จากระบบ Log เช่น Kibana / Elasticsearch
 • Import HAR จาก Browser / Network tools
 • ดู API ตามลำดับเวลา
 • Filter หา API ที่สนใจ
@@ -15,7 +15,7 @@ Log ที่ต้องการไปใช้เป็นหลักฐา�
 • เลือกเฉพาะ Log ที่ต้องการ Export
 • Mask ข้อมูลสำคัญ เช่น Token / Password / Email
 • สร้าง Evidence สำหรับแปะ Ticket
-• Export เป็น ZIP พร้อม summary และ log ที่เลือก
+• Export เป็นโฟลเดอร์ และเลือกสร้าง ZIP เพิ่มได้
 • วิเคราะห์ Error Fingerprint และหา Error ที่เกิดซ้ำ
 
 ตัวอย่างการใช้งานแบบง่าย:
@@ -26,7 +26,7 @@ Log ที่ต้องการไปใช้เป็นหลักฐา�
 5) เลือก API ที่ต้องการ
 6) กด Include Selected
 7) ไปที่ Evidence เพื่อดู Preview
-8) กด Copy Included for Ticket หรือ Export Included Evidence
+8) กด Copy for ticket หรือ Export evidence
 """,
     ),
     (
@@ -35,10 +35,11 @@ Log ที่ต้องการไปใช้เป็นหลักฐา�
 ปุ่ม Import JSON / HAR ใช้สำหรับเปิดไฟล์ Log จากเครื่อง
 
 รองรับ:
+• Single JSON object
 • JSON Array
 • HAR
 
-JSON Array ต้องมีรูปแบบประมาณนี้:
+Single JSON ใช้ object หนึ่งรายการ ส่วน JSON Array ใช้หลาย object เช่น:
 
 [
   {
@@ -79,7 +80,7 @@ Paste JSON ใช้กรณีที่ไม่ได้มีไฟล์ �
 วิธีใช้:
 1) กด Paste JSON
 2) จะมีหน้าต่างใหม่เปิดขึ้น
-3) วาง JSON Array หรือ HAR JSON ลงในช่อง
+3) วาง Single JSON, JSON Array หรือ HAR JSON ลงในช่อง
 4) กด Load Logs
 5) ถ้ารูปแบบถูกต้อง Log จะเข้า Timeline
 
@@ -125,8 +126,8 @@ Timeline เป็นหน้าหลักสำหรับดู API ทั
 Column สำคัญ:
 
 Export
-• ☐ = ยังไม่ได้เลือกสำหรับ Export
-• ☑ = ถูก Include แล้ว
+• ○ = ยังไม่ได้ Include สำหรับ Export
+• ● = Include แล้ว
 
 Timestamp
 • เวลาที่ API เกิดขึ้น
@@ -175,7 +176,7 @@ V3 ขึ้นไปจะไม่ Export ทุก Log อัตโนมั�
    • macOS ใช้ Command หรือ Shift
    • Windows ใช้ Ctrl หรือ Shift
 4) กด Include Selected
-5) Column Export จะเปลี่ยนจาก ☐ เป็น ☑
+5) Column Export จะเปลี่ยนจาก ○ เป็น ●
 
 วิธีที่ 2 — Double-click
 • Double-click ที่ Row เพื่อสลับ Include / Exclude
@@ -479,7 +480,7 @@ employeeId,citizenId,accountNumber
     (
         "18. Package Contents",
         """
-เลือกได้ว่า ZIP ที่ Export จะมีอะไร
+เลือกได้ว่าโฟลเดอร์ Evidence จะมีอะไร
 
 summary.txt
 • Evidence แบบ Text
@@ -498,9 +499,9 @@ Sanitized log files
 • Log ที่ผ่าน Mask แล้ว
 • ON เป็น Default
 
-ตัวอย่าง Package:
+ตัวอย่างโฟลเดอร์ Evidence:
 
-QA_Evidence_20260821_170000.zip
+QA_Evidence_20260821_170000/
 ├── summary.txt
 ├── summary.md
 └── sanitized/
@@ -515,14 +516,14 @@ raw/
 """,
     ),
     (
-        "19. Copy Included for Ticket",
+        "19. Copy for ticket",
         """
 Copy เฉพาะ Included Logs ไป Clipboard
 
 วิธีใช้:
 1) Include Log ที่ต้องการ
 2) ตรวจ Preview
-3) กด Copy Included for Ticket
+3) กด Copy for ticket
 4) ไป Jira / Ticket / Email
 5) Paste
 
@@ -531,7 +532,7 @@ Copy เฉพาะ Included Logs ไป Clipboard
 """,
     ),
     (
-        "20. Copy Included as Markdown",
+        "20. Copy as Markdown",
         """
 เหมือน Copy for Ticket
 แต่ห่อ Evidence ใน Markdown code block
@@ -544,23 +545,25 @@ Copy เฉพาะ Included Logs ไป Clipboard
 • Markdown Documentation
 
 ถ้าระบบปลายทางไม่รองรับ Markdown
-ใช้ Copy Included for Ticket แทน
+ใช้ Copy for ticket แทน
 """,
     ),
     (
-        "21. Export Included Evidence",
+        "21. Export evidence",
         """
-สร้าง Evidence ZIP จาก Included Logs เท่านั้น
+สร้างโฟลเดอร์ Evidence จาก Included Logs เท่านั้น และเลือกสร้าง ZIP เพิ่มได้
 
 ขั้นตอน:
 1) Include Logs
 2) เลือก Package Contents
-3) กด Export Included Evidence
+3) กด Export evidence
 4) เลือก Folder ปลายทาง
-5) โปรแกรมสร้าง ZIP
+5) โปรแกรมสร้างโฟลเดอร์ Evidence
+6) ถ้าเปิด Also create ZIP archive จะได้ไฟล์ ZIP เพิ่มอีกหนึ่งไฟล์
 
 ชื่อประมาณ:
-QA_Evidence_20260821_170000.zip
+QA_Evidence_20260821_170000/
+QA_Evidence_20260821_170000.zip (เมื่อเลือกสร้าง ZIP)
 
 ถ้าไม่ Include Log
 โปรแกรมจะไม่ Export
@@ -572,7 +575,7 @@ QA_Evidence_20260821_170000.zip
     (
         "22. Analysis — Auto Defect Summary",
         """
-Analysis Tab สรุป Log แบบ Rule-based
+หน้า Analysis สรุป Log แบบ Rule-based
 ไม่มีการส่งข้อมูลไป AI หรือ Internet
 
 ตัวอย่าง:
@@ -668,9 +671,9 @@ Tester กด Payment แล้วหน้าจอ Error
     Payment returned HTTP 500 and order was not created.
 13) ตรวจ Mask sensitive data = ON
 14) ตรวจ Preview
-15) Copy Included for Ticket
+15) Copy for ticket
 16) Paste ลง Defect
-17) ถ้าต้องแนบไฟล์ กด Export Included Evidence
+17) ถ้าต้องแนบไฟล์ กด Export evidence
 
 ผลคือ QA ส่ง Ticket ที่มี Technical Evidence ครบขึ้น
 โดยไม่ต้อง Copy Log ทีละไฟล์
@@ -729,7 +732,7 @@ GET  /order/status
         "28. ปัญหาที่พบบ่อย",
         """
 Import failed
-• ตรวจว่า JSON เป็น JSON Array
+• ตรวจว่า JSON เป็น object, array หรือ HAR ที่สมบูรณ์
 • ตรวจ comma / quote / bracket
 • ถ้าเป็น HAR ให้ใช้ไฟล์ HAR จริง
 
@@ -738,7 +741,7 @@ Timeline ว่าง
 • กด Reset Filters
 
 Export แล้วไม่มี Log ที่ต้องการ
-• ตรวจ Column Export ว่าเป็น ☑ หรือไม่
+• ตรวจ Column Export ว่าเป็น ● หรือไม่
 • Export ใช้ Included Logs ไม่ใช่ทุก Row
 
 Copy แล้วขึ้น Nothing included
@@ -793,14 +796,14 @@ Log อาจมีข้อมูลสำคัญ เช่น:
 3) ใช้ Filter หา API
 4) เลือก Row
 5) Include Selected
-6) ดูว่า Export เป็น ☑
+6) ดูว่า Export เป็น ●
 7) ไป Evidence
 8) กรอก Expected / Actual ถ้าต้องการ
 9) เปิด Mask sensitive data
 10) ตรวจ Preview
-11) Copy Included for Ticket
+11) Copy for ticket
 หรือ
-12) Export Included Evidence
+12) Export evidence
 
 จำง่าย ๆ:
 
@@ -809,6 +812,66 @@ Import
 → Include
 → Review
 → Copy / Export
+""",
+    ),
+    (
+        "31. Dark / Light Mode",
+        """
+ปุ่ม Theme อยู่บน Header ด้านขวา ใช้สลับระหว่าง Dark Mode และ Light Mode
+ได้ทันทีโดยไม่ต้องปิดโปรแกรม ค่าที่เลือกจะถูกจำไว้ในเครื่องและนำกลับมาใช้
+เมื่อเปิดโปรแกรมครั้งถัดไป การเปลี่ยน Theme มีผลเฉพาะหน้าตา ไม่เปลี่ยน Log,
+Filter, Included selection, Masking หรือไฟล์ที่ Export
+
+• ถ้าปุ่มแสดง Light mode หมายถึงขณะนี้ใช้ Dark Mode และกดเพื่อเปลี่ยนเป็น Light
+• ถ้าปุ่มแสดง Dark mode หมายถึงขณะนี้ใช้ Light Mode และกดเพื่อเปลี่ยนเป็น Dark
+""",
+    ),
+    (
+        "32. Transaction ID — แหล่งข้อมูลและลำดับค้นหา",
+        """
+Transaction ID ใช้จัดกลุ่ม API ที่เกี่ยวข้องกัน โปรแกรมไม่สร้างเลขใหม่ แต่ค้นจาก
+Log ตามลำดับดังนี้:
+
+1) REQUEST_BODY: transactionId ก่อน requestId รวมถึง field ที่ซ้อนอยู่ใน object/list
+2) Query string ใน REQUEST_URI เช่น ?transactionId=SERVICE260824...
+3) REQUEST_PARAMS: transactionId ก่อน requestId
+4) TRANSACTION_ID / TRANSACTION_ID.keyword
+5) REQUEST_HEADER: mfaf-transaction, x-api-request-id, x-request-id,
+   x-ssb-transaction-id
+6) REQUEST_ID เป็น fallback สุดท้าย
+
+ชื่อ transactionId/requestId ใน Body และ Query ค้นแบบไม่สนตัวพิมพ์เล็กใหญ่
+หากใช้ REQUEST_ID fallback ค่านั้นอาจแทน request เดียว ไม่ใช่ journey ทั้งชุด
+""",
+    ),
+    (
+        "33. Folder Grouping",
+        """
+Folder grouping กำหนดโครงสร้างภายในโฟลเดอร์ Evidence:
+
+• No grouping — summary/raw/sanitized อยู่ที่ root เดียวกัน
+• Kafka topic — สร้างหนึ่งโฟลเดอร์ต่อ kafka_topic_name ที่ต่างกัน
+• Page name — สร้างหนึ่งโฟลเดอร์ต่อ CLIENT_PAGE_NAME ที่ต่างกัน
+• Custom folder — รวม Included Logs ทั้งหมดไว้ใต้ชื่อโฟลเดอร์ที่ผู้ใช้กำหนด
+
+แต่ละกลุ่มมี summary และ raw/sanitized ของกลุ่มนั้นเอง ถ้า Log ไม่มีค่าที่ใช้จัดกลุ่ม
+จะอยู่ใน No Kafka Topic หรือ No Page Name ชื่อที่มีอักขระต้องห้ามของระบบไฟล์
+จะถูกแทนด้วย underscore โดยอัตโนมัติ
+""",
+    ),
+    (
+        "34. Folder Export และ ZIP Option",
+        """
+การ Export ค่าเริ่มต้นสร้างโฟลเดอร์เท่านั้นและไม่สร้าง ZIP เพื่อให้เปิดดูหรือแก้ไข
+ไฟล์ได้ทันที ถ้าต้องการไฟล์เดียวสำหรับแนบ Ticket ให้เปิด Also create ZIP archive
+ก่อนกด Export evidence โปรแกรมจะเก็บโฟลเดอร์ต้นฉบับไว้และสร้าง ZIP เพิ่มข้างกัน
+
+ตัวอย่างเมื่อเปิด ZIP:
+QA_Evidence_20260831_120000/
+QA_Evidence_20260831_120000.zip
+
+Raw log files ปิดเป็นค่าเริ่มต้นเพราะอาจมีข้อมูลสำคัญ ส่วน Sanitized log files
+และ Mask sensitive data เปิดเป็นค่าเริ่มต้น ควรตรวจ Preview ก่อนแชร์ทุกครั้ง
 """,
     ),
 ]

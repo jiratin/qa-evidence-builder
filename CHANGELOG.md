@@ -4,6 +4,20 @@ All notable changes to QA Evidence Builder are documented in this file.
 
 The project follows Semantic Versioning where practical.
 
+## [1.2.0] - 2026-08-31
+
+### Added
+
+- Import support for a single JSON object in addition to JSON arrays and HAR.
+- Export grouping by Kafka topic, page name, or a user-defined folder.
+- Optional ZIP creation, disabled by default.
+- Persistent Dark and Light themes.
+
+### Changed
+
+- Transaction ID resolution now prioritizes nested `transactionId`/`requestId` values in the request body, followed by URL/query parameters, then existing fields and headers.
+- User Guide now matches the current PySide6 design and documents the complete import, grouping, theme, and export workflows.
+
 ## [1.1.1] - 2026-08-24
 
 ### Fixed

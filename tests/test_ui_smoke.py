@@ -18,7 +18,7 @@ window.refresh()
 assert window.table.rowCount() == len(window.entries)
 assert window.pages.count() == 4
 assert window.mask.isChecked()
-assert window.export_group.count() == 4
+assert window.export_group.count() == 5
 assert not window.include_zip.isChecked()
 original_theme = window.theme_mode
 window.toggle_theme()

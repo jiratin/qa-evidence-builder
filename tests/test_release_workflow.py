@@ -7,6 +7,8 @@ release_config = (root / ".github/release.yml").read_text(encoding="utf-8")
 assert "releases/generate-notes" in workflow
 assert "libegl1" in workflow
 assert "libxkbcommon-x11-0" in workflow
+assert "Launch-test Windows executable" in workflow
+assert "Packaged executable exited during startup" in workflow
 assert "--notes-file RELEASE_NOTES.md" in workflow
 assert "> RELEASE_NOTES.md" in workflow
 assert ">> RELEASE_NOTES.md" in workflow

@@ -46,12 +46,12 @@ def filter_entries(
 
         haystack = " ".join([
             e.request_uri, e.request_id, e.transaction_id,
-            e.page_name, e.kafka_topic,
+            e.page_name, e.page_url, e.kafka_topic,
         ]).lower()
 
         if q and q not in haystack:
             continue
-        if page_q and page_q not in e.page_name.lower():
+        if page_q and page_q not in f"{e.page_name} {e.page_url}".lower():
             continue
         if topic_q and topic_q not in e.kafka_topic.lower():
             continue

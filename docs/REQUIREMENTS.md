@@ -28,10 +28,13 @@ tests, User Guide, and changelog.
 - FR-021: Mask sensitive fields by default and accept extra mask keys.
 - FR-022: Copy evidence as plain text or Markdown.
 - FR-023: Select summary text, summary Markdown, raw, and sanitized contents.
-- FR-024: Export without grouping, by Kafka topic, by page name, or into a
+- FR-024: Export without grouping, by Kafka topic, by page name, by page URL, or into a
   custom folder. Distinct Kafka/page values must produce distinct folders.
 - FR-025: Create an evidence folder on every export. ZIP creation is optional
   and disabled by default.
+- FR-026: Use filesystem-safe, concise exported filenames based on endpoint and
+  the first query parameter. When raw or sanitized is the only selected content,
+  place its JSON files directly in the current group folder.
 
 ## Application and delivery
 
@@ -41,6 +44,8 @@ tests, User Guide, and changelog.
 - NFR-004: Windows and macOS release builds are produced by GitHub Actions only
   after syntax, core, help, UI, and release-workflow checks pass.
 - NFR-005: The searchable User Guide reflects the current UI and behaviour.
+- NFR-006: PySide6 must remain pinned to the Windows packaging-tested version;
+  dependency upgrades require launching the built executable in CI or locally.
 
 ## Verification map
 

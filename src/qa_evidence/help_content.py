@@ -852,6 +852,7 @@ Folder grouping กำหนดโครงสร้างภายในโฟ�
 • No grouping — summary/raw/sanitized อยู่ที่ root เดียวกัน
 • Kafka topic — สร้างหนึ่งโฟลเดอร์ต่อ kafka_topic_name ที่ต่างกัน
 • Page name — สร้างหนึ่งโฟลเดอร์ต่อ CLIENT_PAGE_NAME ที่ต่างกัน
+• Page URL — สร้างหนึ่งโฟลเดอร์ต่อ PAGE_URL ที่ต่างกัน เหมาะกับ Log ที่ไม่มี Page Name
 • Custom folder — รวม Included Logs ทั้งหมดไว้ใต้ชื่อโฟลเดอร์ที่ผู้ใช้กำหนด
 
 แต่ละกลุ่มมี summary และ raw/sanitized ของกลุ่มนั้นเอง ถ้า Log ไม่มีค่าที่ใช้จัดกลุ่ม
@@ -872,6 +873,13 @@ QA_Evidence_20260831_120000.zip
 
 Raw log files ปิดเป็นค่าเริ่มต้นเพราะอาจมีข้อมูลสำคัญ ส่วน Sanitized log files
 และ Mask sensitive data เปิดเป็นค่าเริ่มต้น ควรตรวจ Preview ก่อนแชร์ทุกครั้ง
+
+ถ้าเลือก Package Content เพียง Raw log files หรือ Sanitized log files อย่างเดียว
+ไฟล์ JSON จะอยู่ในโฟลเดอร์ Evidence/กลุ่มโดยตรง ไม่สร้างชั้น raw หรือ sanitized เพิ่ม
+ถ้าเลือกหลาย content โปรแกรมจะแยก raw และ sanitized เพื่อไม่ให้ไฟล์ปะปนกัน
+
+ชื่อไฟล์ Log ใช้ endpoint และ query parameter คู่แรกแบบสั้น เช่น:
+007_privateId_commandId_2026090110091033335038.json
 """,
     ),
 ]

@@ -181,6 +181,18 @@ jobs:
             --paths src `
             run.py
 
+      - name: Launch-test Windows executable
+        shell: pwsh
+        run: |
+          $env:QT_QPA_PLATFORM = "offscreen"
+          $executable = Resolve-Path "dist/QA-Evidence-Builder-Windows.exe"
+          $process = Start-Process -FilePath $executable -PassThru
+          Start-Sleep -Seconds 8
+          if ($process.HasExited) {
+            throw "Packaged executable exited during startup with code $($process.ExitCode)."
+          }
+          taskkill /PID $process.Id /T /F | Out-Null
+
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
         with:

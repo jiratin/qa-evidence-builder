@@ -4,6 +4,28 @@ All notable changes to QA Evidence Builder are documented in this file.
 
 The project follows Semantic Versioning where practical.
 
+## [1.3.1] - 2026-09-01
+
+### Fixed
+
+- Pin the packaged Qt runtime to PySide6 6.8.3 to prevent the Windows executable from failing while importing QtCore.
+- Launch-test the packaged Windows executable in GitHub Actions before publishing a release.
+
+## [1.3.0] - 2026-09-01
+
+### Added
+
+- Parse, display, search, and export-group logs by `PAGE_URL`.
+
+### Changed
+
+- Exported log filenames now use a short endpoint and first-query-parameter format without special characters.
+- A raw-only or sanitized-only export now places JSON files directly in the selected group folder.
+
+### Fixed
+
+- Explicitly style Qt dropdown popup text and selection colors in Light Mode.
+
 ## [1.2.0] - 2026-08-31
 
 ### Added

@@ -14,6 +14,7 @@ class LogEntry:
     request_id: str = ""
     transaction_id: str = ""
     page_name: str = ""
+    page_url: str = ""
     kafka_topic: str = ""
     request_body: Any = ""
     response_body: Any = ""

@@ -9,7 +9,7 @@ from qa_evidence.parser import parse_auto, parse_har
 from qa_evidence.filtering import filter_entries, group_by_transaction
 from qa_evidence.evidence import build_ticket, build_markdown
 from qa_evidence.sanitizer import sanitize
-from qa_evidence.exporter import export_package
+from qa_evidence.exporter import _log_filename, export_package
 from qa_evidence.analyzer import (
     error_fingerprint,
     find_duplicate_errors,
@@ -91,6 +91,17 @@ uri_transaction = parse_auto({"fields": {
     "TRANSACTION_ID": ["FIELD-TX"],
 }})
 assert uri_transaction[0].transaction_id == "SERVICE260824152809-NE12816"
+
+page_url_entry = parse_auto({"fields": {
+    "REQUEST_URI": ["/api/privateId.json"],
+    "PAGE_URL": ["https://easyapp.example/orders/summary"],
+}})[0]
+assert page_url_entry.page_url == "https://easyapp.example/orders/summary"
+
+assert _log_filename(
+    7,
+    "/api/privateId.json?commandId=2026090110091033335038&publicId=ws00000010@EasyApp.co.th&appName=undefined",
+) == "007_privateId_commandId_2026090110091033335038.json"
 
 errors = filter_entries(entries, errors_only=True)
 assert len(errors) == 2
@@ -200,5 +211,27 @@ with tempfile.TemporaryDirectory() as directory:
     assert (destination / "topic-b" / "summary.txt").exists()
     assert (destination / "topic-c" / "summary.txt").exists()
     assert len(list((destination / "topic-a" / "sanitized").glob("*.json"))) == 2
+
+with tempfile.TemporaryDirectory() as directory:
+    destination = Path(directory) / "raw-only"
+    export_package(
+        entries[:1], destination,
+        include_summary_txt=False,
+        include_summary_md=False,
+        include_raw=True,
+        include_sanitized=False,
+    )
+    assert not (destination / "raw").exists()
+    assert len(list(destination.glob("*.json"))) == 1
+
+with tempfile.TemporaryDirectory() as directory:
+    destination = Path(directory) / "page-url-groups"
+    page_entries = parse_auto([
+        {"fields": {"REQUEST_URI": ["/a"], "PAGE_URL": ["/orders"]}},
+        {"fields": {"REQUEST_URI": ["/b"], "PAGE_URL": ["/profile"]}},
+    ])
+    export_package(page_entries, destination, group_by="page_url")
+    assert (destination / "_orders" / "summary.txt").exists()
+    assert (destination / "_profile" / "summary.txt").exists()
 
 print("ALL_V3_TESTS_PASSED")

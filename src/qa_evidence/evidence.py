@@ -95,6 +95,7 @@ def build_ticket(
             f"Transaction ID: {e.transaction_id or '-'}",
             f"Error Fingerprint: {error_fingerprint(e) or '-'}",
             f"Page: {e.page_name or '-'}",
+            f"Page URL: {e.page_url or '-'}",
             f"Kafka Topic: {e.kafka_topic or '-'}",
             f"Source: {e.source_type}",
             "",

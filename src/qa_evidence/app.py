@@ -280,6 +280,7 @@ class MainWindow(QMainWindow):
         self.export_group.addItem("No grouping", "none")
         self.export_group.addItem("Kafka topic", "kafka")
         self.export_group.addItem("Page name", "page")
+        self.export_group.addItem("Page URL", "page_url")
         self.export_group.addItem("Custom folder", "custom")
         self.custom_group_name = QLineEdit(); self.custom_group_name.setPlaceholderText("Custom folder name")
         self.custom_group_name.setVisible(False)
@@ -407,7 +408,7 @@ class MainWindow(QMainWindow):
         selected = self.selected_filtered_entries()
         if not selected: self.inspector.clear(); return
         e = selected[0]
-        self.inspector.setPlainText(f"{e.request_method} {e.request_uri}\nHTTP {e.response_status}  •  {e.response_time} ms\nRequest ID: {e.request_id}\nTransaction: {e.transaction_id}\nPage: {e.page_name}\nKafka topic: {e.kafka_topic}\n\nREQUEST HEADERS\n{e.request_header}\n\nREQUEST BODY\n{e.request_body}\n\nRESPONSE BODY\n{e.response_body}")
+        self.inspector.setPlainText(f"{e.request_method} {e.request_uri}\nHTTP {e.response_status}  •  {e.response_time} ms\nRequest ID: {e.request_id}\nTransaction: {e.transaction_id}\nPage: {e.page_name}\nPage URL: {e.page_url}\nKafka topic: {e.kafka_topic}\n\nREQUEST HEADERS\n{e.request_header}\n\nREQUEST BODY\n{e.request_body}\n\nRESPONSE BODY\n{e.response_body}")
 
     def _extra_mask_keys(self): return [x.strip() for x in self.extra_mask.text().split(",") if x.strip()]
     def update_preview(self): self.preview.setPlainText(build_ticket(self.included_entries(), self.mask.isChecked(), self.expected.toPlainText().strip(), self.actual.toPlainText().strip(), self._extra_mask_keys()))

@@ -2,6 +2,7 @@ import json
 import re
 import zipfile
 from pathlib import Path
+from urllib.parse import parse_qsl, urlsplit
 
 from .evidence import build_ticket, build_markdown
 from .sanitizer import sanitize
@@ -10,19 +11,38 @@ def _safe(s):
     s = re.sub(r'[<>:"/\\|?*\x00-\x1f]', "_", str(s or "log")).strip(" .")
     return s[:120] or "log"
 
+def _filename_token(value, fallback="log"):
+    token = re.sub(r"[^A-Za-z0-9_-]+", "_", str(value or ""))
+    token = re.sub(r"_+", "_", token).strip("_-")
+    return token[:64] or fallback
+
+def _log_filename(index, request_uri):
+    """Create a short, stable filename from endpoint and first query pair."""
+    parsed = urlsplit(str(request_uri or ""))
+    basename = Path(parsed.path.rstrip("/")).name or "api"
+    endpoint = _filename_token(Path(basename).stem, "api")
+    parts = [f"{index:03d}", endpoint]
+    query = parse_qsl(parsed.query, keep_blank_values=False)
+    if query:
+        key, value = query[0]
+        parts.extend((_filename_token(key, "param"), _filename_token(value, "value")))
+    return "_".join(parts) + ".json"
+
 def _group_entries(entries, group_by="none", custom_group_name=""):
     mode = str(group_by or "none").lower()
     if mode == "none":
         return {"": list(entries)}
     if mode == "custom":
         return {_safe(custom_group_name or "Selected Logs"): list(entries)}
-    if mode not in {"kafka", "page"}:
+    if mode not in {"kafka", "page", "page_url"}:
         raise ValueError("Unsupported export grouping mode.")
 
     groups = {}
     for entry in entries:
-        value = entry.kafka_topic if mode == "kafka" else entry.page_name
-        fallback = "No Kafka Topic" if mode == "kafka" else "No Page Name"
+        values = {"kafka": entry.kafka_topic, "page": entry.page_name, "page_url": entry.page_url}
+        fallbacks = {"kafka": "No Kafka Topic", "page": "No Page Name", "page_url": "No Page URL"}
+        value = values[mode]
+        fallback = fallbacks[mode]
         groups.setdefault(_safe(value or fallback), []).append(entry)
     return groups
 
@@ -50,16 +70,19 @@ def _write_group(
             encoding="utf-8",
         )
 
-    raw_dir = destination / "raw" if include_raw else None
-    sanitized_dir = destination / "sanitized" if include_sanitized else None
+    selected_content_count = sum(bool(value) for value in (
+        include_summary_txt, include_summary_md, include_raw, include_sanitized
+    ))
+    flatten_log_files = selected_content_count == 1
+    raw_dir = (destination if flatten_log_files else destination / "raw") if include_raw else None
+    sanitized_dir = (destination if flatten_log_files else destination / "sanitized") if include_sanitized else None
     if raw_dir:
         raw_dir.mkdir(exist_ok=True)
     if sanitized_dir:
         sanitized_dir.mkdir(exist_ok=True)
 
     for i, entry in enumerate(entries, start=1):
-        api = _safe(entry.request_uri.rstrip("/").split("/")[-1] or "api")
-        name = f"{i:03d}_{api}.json"
+        name = _log_filename(i, entry.request_uri)
         if raw_dir:
             (raw_dir / name).write_text(
                 json.dumps(entry.raw, ensure_ascii=False, indent=2), encoding="utf-8"

@@ -5,7 +5,7 @@ from datetime import datetime
 from pathlib import Path
 
 from PySide6.QtCore import QSettings, Qt
-from PySide6.QtGui import QColor, QIcon, QKeySequence, QShortcut, QTextCursor, QTextDocument
+from PySide6.QtGui import QColor, QIcon, QKeySequence, QPixmap, QShortcut, QTextCursor, QTextDocument
 from PySide6.QtWidgets import (
     QAbstractItemView, QApplication, QCheckBox, QComboBox, QDialog, QFileDialog, QFrame,
     QGridLayout, QHBoxLayout, QHeaderView, QLabel, QLineEdit, QMainWindow,
@@ -134,9 +134,19 @@ class MainWindow(QMainWindow):
         side.setFixedWidth(220)
         lay = QVBoxLayout(side)
         lay.setContentsMargins(16, 22, 16, 16)
-        brand = QLabel("◈  QA Evidence")
+        brand_row = QHBoxLayout()
+        self.brand_icon = QLabel()
+        self.brand_icon.setObjectName("brandIcon")
+        self.brand_icon.setAccessibleName("QA Evidence Builder application icon")
+        brand_pixmap = QPixmap(str(resource_path("assets/icons/png/icon-256.png")))
+        self.brand_icon.setPixmap(brand_pixmap.scaled(36, 36, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        self.brand_icon.setFixedSize(40, 40)
+        brand = QLabel("QA Evidence")
         brand.setObjectName("brand")
-        lay.addWidget(brand)
+        brand_row.addWidget(self.brand_icon)
+        brand_row.addWidget(brand)
+        brand_row.addStretch()
+        lay.addLayout(brand_row)
         subtitle = QLabel("Local evidence workspace")
         subtitle.setObjectName("muted")
         lay.addWidget(subtitle)

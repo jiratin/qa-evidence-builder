@@ -25,6 +25,7 @@ for keyword in [
     "Dark / Light Mode",
     "Also create ZIP archive",
     "Find in Evidence Preview",
+    "Sidebar Brand",
 ]:
     assert keyword.lower() in combined.lower(), keyword
 

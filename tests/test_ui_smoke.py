@@ -14,6 +14,8 @@ from qa_evidence.parser import parse_auto
 
 application = QApplication.instance() or QApplication([])
 window = MainWindow()
+assert window.brand_icon.pixmap() is not None
+assert not window.brand_icon.pixmap().isNull()
 window.entries = parse_auto((root / "samples/sample_logs.json").read_text(encoding="utf-8"))
 window._configure_entries()
 window.refresh()

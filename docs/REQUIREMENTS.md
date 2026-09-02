@@ -82,8 +82,9 @@ tests, User Guide, and changelog.
 - NFR-006: PySide6 must remain pinned to the Windows packaging-tested version;
   dependency upgrades require launching the built executable in CI or locally.
   Supported source/build runtimes are Python 3.10 through 3.13.
-- NFR-007: Source and packaged applications use the QA Evidence Builder icon,
-  `Guide Jir` publisher metadata, and application version metadata.
+- NFR-007: Source and packaged applications use the QA Evidence Builder icon in
+  operating-system surfaces and the in-app Sidebar brand, with `Guide Jir`
+  publisher metadata and application version metadata.
 - NFR-008: Release tags must match the application version. Required icons,
   artifact names, and macOS bundle contents are validated before publishing.
 - NFR-009: Packaged Windows, macOS Apple Silicon, and macOS Intel applications

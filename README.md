@@ -36,7 +36,7 @@ QA Evidence Builder is a local desktop tool for QA, Testers, and Developers to t
 - Per-log evidence notes
 - Built-in Help / User Guide
 - Modern custom-styled PySide6 dashboard with persistent Dark/Light mode, responsive navigation, and inspector
-- Branded Windows and macOS application icons and metadata
+- Branded in-app, Windows, and macOS application icons and metadata
 
 ## Requirements
 

@@ -12,6 +12,7 @@ The project follows Semantic Versioning where practical.
 
 - Search the rendered Evidence preview with forward/backward navigation,
   wrap-around, keyboard actions, and optional case matching.
+- Display the application icon beside the in-app Sidebar brand.
 
 ### Documentation
 

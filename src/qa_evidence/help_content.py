@@ -1007,4 +1007,14 @@ Shift+Enter เพื่อย้อนกลับ เมื่อค้นห�
 ข้อความจะแสดง No matches ช่องค้นหานี้ทำงานกับ Preview ที่แสดงหลัง Masking แล้ว
 """,
     ),
+    (
+        "46. Application Icon และ Sidebar Brand",
+        """
+ไอคอน QA Evidence Builder แสดงทั้งใน Sidebar ภายในโปรแกรมและตำแหน่งที่ระบบ
+ปฏิบัติการรองรับ เช่น Taskbar, Dock, Application Menu หรือแถบชื่อหน้าต่าง
+
+ตำแหน่งของไอคอนบนกรอบหน้าต่างอาจต่างกันตาม Windows และ macOS แต่ไอคอนใน
+Sidebar จะอยู่ข้างชื่อ QA Evidence เสมอ เพื่อให้เห็น Product Identity ภายในแอป
+""",
+    ),
 ]

@@ -13,6 +13,9 @@ assert "def paste_json(self):" in app
 assert "def open_help(self):" in app
 assert "HelpDialog(self)" in app
 assert "setWindowIcon" in app
+assert 'setObjectName("brandIcon")' in app
+assert "QPixmap" in app
+assert 'brand_pixmap.scaled(36, 36' in app
 assert "Import completed with warnings" in app
 assert "Export raw logs?" in app
 assert "without sensitive-data masking" in app

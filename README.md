@@ -4,17 +4,19 @@ QA Evidence Builder is a local desktop tool for QA, Testers, and Developers to t
 
 ## Version
 
-**v1.3.2**
+**v1.3.3**
 
 ## Key features
 
 - Import Elasticsearch/Kibana-style single JSON objects and JSON arrays
 - Import HAR network logs
+- Import and merge multiple JSON/HAR files with source tracking
 - Paste JSON directly into the application
 - Timeline view with API, status, response time, request ID, transaction, and error fingerprint
 - Search and filtering by method, status, page, Kafka topic, transaction, errors, and slow APIs
 - Explicit log selection with Include/Exclude, Select All, and Deselect All
 - Transaction grouping
+- Transaction journey summaries with first error, slowest API, and duration
 - Transaction ID source and fallback indication
 - Import validation summary for skipped records and incomplete fields
 - Expected Result / Actual Result evidence
@@ -24,6 +26,9 @@ QA Evidence Builder is a local desktop tool for QA, Testers, and Developers to t
 - Optional ZIP archive (off by default)
 - Explicit warning and confirmation before raw-log export
 - Error fingerprinting and repeated-error analysis
+- HTTP-200 business-error detection with configurable success result codes
+- Configurable slow-API threshold
+- Per-log evidence notes
 - Built-in Help / User Guide
 - Modern custom-styled PySide6 dashboard with persistent Dark/Light mode, responsive navigation, and inspector
 - Branded Windows and macOS application icons and metadata

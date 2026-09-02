@@ -17,6 +17,9 @@ tests, User Guide, and changelog.
 - FR-007: Report imported, skipped, invalid-timestamp, and missing-endpoint
   counts without exposing raw record contents. Mixed-validity input must retain
   usable records.
+- FR-008: Import multiple JSON and HAR files in one operation, retain each
+  source filename/record index, assign collision-free application indexes, and
+  merge usable records in timestamp order.
 
 ## Investigation
 
@@ -26,6 +29,14 @@ tests, User Guide, and changelog.
 - FR-012: Include/exclude selected rows and include all filtered rows.
 - FR-013: Group and navigate logs by Transaction ID.
 - FR-014: Produce error fingerprints, automatic summaries, and duplicate groups.
+- FR-015: Detect business errors in successful HTTP responses from `success`,
+  error fields, and configurable result-code conventions.
+- FR-016: Provide a transaction journey summary with the first API, first
+  error, slowest API, error counts, elapsed duration, and fallback warning.
+- FR-017: Store an optional Unicode evidence note per log and include notes only
+  when that log is included in copied or exported evidence.
+- FR-018: Persist a positive slow-response threshold and success result-code
+  list locally, applying them consistently to filters, analysis, and evidence.
 
 ## Evidence and export
 
@@ -48,6 +59,12 @@ tests, User Guide, and changelog.
 - NFR-001: All log processing remains local; the application does not upload logs.
 - NFR-002: Raw export remains disabled by default.
 - NFR-003: The UI supports persistent Dark and Light modes and responsive navigation.
+- NFR-003a: Search and filters are grouped by Search, Request, Result,
+  Performance, and Context. Alert and error indicators use the shared danger
+  text color in both themes.
+- NFR-003b: Active filters are represented by individually removable chips,
+  the reset action displays the active count, each category can be cleared,
+  and presets cover all errors, slow APIs, and the selected transaction.
 - NFR-004: Windows and macOS release builds are produced by GitHub Actions only
   after syntax, core, help, UI, and release-workflow checks pass.
 - NFR-005: The searchable User Guide reflects the current UI and behaviour.

@@ -2,6 +2,7 @@ def filter_entries(
     entries,
     search="",
     errors_only=False,
+    business_errors_only=False,
     slow_only=False,
     method="ALL",
     status_class="ALL",
@@ -22,7 +23,9 @@ def filter_entries(
 
     out = []
     for e in entries:
-        if errors_only and not e.is_error:
+        if errors_only and not e.has_error:
+            continue
+        if business_errors_only and not e.is_business_error:
             continue
         if slow_only and not e.is_slow:
             continue
@@ -46,7 +49,8 @@ def filter_entries(
 
         haystack = " ".join([
             e.request_uri, e.request_id, e.transaction_id,
-            e.page_name, e.page_url, e.kafka_topic,
+            e.page_name, e.page_url, e.kafka_topic, e.source_file,
+            e.note, e.business_error_reason,
         ]).lower()
 
         if q and q not in haystack:

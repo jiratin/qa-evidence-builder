@@ -19,7 +19,14 @@ dist/
 
 # Test / coverage caches
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyright/
+.tox/
+.nox/
 .coverage
+coverage.xml
+junit.xml
 htmlcov/
 
 # IDE / editors
@@ -31,9 +38,26 @@ htmlcov/
 # macOS / Windows
 .DS_Store
 Thumbs.db
+.AppleDouble
+.LSOverride
+
+# Environment and local secrets
+.env
+.env.*
+!.env.example
+
+# Temporary, profiling, and benchmark output
+*.tmp
+*.temp
+*.bak
+*.orig
+*.prof
+.prof/
+benchmark-results/
 
 # Local/exported evidence
 QA_Evidence_*.zip
+QA_Evidence_*/
 exports/
 output/
 

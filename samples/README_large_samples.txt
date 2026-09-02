@@ -1,5 +1,10 @@
 QA Evidence Builder - Large Test Samples
 
+All records in this directory are synthetic test data. They contain no
+production credentials, customer data, or real personal information. Values
+that resemble passwords, tokens, phone numbers, accounts, and email addresses
+exist only to exercise the sensitive-data masking features.
+
 1) qa_logs_72_entries_realistic.json
    - 72 Elasticsearch/Kibana-style entries
    - Multiple transactions

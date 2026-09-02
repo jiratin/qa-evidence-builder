@@ -23,13 +23,15 @@ def build_ticket(
         return "\n".join(lines + ["No logs selected."])
 
     errors = sum(1 for e in entries if e.is_error)
+    business_errors = sum(1 for e in entries if e.is_business_error)
     slow = sum(1 for e in entries if e.is_slow)
     transactions = sorted({e.transaction_id for e in entries if e.transaction_id})
 
     lines += [
         f"Selected logs: {len(entries)}",
         f"Errors (HTTP >= 400): {errors}",
-        f"Slow APIs (>= 3000 ms): {slow}",
+        f"Business Errors: {business_errors}",
+        f"Slow APIs (>= {entries[0].slow_threshold_ms:g} ms): {slow}",
         f"Transactions: {len(transactions)}",
         "",
     ]
@@ -62,6 +64,8 @@ def build_ticket(
             flags.append("ERROR")
         if e.is_slow:
             flags.append("SLOW")
+        if e.is_business_error:
+            flags.append("BUSINESS ERROR")
         fp = error_fingerprint(e)
         if fp:
             flags.append(fp)
@@ -83,6 +87,8 @@ def build_ticket(
             flags.append("ERROR")
         if e.is_slow:
             flags.append("SLOW")
+        if e.is_business_error:
+            flags.append("BUSINESS ERROR")
 
         lines += [
             f"[API #{n}] {' | '.join(flags) if flags else 'OK'}",
@@ -100,6 +106,9 @@ def build_ticket(
             f"Page URL: {e.page_url or '-'}",
             f"Kafka Topic: {e.kafka_topic or '-'}",
             f"Source: {e.source_type}",
+            f"Source File: {e.source_file or '-'}",
+            f"Source Record: {e.source_record_index or '-'}",
+            f"Evidence Note: {e.note.strip() or '-'}",
             "",
             "Query:",
             _pretty(e.query, mask, extra_mask_keys),

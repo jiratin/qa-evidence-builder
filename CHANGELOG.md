@@ -6,9 +6,27 @@ The project follows Semantic Versioning where practical.
 
 ## [Unreleased]
 
+## [1.3.3] - 2026-09-02
+
+### Added
+
+- Detect business errors in HTTP-success responses using configurable success codes.
+- Show transaction journey details, first failure, slowest API, duration, and fallback warnings.
+- Add Unicode evidence notes to individual included logs.
+- Import and merge multiple JSON/HAR files while retaining source filenames and record indexes.
+- Persist a configurable slow-response threshold and use it across analysis and evidence.
+
 ### Fixed
 
 - Create missing macOS bundle metadata keys safely and re-sign the bundle before launch validation.
+- Group related search/filter controls, add removable active-filter chips,
+  category clear actions and investigation presets, and consistently highlight alert/error text in red.
+
+### Security
+
+- Ignore local environment files, exported evidence folders, temporary files,
+  additional tool caches, and profiling/benchmark output.
+- Document that committed sample logs contain synthetic test data only.
 
 ## [1.3.2] - 2026-09-02
 

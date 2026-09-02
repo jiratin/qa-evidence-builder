@@ -905,4 +905,68 @@ Evidence page จะแสดงคำเตือน และเมื่อ�
 ให้เข้าถึงข้อมูลต้นฉบับแล้วเท่านั้น
 """,
     ),
+    (
+        "37. Business Error Detection",
+        """
+โปรแกรมตรวจ Business Error ที่ซ่อนอยู่ใน HTTP 200 ได้จาก success=false,
+error/errorCode/errorMessage และ resultCode ที่ไม่อยู่ใน Success result codes
+โดยแสดง BUSINESS ERROR ใน Timeline, Filter, Journey, Analysis และ Evidence
+
+Success result codes ตั้งค่าได้ในหน้า Analysis ค่าเริ่มต้นคือ
+0, 200, 20000, SUCCESS และ OK การตั้งค่านี้ถูกเก็บเฉพาะในเครื่อง
+""",
+    ),
+    (
+        "38. Transaction Journey",
+        """
+หน้า Transactions แสดงจำนวน HTTP/Business Error, Slow API, ระยะเวลารวม
+และบอกว่ากลุ่มใช้ Transaction จริงหรือ Request ID fallback เมื่อเลือกแถวจะแสดง
+API ตามลำดับ พร้อม First Error และ Slowest API กด Include journey เพื่อเพิ่ม
+Log ทั้ง journey เข้า Evidence ได้ทันที
+""",
+    ),
+    (
+        "39. Evidence Notes",
+        """
+เลือก Log ใน Timeline แล้วกรอก Evidence note ใน Inspector จากนั้นกด Save note
+หมายเหตุรองรับภาษาไทยและจะเข้า Preview, Ticket และ Export เฉพาะเมื่อ Log นั้น
+ถูก Include เท่านั้น Note ไม่แก้ไข Raw Log และจะถูกล้างเมื่อกด Clear
+""",
+    ),
+    (
+        "40. Multiple File Import และ Analysis Settings",
+        """
+Import JSON / HAR File(s) เลือกหลายไฟล์พร้อมกันได้ โปรแกรมจะรวมและเรียง Log
+ตาม Timestamp พร้อมเก็บ Source File และ Source Record ไว้ใน Inspector/Evidence
+ไฟล์ที่เสียหนึ่งไฟล์ไม่ทำให้ไฟล์อื่นหาย และ Import Report จะแจ้งรายการที่ข้าม
+
+หน้า Analysis สามารถกำหนด Slow threshold เป็นจำนวน millisecond ที่มากกว่า 0
+และ Success result codes แบบคั่นด้วย comma แล้วกด Apply ค่าจะถูกจำในเครื่อง
+และใช้กับ Timeline, Filter, Journey, Summary และ Evidence
+""",
+    ),
+    (
+        "41. Filter Groups และ Error Highlight",
+        """
+ตัวกรองแบ่งเป็นหมวด Search, Request, Result, Performance และ Context เพื่อให้
+เลือกเงื่อนไขตามงานได้ง่ายขึ้น Errors only รวมทั้ง HTTP Error และ Business Error
+ส่วน Business errors ใช้เมื่อต้องการดูเฉพาะข้อผิดพลาดจาก Response Body
+
+ข้อความเตือน, HTTP Error, Business Error และ Request ID fallback ที่ต้องระวัง
+จะแสดงด้วยตัวอักษรสีแดงทั้ง Dark และ Light Mode ส่วน Slow API ใช้สีเหลือง
+เพราะเป็น Performance warning ไม่ใช่ Error โดยตรง
+""",
+    ),
+    (
+        "42. Active Filters และ Quick Presets",
+        """
+เหนือ Timeline จะแสดง Active Filter Chips สำหรับเงื่อนไขที่กำลังใช้งาน กด × บน
+Chip เพื่อล้างเฉพาะเงื่อนไขนั้น ปุ่ม Reset all filters แสดงจำนวนเงื่อนไขทั้งหมด
+และแต่ละหมวดมีปุ่ม Clear สำหรับล้างเฉพาะหมวด
+
+Quick preset มี All Errors, Slow APIs และ Current Transaction โดย Current
+Transaction จะใช้ Transaction ID จากแถว Timeline ที่เลือก ถ้าไม่มี Transaction ID
+โปรแกรมจะแจ้งให้เลือกแถวที่เหมาะสมก่อน Filters ทุกชนิดยังทำงานร่วมกันแบบ AND
+""",
+    ),
 ]

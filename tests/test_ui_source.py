@@ -26,5 +26,24 @@ assert "QComboBox QAbstractItemView" in theme
 assert "Also create ZIP archive" in app
 assert "Kafka topic" in app
 assert "Page URL" in app
+assert "Business errors" in app
+assert "Success result codes" in app
+assert "Include journey" in app
+assert "Evidence note" in app
+assert "getOpenFileNames" in app
+assert "parse_files" in app
+assert 'group("Search across logs"' in app
+assert 'group("Request"' in app
+assert 'group("Result"' in app
+assert 'group("Performance"' in app
+assert 'group("Context"' in app
+assert "QLabel#alert" in theme
+assert "QLabel#errorText" in theme
+assert "QCheckBox#danger" in theme
+assert "update_active_filter_chips" in app
+assert "Reset all filters (" in app
+assert "Current Transaction" in app
+assert "clear_request_filters" in app
+assert "QPushButton#filterChip" in theme
 
 print("ALL_UI_SOURCE_TESTS_PASSED")

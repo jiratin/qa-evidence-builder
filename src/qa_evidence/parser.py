@@ -1,5 +1,6 @@
 import json
 from datetime import datetime, timezone
+from pathlib import Path
 from urllib.parse import urlparse, parse_qs
 from .models import ImportIssue, ImportReport, ImportResult, LogEntry
 
@@ -140,13 +141,13 @@ def _transaction_details(fields):
 def _transaction_id(fields):
     return _transaction_details(fields)[0]
 
-def _parse_json_array_with_report(payload):
+def _parse_json_array_with_report(payload, source_file=""):
     if isinstance(payload, str):
         payload = json.loads(payload)
     if not isinstance(payload, list):
         raise ValueError("Input must be a JSON Array.")
 
-    report = ImportReport(source_format="json", source_count=len(payload))
+    report = ImportReport(source_format="json", source_name=source_file, source_count=len(payload))
     entries = []
     for i, raw in enumerate(payload, start=1):
         if not isinstance(raw, dict):
@@ -192,6 +193,8 @@ def _parse_json_array_with_report(payload):
             request_header=_jsonish(_first(fields, "REQUEST_HEADER", "REQUEST_HEADER.keyword")),
             query=_jsonish(_first(fields, "REQUEST_PARAMS", "REQUEST_PARAMS.keyword")),
             source_type="json",
+            source_file=source_file,
+            source_record_index=i,
             raw=raw,
         ))
 
@@ -202,7 +205,7 @@ def _parse_json_array_with_report(payload):
 def parse_json_array(payload):
     return _parse_json_array_with_report(payload).entries
 
-def _parse_har_with_report(payload):
+def _parse_har_with_report(payload, source_file=""):
     if isinstance(payload, str):
         payload = json.loads(payload)
 
@@ -210,7 +213,7 @@ def _parse_har_with_report(payload):
     if not isinstance(log, dict) or not isinstance(log.get("entries"), list):
         raise ValueError("Invalid HAR file.")
 
-    report = ImportReport(source_format="har", source_count=len(log["entries"]))
+    report = ImportReport(source_format="har", source_name=source_file, source_count=len(log["entries"]))
     out = []
     for i, item in enumerate(log["entries"], start=1):
         if not isinstance(item, dict):
@@ -296,6 +299,8 @@ def _parse_har_with_report(payload):
             request_header=headers,
             query=query,
             source_type="har",
+            source_file=source_file,
+            source_record_index=i,
             raw=item,
         ))
 
@@ -309,12 +314,44 @@ def parse_har(payload):
 def parse_auto(payload):
     return parse_with_report(payload).entries
 
-def parse_with_report(payload):
+def parse_with_report(payload, source_file=""):
     parsed = json.loads(payload) if isinstance(payload, str) else payload
     if isinstance(parsed, list):
-        return _parse_json_array_with_report(parsed)
+        return _parse_json_array_with_report(parsed, source_file)
     if isinstance(parsed, dict) and isinstance(parsed.get("log"), dict):
-        return _parse_har_with_report(parsed)
+        return _parse_har_with_report(parsed, source_file)
     if isinstance(parsed, dict):
-        return _parse_json_array_with_report([parsed])
+        return _parse_json_array_with_report([parsed], source_file)
     raise ValueError("Unsupported input. Use a JSON object, JSON Array, or HAR.")
+
+def parse_files(paths):
+    paths = [Path(path) for path in paths]
+    if not paths:
+        raise ValueError("Select at least one JSON or HAR file.")
+    combined = ImportReport(source_format="multiple" if len(paths) > 1 else "file")
+    entries = []
+    for path in paths:
+        try:
+            result = parse_with_report(path.read_text(encoding="utf-8"), path.name)
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            report = ImportReport(source_format="invalid", source_name=path.name, source_count=1, skipped_count=1)
+            report.issues.append(ImportIssue("file_error", f"{path.name}: {exc}"))
+            combined.source_count += 1
+            combined.skipped_count += 1
+            combined.issues.extend(report.issues)
+            combined.file_reports.append(report)
+            continue
+        combined.source_count += result.report.source_count
+        combined.imported_count += result.report.imported_count
+        combined.skipped_count += result.report.skipped_count
+        combined.invalid_timestamp_count += result.report.invalid_timestamp_count
+        combined.missing_endpoint_count += result.report.missing_endpoint_count
+        combined.issues.extend(result.report.issues)
+        combined.file_reports.append(result.report)
+        entries.extend(result.entries)
+    entries.sort(key=lambda entry: (
+        entry.timestamp_sort or float("inf"), entry.source_file, entry.source_record_index
+    ))
+    for index, entry in enumerate(entries, start=1):
+        entry.index = index
+    return ImportResult(entries, combined)

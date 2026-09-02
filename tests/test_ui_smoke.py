@@ -14,10 +14,21 @@ from qa_evidence.parser import parse_auto
 application = QApplication.instance() or QApplication([])
 window = MainWindow()
 window.entries = parse_auto((root / "samples/sample_logs.json").read_text(encoding="utf-8"))
+window._configure_entries()
 window.refresh()
 
 assert window.table.rowCount() == len(window.entries)
 assert window.pages.count() == 4
+assert window.tx_table.columnCount() == 7
+assert not window.business_errors_only.isChecked()
+window.status.setCurrentText("5xx")
+assert window.reset_filters_button.text().endswith("(1)")
+window.clear_request_filters()
+assert window.reset_filters_button.text() == "Reset all filters"
+window.filter_preset.setCurrentText("All Errors")
+window.apply_filter_preset()
+assert window.errors_only.isChecked()
+window.reset_filters()
 assert window.mask.isChecked()
 assert window.export_group.count() == 5
 assert not window.include_zip.isChecked()

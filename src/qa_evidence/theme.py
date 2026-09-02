@@ -1,8 +1,8 @@
 """Dark and light visual themes for the Qt desktop application."""
 
 PALETTES = {
-    "dark": {"window": "#0b1020", "sidebar": "#11182a", "surface": "#151d31", "surface_alt": "#1b2540", "input": "#0f1628", "border": "#273452", "text": "#f4f7ff", "muted": "#93a4c3", "primary": "#7c6df2", "primary_hover": "#9185f7", "table_alt": "#121a2d", "selected": "#302c61", "scroll": "#354362"},
-    "light": {"window": "#f5f7fb", "sidebar": "#ffffff", "surface": "#ffffff", "surface_alt": "#eef1f8", "input": "#f9faff", "border": "#d8deeb", "text": "#172033", "muted": "#64748b", "primary": "#6657e8", "primary_hover": "#5949d7", "table_alt": "#f8f9fc", "selected": "#dedafb", "scroll": "#aeb8ca"},
+    "dark": {"window": "#0b1020", "sidebar": "#11182a", "surface": "#151d31", "surface_alt": "#1b2540", "input": "#0f1628", "border": "#273452", "text": "#f4f7ff", "muted": "#93a4c3", "primary": "#7c6df2", "primary_hover": "#9185f7", "danger": "#ff5c6c", "table_alt": "#121a2d", "selected": "#302c61", "scroll": "#354362"},
+    "light": {"window": "#f5f7fb", "sidebar": "#ffffff", "surface": "#ffffff", "surface_alt": "#eef1f8", "input": "#f9faff", "border": "#d8deeb", "text": "#172033", "muted": "#64748b", "primary": "#6657e8", "primary_hover": "#5949d7", "danger": "#d92d3a", "table_alt": "#f8f9fc", "selected": "#dedafb", "scroll": "#aeb8ca"},
 }
 COLORS = PALETTES["dark"]
 
@@ -17,9 +17,14 @@ def stylesheet(mode="dark") -> str:
     QLabel#brand {{ font-size: 18px; font-weight: 700; }} QLabel#pageTitle {{ font-size: 25px; font-weight: 700; }}
     QLabel#sectionTitle {{ font-size: 15px; font-weight: 650; }} QLabel#metric {{ font-size: 25px; font-weight: 750; }}
     QLabel#muted, QLabel#cardLabel {{ color: {c['muted']}; }}
+    QLabel#alert, QLabel#errorText, QCheckBox#danger {{ color: {c['danger']}; font-weight: 650; }}
+    QLabel#filterTitle {{ color: {c['muted']}; font-size: 11px; font-weight: 700; }}
+    QFrame#filterGroup {{ background: {c['surface_alt']}; border: 1px solid {c['border']}; border-radius: 9px; }}
     QPushButton {{ background: transparent; border: 1px solid {c['border']}; border-radius: 8px; padding: 8px 12px; }}
     QPushButton:hover {{ background: {c['surface_alt']}; }} QPushButton#primary {{ background: {c['primary']}; color: #ffffff; border-color: {c['primary']}; font-weight: 650; }} QPushButton#primary:hover {{ background: {c['primary_hover']}; }}
     QPushButton#nav {{ border: none; text-align: left; color: {c['muted']}; padding: 11px 14px; }} QPushButton#nav:hover {{ color: {c['text']}; background: {c['surface_alt']}; }} QPushButton#nav:checked {{ color: {c['text']}; background: {c['surface_alt']}; border-left: 3px solid {c['primary']}; }}
+    QPushButton#filterChip {{ color: {c['primary']}; background: {c['surface_alt']}; border-color: {c['primary']}; padding: 4px 8px; }}
+    QPushButton#filterClear {{ color: {c['muted']}; border: none; padding: 1px 4px; font-size: 11px; }} QPushButton#filterClear:hover {{ color: {c['danger']}; }}
     QLineEdit, QComboBox, QPlainTextEdit, QTextEdit, QTextBrowser, QListWidget {{ background: {c['input']}; border: 1px solid {c['border']}; border-radius: 8px; padding: 7px; selection-background-color: {c['primary']}; selection-color: #ffffff; }}
     QLineEdit:focus, QComboBox:focus, QPlainTextEdit:focus, QTextEdit:focus {{ border-color: {c['primary']}; }} QComboBox::drop-down {{ border: none; width: 24px; }}
     QComboBox QAbstractItemView {{ background: {c['surface']}; color: {c['text']}; border: 1px solid {c['border']}; selection-background-color: {c['primary']}; selection-color: #ffffff; outline: 0; padding: 4px; }}

@@ -15,12 +15,14 @@ from PySide6.QtWidgets import (
 )
 
 from . import __version__
-from .analyzer import build_auto_summary, error_fingerprint, find_duplicate_errors
+from .analyzer import (
+    build_auto_summary, error_fingerprint, find_duplicate_errors, transaction_journey,
+)
 from .evidence import build_markdown, build_ticket
 from .exporter import export_package
 from .filtering import filter_entries, group_by_transaction
 from .help_dialog import HelpDialog
-from .parser import parse_auto, parse_with_report
+from .parser import parse_auto, parse_files, parse_with_report
 from .theme import COLORS, stylesheet
 
 
@@ -87,6 +89,12 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(860, 620)
         self.settings = QSettings("QA Evidence Builder", "QA Evidence Builder")
         self.theme_mode = self.settings.value("theme", "dark")
+        try:
+            self.slow_threshold_ms = max(1.0, float(self.settings.value("slow_threshold_ms", 3000)))
+        except (TypeError, ValueError):
+            self.slow_threshold_ms = 3000.0
+        stored_codes = str(self.settings.value("success_result_codes", "0,200,20000,SUCCESS,OK"))
+        self.success_result_codes = tuple(code.strip() for code in stored_codes.split(",") if code.strip())
         self.entries, self.filtered = [], []
         self.included_indexes = set()
         self._build()
@@ -161,7 +169,7 @@ class MainWindow(QMainWindow):
         lay.addStretch()
         self.theme_button = button("Light mode", self.toggle_theme)
         lay.addWidget(self.theme_button)
-        lay.addWidget(button("Import JSON / HAR", self.import_file))
+        lay.addWidget(button("Import JSON / HAR File(s)", self.import_file))
         lay.addWidget(button("Paste JSON", self.paste_json))
         lay.addWidget(button("Clear", self.clear_all))
         lay.addWidget(button("Export Evidence", self.export, primary=True))
@@ -201,8 +209,7 @@ class MainWindow(QMainWindow):
         return page
 
     def _filters(self):
-        lay = QGridLayout()
-        lay.setContentsMargins(12, 10, 12, 10)
+        root = QVBoxLayout(); root.setContentsMargins(12, 10, 12, 10); root.setSpacing(8)
         self.search = QLineEdit(); self.search.setPlaceholderText("Search API, request ID…")
         self.method = QComboBox(); self.method.addItems(["ALL", "GET", "POST", "PUT", "PATCH", "DELETE"])
         self.status = QComboBox(); self.status.addItems(["ALL", "2xx", "3xx", "4xx", "5xx", "Other"])
@@ -211,17 +218,43 @@ class MainWindow(QMainWindow):
         self.topic = QLineEdit(); self.topic.setPlaceholderText("Kafka topic")
         self.transaction = QLineEdit(); self.transaction.setPlaceholderText("Transaction ID")
         self.errors_only = QCheckBox("Errors only")
+        self.business_errors_only = QCheckBox("Business errors")
         self.slow_only = QCheckBox("Slow only")
-        controls = [self.search, self.method, self.status, self.min_ms, self.page_filter, self.topic, self.transaction]
-        for col, widget in enumerate(controls):
-            lay.addWidget(widget, 0, col)
-        lay.addWidget(self.errors_only, 1, 0)
-        lay.addWidget(self.slow_only, 1, 1)
-        lay.addWidget(button("Reset filters", self.reset_filters), 1, 6)
-        return panel(lay)
+        self.errors_only.setObjectName("danger"); self.business_errors_only.setObjectName("danger")
+
+        def group(title, widgets, clear_slot, stretch=False):
+            frame = QFrame(); frame.setObjectName("filterGroup")
+            layout = QVBoxLayout(frame); layout.setContentsMargins(9, 7, 9, 9); layout.setSpacing(5)
+            title_row = QHBoxLayout()
+            label = QLabel(title.upper()); label.setObjectName("filterTitle"); title_row.addWidget(label); title_row.addStretch()
+            clear_button = button("Clear", clear_slot, name="filterClear"); title_row.addWidget(clear_button)
+            layout.addLayout(title_row)
+            controls = QHBoxLayout(); controls.setSpacing(6)
+            for widget in widgets: controls.addWidget(widget, 1 if stretch else 0)
+            layout.addLayout(controls)
+            return frame
+
+        preset_row = QHBoxLayout(); preset_row.addWidget(QLabel("Quick preset"))
+        self.filter_preset = QComboBox()
+        self.filter_preset.addItems(["Choose preset…", "All Errors", "Slow APIs", "Current Transaction"])
+        preset_row.addWidget(self.filter_preset); preset_row.addWidget(button("Apply", self.apply_filter_preset)); preset_row.addStretch()
+        root.addLayout(preset_row)
+        root.addWidget(group("Search across logs", [self.search], self.clear_search_filter, stretch=True))
+        categories = QGridLayout(); categories.setSpacing(8)
+        categories.addWidget(group("Request", [self.method, self.status], self.clear_request_filters), 0, 0)
+        categories.addWidget(group("Result", [self.errors_only, self.business_errors_only], self.clear_result_filters), 0, 1)
+        categories.addWidget(group("Performance", [self.min_ms, self.slow_only], self.clear_performance_filters), 1, 0)
+        categories.addWidget(group("Context", [self.page_filter, self.topic, self.transaction], self.clear_context_filters), 1, 1)
+        categories.setColumnStretch(1, 1)
+        self.reset_filters_button = button("Reset all filters", self.reset_filters); categories.addWidget(self.reset_filters_button, 1, 2)
+        root.addLayout(categories)
+        return panel(root)
 
     def _timeline_panel(self):
         lay = QVBoxLayout()
+        self.active_filters_row = QWidget(); self.active_filters_layout = QHBoxLayout(self.active_filters_row)
+        self.active_filters_layout.setContentsMargins(0, 0, 0, 0); self.active_filters_layout.setSpacing(6)
+        lay.addWidget(self.active_filters_row)
         header = QHBoxLayout()
         title = QLabel("Timeline"); title.setObjectName("sectionTitle")
         self.result_count = QLabel("0 results"); self.result_count.setObjectName("muted")
@@ -252,19 +285,32 @@ class MainWindow(QMainWindow):
         hint = QLabel("Select a timeline row to inspect its normalized fields and raw payload.")
         hint.setWordWrap(True); hint.setObjectName("muted")
         self.inspector = QPlainTextEdit(); self.inspector.setReadOnly(True)
-        lay.addWidget(title); lay.addWidget(hint); lay.addWidget(self.inspector, 1)
+        self.inspector_alert = QLabel(); self.inspector_alert.setObjectName("errorText"); self.inspector_alert.setWordWrap(True); self.inspector_alert.hide()
+        note_title = QLabel("Evidence note"); note_title.setObjectName("sectionTitle")
+        self.note_editor = QPlainTextEdit(); self.note_editor.setPlaceholderText("Add a note for the selected log…")
+        self.note_editor.setMaximumHeight(90)
+        lay.addWidget(title); lay.addWidget(hint); lay.addWidget(self.inspector_alert); lay.addWidget(self.inspector, 1)
+        lay.addWidget(note_title); lay.addWidget(self.note_editor)
+        lay.addWidget(button("Save note", self.save_log_note))
         return panel(lay)
 
     def _transactions_page(self):
         page = QWidget(); root = QVBoxLayout(page); root.setContentsMargins(0, 0, 0, 0)
         info = QLabel("Transaction journeys — double-click a row to apply it to the Dashboard filter."); info.setObjectName("muted")
         root.addWidget(info)
-        self.tx_table = QTableWidget(0, 4)
-        self.tx_table.setHorizontalHeaderLabels(("Transaction ID", "APIs", "Errors", "Slow"))
+        self.tx_table = QTableWidget(0, 7)
+        self.tx_table.setHorizontalHeaderLabels(("Transaction ID", "APIs", "HTTP", "Business", "Slow", "Duration", "Source"))
         self.tx_table.setSelectionBehavior(QTableWidget.SelectRows); self.tx_table.setEditTriggers(QTableWidget.NoEditTriggers)
         self.tx_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
         self.tx_table.doubleClicked.connect(self.apply_transaction_group)
+        self.tx_table.itemSelectionChanged.connect(self.update_journey_detail)
         root.addWidget(panel_with_widget(self.tx_table), 1)
+        actions = QHBoxLayout(); actions.addWidget(button("Include journey", self.include_transaction_journey)); actions.addStretch()
+        root.addLayout(actions)
+        self.journey_detail = QPlainTextEdit(); self.journey_detail.setReadOnly(True); self.journey_detail.setMaximumHeight(220)
+        self.journey_alert = QLabel(); self.journey_alert.setObjectName("errorText"); self.journey_alert.hide()
+        root.addWidget(self.journey_alert)
+        root.addWidget(self.journey_detail)
         return page
 
     def _evidence_page(self):
@@ -292,7 +338,7 @@ class MainWindow(QMainWindow):
         self.sanitized = QCheckBox("Sanitized log files"); self.sanitized.setChecked(True)
         for check in (self.summary_txt, self.summary_md, self.raw, self.sanitized): options.addWidget(check)
         self.raw_warning = QLabel("⚠ Raw logs are exported without sensitive-data masking.")
-        self.raw_warning.setWordWrap(True); self.raw_warning.setObjectName("warning"); self.raw_warning.setVisible(False)
+        self.raw_warning.setWordWrap(True); self.raw_warning.setObjectName("alert"); self.raw_warning.setVisible(False)
         options.addWidget(self.raw_warning)
         self.raw.toggled.connect(self.raw_warning.setVisible)
         options.addSpacing(12)
@@ -320,14 +366,23 @@ class MainWindow(QMainWindow):
     def _analysis_page(self):
         page = QWidget(); root = QVBoxLayout(page); root.setContentsMargins(0, 0, 0, 0)
         note = QLabel("Auto defect analysis, error fingerprints, and duplicate detection for the current filtered logs."); note.setObjectName("muted")
+        settings_row = QHBoxLayout()
+        settings_row.addWidget(QLabel("Slow threshold (ms)"))
+        self.slow_threshold = QLineEdit(str(self.slow_threshold_ms)); self.slow_threshold.setMaximumWidth(110)
+        settings_row.addWidget(self.slow_threshold)
+        settings_row.addWidget(QLabel("Success result codes"))
+        self.success_codes = QLineEdit(",".join(self.success_result_codes)); self.success_codes.setPlaceholderText("0,20000,SUCCESS")
+        settings_row.addWidget(self.success_codes, 1)
+        settings_row.addWidget(button("Apply", self.apply_analysis_settings))
         self.analysis = QPlainTextEdit(); self.analysis.setReadOnly(True)
-        root.addWidget(note); root.addWidget(panel_with_widget(self.analysis), 1)
+        self.analysis_alert = QLabel(); self.analysis_alert.setObjectName("errorText"); self.analysis_alert.hide()
+        root.addWidget(note); root.addLayout(settings_row); root.addWidget(self.analysis_alert); root.addWidget(panel_with_widget(self.analysis), 1)
         return page
 
     def _connect_filters(self):
         for edit in (self.search, self.min_ms, self.page_filter, self.topic, self.transaction): edit.textChanged.connect(self.refresh)
         self.method.currentTextChanged.connect(self.refresh); self.status.currentTextChanged.connect(self.refresh)
-        self.errors_only.toggled.connect(self.refresh); self.slow_only.toggled.connect(self.refresh)
+        self.errors_only.toggled.connect(self.refresh); self.business_errors_only.toggled.connect(self.refresh); self.slow_only.toggled.connect(self.refresh)
 
     def _apply_theme(self):
         QApplication.instance().setStyleSheet(stylesheet(self.theme_mode))
@@ -355,13 +410,14 @@ class MainWindow(QMainWindow):
             nav.setText(full[:1] if self.width() < 1050 else full)
 
     def import_file(self):
-        path, _ = QFileDialog.getOpenFileName(self, "Import logs", "", "JSON / HAR (*.json *.har);;All files (*)")
-        if not path: return
+        paths, _ = QFileDialog.getOpenFileNames(self, "Import logs", "", "JSON / HAR (*.json *.har);;All files (*)")
+        if not paths: return
         try:
-            result = parse_with_report(Path(path).read_text(encoding="utf-8"))
+            result = parse_files(paths)
             if not result.entries: raise ValueError("No usable log records were found.")
-            self.entries = result.entries; self.included_indexes.clear(); self.refresh()
-            self._show_import_report(result.report, Path(path).name)
+            self.entries = result.entries; self._configure_entries(); self.included_indexes.clear(); self.refresh()
+            source_name = Path(paths[0]).name if len(paths) == 1 else f"{len(paths)} files"
+            self._show_import_report(result.report, source_name)
         except Exception as exc: QMessageBox.critical(self, "Import failed", str(exc))
 
     def paste_json(self):
@@ -370,7 +426,7 @@ class MainWindow(QMainWindow):
         try:
             result = parse_with_report(dialog.editor.toPlainText().strip())
             if not result.entries: raise ValueError("No usable log records were found.")
-            self.entries = result.entries; self.included_indexes.clear(); self.refresh()
+            self.entries = result.entries; self._configure_entries(); self.included_indexes.clear(); self.refresh()
             self._show_import_report(result.report, "pasted JSON")
         except Exception as exc: QMessageBox.critical(self, "Invalid input", str(exc))
 
@@ -381,9 +437,18 @@ class MainWindow(QMainWindow):
         if report.warning_count:
             summary += f" · {report.warning_count} warnings"
         self.status_label.setText(summary)
+        self.status_label.setObjectName("alert" if report.skipped_count or report.warning_count else "muted")
+        self.status_label.style().unpolish(self.status_label); self.status_label.style().polish(self.status_label)
         if not report.skipped_count and not report.warning_count:
             return
         details = [summary, ""]
+        if len(report.file_reports) > 1:
+            details.append("Files:")
+            details.extend(
+                f"• {item.source_name}: {item.imported_count}/{item.source_count} imported, {item.skipped_count} skipped"
+                for item in report.file_reports
+            )
+            details.append("")
         if report.invalid_timestamp_count:
             details.append(f"• {report.invalid_timestamp_count} timestamp(s) missing or unreadable")
         if report.missing_endpoint_count:
@@ -405,26 +470,109 @@ class MainWindow(QMainWindow):
         self.reset_filters()
         self.status_label.setText("Cleared — import JSON or HAR to begin")
 
+    def clear_search_filter(self): self.search.clear()
+    def clear_request_filters(self): self.method.setCurrentText("ALL"); self.status.setCurrentText("ALL")
+    def clear_result_filters(self): self.errors_only.setChecked(False); self.business_errors_only.setChecked(False)
+    def clear_performance_filters(self): self.min_ms.clear(); self.slow_only.setChecked(False)
+    def clear_context_filters(self): self.page_filter.clear(); self.topic.clear(); self.transaction.clear()
+
+    def apply_filter_preset(self):
+        preset = self.filter_preset.currentText()
+        if preset == "Choose preset…": return
+        transaction_id = ""
+        if preset == "Current Transaction":
+            selected = self.selected_filtered_entries()
+            transaction_id = selected[0].transaction_id if selected else self.transaction.text().strip()
+            if not transaction_id:
+                QMessageBox.information(self, "Transaction unavailable", "Select a Timeline row with a Transaction ID first.")
+                self.filter_preset.setCurrentIndex(0)
+                return
+        self.reset_filters()
+        if preset == "All Errors": self.errors_only.setChecked(True)
+        elif preset == "Slow APIs": self.slow_only.setChecked(True)
+        elif preset == "Current Transaction": self.transaction.setText(transaction_id)
+        self.filter_preset.setCurrentIndex(0)
+
+    def _active_filter_specs(self):
+        specs = []
+        if self.search.text().strip(): specs.append((f"Search: {self.search.text().strip()}", self.search.clear))
+        if self.method.currentText() != "ALL": specs.append((self.method.currentText(), lambda: self.method.setCurrentText("ALL")))
+        if self.status.currentText() != "ALL": specs.append((self.status.currentText(), lambda: self.status.setCurrentText("ALL")))
+        if self.errors_only.isChecked(): specs.append(("All Errors", lambda: self.errors_only.setChecked(False)))
+        if self.business_errors_only.isChecked(): specs.append(("Business Errors", lambda: self.business_errors_only.setChecked(False)))
+        if self.min_ms.text().strip(): specs.append((f">= {self.min_ms.text().strip()} ms", self.min_ms.clear))
+        if self.slow_only.isChecked(): specs.append(("Slow APIs", lambda: self.slow_only.setChecked(False)))
+        if self.page_filter.text().strip(): specs.append((f"Page: {self.page_filter.text().strip()}", self.page_filter.clear))
+        if self.topic.text().strip(): specs.append((f"Topic: {self.topic.text().strip()}", self.topic.clear))
+        if self.transaction.text().strip(): specs.append((f"Transaction: {self.transaction.text().strip()}", self.transaction.clear))
+        return specs
+
+    def update_active_filter_chips(self):
+        while self.active_filters_layout.count():
+            item = self.active_filters_layout.takeAt(0)
+            if item.widget(): item.widget().deleteLater()
+        specs = self._active_filter_specs()
+        label = QLabel("Active filters" if specs else "No active filters"); label.setObjectName("muted")
+        self.active_filters_layout.addWidget(label)
+        for text, clear_action in specs:
+            chip = button(f"{text}  ×", name="filterChip")
+            chip.clicked.connect(lambda checked=False, action=clear_action: action())
+            self.active_filters_layout.addWidget(chip)
+        self.active_filters_layout.addStretch()
+        count = len(specs)
+        self.reset_filters_button.setText(f"Reset all filters ({count})" if count else "Reset all filters")
+
     def reset_filters(self):
         for edit in (self.search, self.min_ms, self.page_filter, self.topic, self.transaction): edit.clear()
-        self.method.setCurrentText("ALL"); self.status.setCurrentText("ALL"); self.errors_only.setChecked(False); self.slow_only.setChecked(False); self.refresh()
+        self.method.setCurrentText("ALL"); self.status.setCurrentText("ALL"); self.errors_only.setChecked(False); self.business_errors_only.setChecked(False); self.slow_only.setChecked(False); self.refresh()
+
+    def _configure_entries(self):
+        for entry in self.entries:
+            entry.slow_threshold_ms = self.slow_threshold_ms
+            entry.success_result_codes = self.success_result_codes
+
+    def apply_analysis_settings(self):
+        try:
+            threshold = float(self.slow_threshold.text().strip())
+            if threshold <= 0: raise ValueError
+        except ValueError:
+            QMessageBox.information(self, "Invalid threshold", "Slow threshold must be a positive number.")
+            return
+        codes = tuple(code.strip() for code in self.success_codes.text().split(",") if code.strip())
+        if not codes:
+            QMessageBox.information(self, "Success codes required", "Enter at least one success result code.")
+            return
+        self.slow_threshold_ms = threshold; self.success_result_codes = codes
+        self.settings.setValue("slow_threshold_ms", threshold)
+        self.settings.setValue("success_result_codes", ",".join(codes))
+        self._configure_entries(); self.refresh()
+        self.status_label.setText(f"Analysis settings applied · Slow >= {threshold:g} ms")
 
     def refresh(self):
-        self.filtered = filter_entries(self.entries, search=self.search.text(), errors_only=self.errors_only.isChecked(), slow_only=self.slow_only.isChecked(), method=self.method.currentText(), status_class=self.status.currentText(), min_ms=self.min_ms.text(), page=self.page_filter.text(), topic=self.topic.text(), transaction=self.transaction.text())
+        self.filtered = filter_entries(self.entries, search=self.search.text(), errors_only=self.errors_only.isChecked(), business_errors_only=self.business_errors_only.isChecked(), slow_only=self.slow_only.isChecked(), method=self.method.currentText(), status_class=self.status.currentText(), min_ms=self.min_ms.text(), page=self.page_filter.text(), topic=self.topic.text(), transaction=self.transaction.text())
+        self.update_active_filter_chips()
         self.table.setRowCount(len(self.filtered))
         for row, entry in enumerate(self.filtered):
             values = ("●" if entry.index in self.included_indexes else "○", entry.timestamp_display, entry.severity, error_fingerprint(entry), entry.request_method, entry.request_uri, entry.response_status, entry.response_time, entry.request_id, entry.transaction_id)
             for col, value in enumerate(values):
                 item = QTableWidgetItem(str(value)); item.setData(Qt.UserRole, entry.index)
                 if col == 0: item.setForeground(QColor("#7c6df2" if entry.index in self.included_indexes else "#62708e"))
-                if col == 2 and entry.is_error: item.setForeground(QColor("#ff6b7a"))
+                if entry.has_error and col in {2, 3, 6}: item.setForeground(QColor("#ff5c6c"))
                 self.table.setItem(row, col, item)
         groups = group_by_transaction(self.filtered); self.tx_table.setRowCount(len(groups))
         for row, (tx, items) in enumerate(groups.items()):
-            for col, value in enumerate((tx, len(items), sum(x.is_error for x in items), sum(x.is_slow for x in items))): self.tx_table.setItem(row, col, QTableWidgetItem(str(value)))
-        success = sum(1 for x in self.entries if not x.is_error)
-        for key, value in (("total", len(self.entries)), ("success", success), ("errors", sum(x.is_error for x in self.entries)), ("slow", sum(x.is_slow for x in self.entries)), ("included", len(self.included_indexes))): self.metrics[key].setText(str(value))
+            journey = transaction_journey(items)
+            source = "Fallback" if journey["uses_fallback"] else "Transaction"
+            values = (tx, len(items), journey["http_errors"], journey["business_errors"], journey["slow_count"], f"{journey['duration_ms']:.0f} ms", source)
+            for col, value in enumerate(values):
+                item = QTableWidgetItem(str(value))
+                if col in {2, 3} and int(value): item.setForeground(QColor("#ff5c6c"))
+                self.tx_table.setItem(row, col, item)
+        success = sum(1 for x in self.entries if not x.has_error)
+        for key, value in (("total", len(self.entries)), ("success", success), ("errors", sum(x.has_error for x in self.entries)), ("slow", sum(x.is_slow for x in self.entries)), ("included", len(self.included_indexes))): self.metrics[key].setText(str(value))
         self.result_count.setText(f"{len(self.filtered)} results"); self.status_label.setText(f"Showing {len(self.filtered)} / {len(self.entries)} logs  •  Included {len(self.included_indexes)}  •  Sensitive data {'masked' if self.mask.isChecked() else 'visible'}")
+        if self.status_label.objectName() != "muted":
+            self.status_label.setObjectName("muted"); self.status_label.style().unpolish(self.status_label); self.status_label.style().polish(self.status_label)
         self.update_preview(); self.update_analysis()
 
     def selected_filtered_entries(self): return [self.filtered[i.row()] for i in self.table.selectionModel().selectedRows()]
@@ -452,13 +600,64 @@ class MainWindow(QMainWindow):
         if row < 0: return
         value = self.tx_table.item(row, 0).text(); self.transaction.setText("" if value == "(no transaction)" else value); self._navigate(0)
 
+    def _selected_transaction_entries(self):
+        row = self.tx_table.currentRow()
+        if row < 0 or not self.tx_table.item(row, 0): return []
+        key = self.tx_table.item(row, 0).text()
+        return group_by_transaction(self.filtered).get(key, [])
+
+    def include_transaction_journey(self):
+        entries = self._selected_transaction_entries()
+        if not entries:
+            QMessageBox.information(self, "No transaction selected", "Select a transaction journey first.")
+            return
+        self.included_indexes.update(entry.index for entry in entries); self.refresh()
+
+    def update_journey_detail(self):
+        journey = transaction_journey(self._selected_transaction_entries())
+        if not journey: self.journey_detail.clear(); self.journey_alert.hide(); return
+        first_error = journey["first_error"]
+        slowest = journey["slowest_api"]
+        lines = [
+            f"First API: {journey['first_api'].request_method} {journey['first_api'].request_uri}",
+            f"First Error: {first_error.request_method} {first_error.request_uri}" if first_error else "First Error: -",
+            f"Slowest API: {slowest.request_method} {slowest.request_uri} ({slowest.response_time} ms)" if slowest else "Slowest API: -",
+            f"Duration: {journey['duration_ms']:.0f} ms",
+            "Warning: grouped by Request ID fallback" if journey["uses_fallback"] else "Source: explicit transaction identifier",
+            "",
+        ]
+        for position, entry in enumerate(journey["entries"]):
+            arrow = "  " if position == 0 else "→ "
+            lines.append(f"{arrow}{entry.request_method or '-'} {entry.request_uri or '-'}  {entry.response_status or '-'}  {entry.response_time or '-'} ms  [{entry.severity}]")
+        self.journey_detail.setPlainText("\n".join(lines))
+        alert_parts = []
+        if journey["http_errors"]: alert_parts.append(f"{journey['http_errors']} HTTP error(s)")
+        if journey["business_errors"]: alert_parts.append(f"{journey['business_errors']} business error(s)")
+        if journey["uses_fallback"]: alert_parts.append("Request ID fallback grouping")
+        self.journey_alert.setText("⚠ " + " · ".join(alert_parts) if alert_parts else "")
+        self.journey_alert.setVisible(bool(alert_parts))
+
     def update_inspector(self):
         selected = self.selected_filtered_entries()
-        if not selected: self.inspector.clear(); return
+        if not selected: self.inspector.clear(); self.note_editor.clear(); self.inspector_alert.hide(); return
         e = selected[0]
         source = TRANSACTION_SOURCE_LABELS.get(e.transaction_source, e.transaction_source)
         source_detail = f" · {e.transaction_source_field}" if e.transaction_source_field else ""
-        self.inspector.setPlainText(f"{e.request_method} {e.request_uri}\nHTTP {e.response_status}  •  {e.response_time} ms\nRequest ID: {e.request_id}\nTransaction: {e.transaction_id}\nTransaction Source: {source}{source_detail}\nPage: {e.page_name}\nPage URL: {e.page_url}\nKafka topic: {e.kafka_topic}\n\nREQUEST HEADERS\n{e.request_header}\n\nREQUEST BODY\n{e.request_body}\n\nRESPONSE BODY\n{e.response_body}")
+        self.inspector.setPlainText(f"{e.request_method} {e.request_uri}\nHTTP {e.response_status}  •  {e.response_time} ms\nBusiness Error: {e.business_error_reason or '-'}\nRequest ID: {e.request_id}\nTransaction: {e.transaction_id}\nTransaction Source: {source}{source_detail}\nSource File: {e.source_file or '-'}\nSource Record: {e.source_record_index or '-'}\nPage: {e.page_name}\nPage URL: {e.page_url}\nKafka topic: {e.kafka_topic}\n\nREQUEST HEADERS\n{e.request_header}\n\nREQUEST BODY\n{e.request_body}\n\nRESPONSE BODY\n{e.response_body}")
+        alert = ""
+        if e.is_error: alert = f"HTTP ERROR {e.response_status}"
+        if e.is_business_error: alert += (" · " if alert else "") + f"BUSINESS ERROR: {e.business_error_reason}"
+        self.inspector_alert.setText("⚠ " + alert if alert else ""); self.inspector_alert.setVisible(bool(alert))
+        self.note_editor.setPlainText(e.note)
+
+    def save_log_note(self):
+        selected = self.selected_filtered_entries()
+        if not selected:
+            QMessageBox.information(self, "No log selected", "Select a Timeline row before saving a note.")
+            return
+        selected[0].note = self.note_editor.toPlainText().strip()
+        self.update_preview()
+        self.status_label.setText("Evidence note saved")
 
     def _extra_mask_keys(self): return [x.strip() for x in self.extra_mask.text().split(",") if x.strip()]
     def update_preview(self): self.preview.setPlainText(build_ticket(self.included_entries(), self.mask.isChecked(), self.expected.toPlainText().strip(), self.actual.toPlainText().strip(), self._extra_mask_keys()))
@@ -470,6 +669,13 @@ class MainWindow(QMainWindow):
             lines.extend(f"  - {e.timestamp_display} {e.request_method} {e.request_uri} HTTP {e.response_status}" for e in items)
             lines.append("")
         self.analysis.setPlainText("\n".join(lines))
+        http_errors = sum(entry.is_error for entry in self.filtered)
+        business_errors = sum(entry.is_business_error for entry in self.filtered)
+        error_text = []
+        if http_errors: error_text.append(f"{http_errors} HTTP error(s)")
+        if business_errors: error_text.append(f"{business_errors} business error(s)")
+        self.analysis_alert.setText("⚠ " + " · ".join(error_text) if error_text else "")
+        self.analysis_alert.setVisible(bool(error_text))
 
     def _require_included(self):
         entries = self.included_entries()

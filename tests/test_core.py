@@ -1,11 +1,12 @@
 import sys
 import tempfile
+import json
 from pathlib import Path
 import zipfile
 
 sys.path.insert(0, str(Path(__file__).parents[1] / "src"))
 
-from qa_evidence.parser import parse_auto, parse_har, parse_with_report
+from qa_evidence.parser import parse_auto, parse_files, parse_har, parse_with_report
 from qa_evidence.filtering import filter_entries, group_by_transaction
 from qa_evidence.evidence import build_ticket, build_markdown
 from qa_evidence.sanitizer import sanitize
@@ -14,6 +15,7 @@ from qa_evidence.analyzer import (
     error_fingerprint,
     find_duplicate_errors,
     build_auto_summary,
+    transaction_journey,
 )
 
 sample = [
@@ -158,6 +160,32 @@ summary = build_auto_summary(entries)
 assert "Detected 2 HTTP error(s)" in summary
 assert "repeated error signature" in summary
 
+business_entry = parse_auto({"fields": {
+    "TIMESTAMP": ["2026-08-21 11:03:39.000"],
+    "REQUEST_URI": ["/api/business"],
+    "RESPONSE_STATUS": [200],
+    "RESPONSE_TIME": [2500],
+    "RESPONSE_BODY": ['{"resultCode":"50001","resultDescription":"Invalid account"}'],
+}})[0]
+assert business_entry.is_business_error
+assert business_entry.has_error
+assert business_entry.severity == "BUSINESS ERROR"
+assert error_fingerprint(business_entry).startswith("ERR-")
+assert filter_entries([business_entry], business_errors_only=True) == [business_entry]
+business_entry.success_result_codes = ("50001",)
+assert not business_entry.is_business_error
+business_entry.slow_threshold_ms = 2000
+assert business_entry.is_slow
+business_entry.slow_threshold_ms = 3000
+assert not business_entry.is_slow
+
+journey = transaction_journey(entries)
+assert journey["first_api"] is entries[0]
+assert journey["first_error"] is entries[0]
+assert journey["slowest_api"] is entries[1]
+assert journey["http_errors"] == 2
+assert round(journey["duration_ms"]) == 1770
+
 ticket = build_ticket(
     entries[:2],
     True,
@@ -170,6 +198,11 @@ assert "Error Fingerprint:" in ticket
 assert "Transaction Source:" in ticket
 assert '"password": "********"' in ticket
 assert '"customSecret": "********"' in ticket
+entries[0].note = "จุดแรกที่เริ่มผิดพลาด"
+entries[0].source_file = "payment.json"
+ticket_with_note = build_ticket(entries[:1], True)
+assert "จุดแรกที่เริ่มผิดพลาด" in ticket_with_note
+assert "payment.json" in ticket_with_note
 
 markdown = build_markdown(entries[:1], True)
 assert markdown.startswith("```text")
@@ -214,6 +247,20 @@ malformed_har_entries = parse_har({"log": {"entries": [None, {
     "response": [],
 }]}})
 assert len(malformed_har_entries) == 1
+
+with tempfile.TemporaryDirectory() as directory:
+    first_file = Path(directory) / "first.json"
+    second_file = Path(directory) / "second.har"
+    broken_file = Path(directory) / "broken.json"
+    first_file.write_text('[{"fields":{"TIMESTAMP":["2026-08-21 11:03:40.000"],"REQUEST_URI":["/later"]}}]', encoding="utf-8")
+    second_file.write_text(json.dumps(har), encoding="utf-8")
+    broken_file.write_text("not json", encoding="utf-8")
+    multiple = parse_files([first_file, second_file, broken_file])
+    assert len(multiple.entries) == 2
+    assert multiple.entries[0].source_file == "second.har"
+    assert multiple.entries[1].source_file == "first.json"
+    assert [entry.index for entry in multiple.entries] == [1, 2]
+    assert multiple.report.skipped_count == 1
 
 with tempfile.TemporaryDirectory() as directory:
     destination = Path(directory) / "evidence"

@@ -67,7 +67,7 @@ python run.py
 4. Include selected logs, or use Select All for the current filtered result.
 5. Review Evidence and optionally enter Expected/Actual results.
 6. Keep sensitive-data masking enabled.
-7. Copy the evidence for a ticket or export an evidence ZIP.
+7. Copy the evidence for a ticket or export an evidence folder, with an optional ZIP archive.
 
 ## Security
 
@@ -91,7 +91,7 @@ Tests are deliberately runnable without a display server; packaged UI smoke chec
 
 ## Repository
 
-GitHub: `jiratinteean/qa-evidence-builder`
+GitHub: [`jiratin/qa-evidence-builder`](https://github.com/jiratin/qa-evidence-builder)
 
 ## Release
 
@@ -118,11 +118,21 @@ Extract the ZIP, then open `QA Evidence Builder.app`.
 Users of these release builds do not need VS Code or a separate Python installation.
 
 > macOS and Windows builds are currently unsigned. Gatekeeper or SmartScreen may display a warning until code signing is configured.
+
 ## Automated releases
 
 GitHub Actions builds both operating-system versions whenever a version tag such as `v1.0.1` is pushed.
 
 See [`docs/RELEASING.md`](docs/RELEASING.md) for the release process and manual rebuild instructions.
+
+## Development documentation
+
+- [`docs/PROJECT_CONTEXT.md`](docs/PROJECT_CONTEXT.md) — current status, constraints, and continuation checklist
+- [`docs/ROADMAP.md`](docs/ROADMAP.md) — delivered, partial, planned, and deferred work
+- [`docs/REQUIREMENTS.md`](docs/REQUIREMENTS.md) — compatibility contract and verification map
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — module boundaries and data flow
+- [`docs/DECISIONS.md`](docs/DECISIONS.md) — decisions that should not be reversed accidentally
+- [`docs/RELEASING.md`](docs/RELEASING.md) — versioning, validation, packaging, and release procedure
 
 ## Changelog
 

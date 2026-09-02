@@ -6,6 +6,11 @@ The project follows Semantic Versioning where practical.
 
 ## [Unreleased]
 
+### Documentation
+
+- Add project context, roadmap, architecture, decision records, and repository
+  handoff rules; align repository and release instructions with the current build.
+
 ## [1.3.4] - 2026-09-02
 
 ### Added

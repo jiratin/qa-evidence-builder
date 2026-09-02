@@ -86,10 +86,36 @@ tests, User Guide, and changelog.
 - NFR-009: Packaged Windows, macOS Apple Silicon, and macOS Intel applications
   must pass a startup test before their artifacts can be released.
 
+## Behaviour clarifications
+
+- Error Fingerprint is an error-grouping signature, not a permanent row ID. It
+  is derived from method, URI, HTTP status, result code, business-error reason,
+  and a normalized error message. Numeric message fragments are normalized so
+  repeated instances of the same failure can group together.
+- An empty or invalid export-folder format must never escape the chosen parent
+  folder. Only `{date}` and `{time}` are supported; other format fields produce
+  a user-visible validation error.
+- The All Errors preset enables the error filter, Slow APIs enables the slow
+  filter, and Current Transaction filters to the selected row's transaction.
+- User preferences are local application settings. They contain UI preferences
+  and analysis configuration, not imported log contents.
+
 ## Verification map
 
 - Input, Transaction ID, masking, filtering, analysis, and export: `tests/test_core.py`
 - UI availability, theme, and defaults: `tests/test_ui_smoke.py`
 - UI framework/design source checks: `tests/test_ui_source.py`
 - User Guide completeness: `tests/test_help.py`
-- GitHub Release workflow: `tests/test_release_workflow.py`
+- User Guide visibility and launch path: `tests/test_help_visibility.py`
+- GitHub Release workflow, version metadata, and bundle stamping:
+  `tests/test_release_workflow.py`
+- Required icons, version/tag match, artifact names, and macOS bundles:
+  `scripts/validate_release.py`
+
+## Change acceptance
+
+Every user-visible change must update the relevant requirement, automated test,
+built-in User Guide, README when appropriate, and `CHANGELOG.md`. Before release,
+all verification commands in `docs/RELEASING.md` and all three packaged startup
+jobs must pass. Security-sensitive changes must preserve local-only processing,
+default masking, and explicit raw-export confirmation.

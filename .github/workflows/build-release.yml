@@ -9,7 +9,7 @@ on:
       version:
         description: "Release tag to build, e.g. v1.0.0"
         required: true
-        default: "v1.0.0"
+        default: "v1.3.1"
 
 permissions:
   contents: write
@@ -39,10 +39,15 @@ jobs:
         run: python -m pip install -r requirements-dev.txt
       - name: Compile Python sources
         run: python -m compileall -q src run.py tests
+      - name: Validate release version and required assets
+        run: >-
+          python scripts/validate_release.py --check-assets
+          --tag "${{ github.event_name == 'workflow_dispatch' && github.event.inputs.version || github.ref_name }}"
       - name: Run tests
         run: |
           python tests/test_core.py
           python tests/test_help.py
+          python tests/test_help_visibility.py
           python tests/test_ui_source.py
           python tests/test_ui_smoke.py
           python tests/test_release_workflow.py
@@ -79,7 +84,31 @@ jobs:
             --windowed \
             --name "QA Evidence Builder" \
             --paths src \
+            --icon assets/icons/qa-evidence-builder.icns \
+            --add-data "assets/icons/png/icon-256.png:assets/icons/png" \
+            --osx-bundle-identifier "com.guidejir.qaevidencebuilder" \
             run.py
+
+          APP_VERSION=$(python -c "import sys; sys.path.insert(0, 'src'); from qa_evidence import __version__; print(__version__)")
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $APP_VERSION" "dist/QA Evidence Builder.app/Contents/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $APP_VERSION" "dist/QA Evidence Builder.app/Contents/Info.plist"
+          /usr/libexec/PlistBuddy -c "Add :NSHumanReadableCopyright string Copyright © 2026 Guide Jir. All rights reserved." "dist/QA Evidence Builder.app/Contents/Info.plist" || true
+
+      - name: Validate and launch-test packaged application
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          python scripts/validate_release.py --check-assets --macos-app "dist/QA Evidence Builder.app"
+          "dist/QA Evidence Builder.app/Contents/MacOS/QA Evidence Builder" > app-startup.log 2>&1 &
+          APP_PID=$!
+          sleep 8
+          if ! kill -0 "$APP_PID" 2>/dev/null; then
+            cat app-startup.log
+            echo "Packaged executable exited during startup."
+            exit 1
+          fi
+          kill "$APP_PID"
+          wait "$APP_PID" || true
 
       - name: Verify Apple Silicon architecture
         run: |
@@ -130,7 +159,31 @@ jobs:
             --windowed \
             --name "QA Evidence Builder" \
             --paths src \
+            --icon assets/icons/qa-evidence-builder.icns \
+            --add-data "assets/icons/png/icon-256.png:assets/icons/png" \
+            --osx-bundle-identifier "com.guidejir.qaevidencebuilder" \
             run.py
+
+          APP_VERSION=$(python -c "import sys; sys.path.insert(0, 'src'); from qa_evidence import __version__; print(__version__)")
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $APP_VERSION" "dist/QA Evidence Builder.app/Contents/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $APP_VERSION" "dist/QA Evidence Builder.app/Contents/Info.plist"
+          /usr/libexec/PlistBuddy -c "Add :NSHumanReadableCopyright string Copyright © 2026 Guide Jir. All rights reserved." "dist/QA Evidence Builder.app/Contents/Info.plist" || true
+
+      - name: Validate and launch-test packaged application
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          python scripts/validate_release.py --check-assets --macos-app "dist/QA Evidence Builder.app"
+          "dist/QA Evidence Builder.app/Contents/MacOS/QA Evidence Builder" > app-startup.log 2>&1 &
+          APP_PID=$!
+          sleep 8
+          if ! kill -0 "$APP_PID" 2>/dev/null; then
+            cat app-startup.log
+            echo "Packaged executable exited during startup."
+            exit 1
+          fi
+          kill "$APP_PID"
+          wait "$APP_PID" || true
 
       - name: Verify Intel architecture
         run: |
@@ -179,6 +232,9 @@ jobs:
             --windowed `
             --name "QA-Evidence-Builder-Windows" `
             --paths src `
+            --icon assets/icons/qa-evidence-builder.ico `
+            --version-file packaging/windows_version_info.txt `
+            --add-data "assets/icons/png/icon-256.png:assets/icons/png" `
             run.py
 
       - name: Launch-test Windows executable
@@ -239,6 +295,12 @@ jobs:
         with:
           name: qa-evidence-builder-windows
           path: release-assets
+
+      - name: Validate release artifacts
+        run: |
+          python scripts/validate_release.py \
+            --tag "${{ steps.version.outputs.tag }}" \
+            --artifacts release-assets
 
       - name: Generate release notes from actual changes
         env:

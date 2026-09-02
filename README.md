@@ -15,18 +15,22 @@ QA Evidence Builder is a local desktop tool for QA, Testers, and Developers to t
 - Search and filtering by method, status, page, Kafka topic, transaction, errors, and slow APIs
 - Explicit log selection with Include/Exclude, Select All, and Deselect All
 - Transaction grouping
+- Transaction ID source and fallback indication
+- Import validation summary for skipped records and incomplete fields
 - Expected Result / Actual Result evidence
 - Sensitive-data masking and custom mask keys
 - Plain-text and Markdown ticket evidence
 - Evidence folder export grouped by Kafka topic, page name, page URL, or a custom folder
 - Optional ZIP archive (off by default)
+- Explicit warning and confirmation before raw-log export
 - Error fingerprinting and repeated-error analysis
 - Built-in Help / User Guide
 - Modern custom-styled PySide6 dashboard with persistent Dark/Light mode, responsive navigation, and inspector
+- Branded Windows and macOS application icons and metadata
 
 ## Requirements
 
-- Python 3.10 or newer
+- Python 3.10–3.13 (the pinned PySide6 runtime does not support Python 3.14)
 - Dependencies from `requirements.txt` (including PySide6)
 
 ## Run locally
@@ -68,6 +72,7 @@ Raw log export is disabled by default.
 python -m compileall -q src run.py tests
 python tests/test_core.py
 python tests/test_help.py
+python tests/test_help_visibility.py
 python tests/test_ui_source.py
 python tests/test_ui_smoke.py
 python tests/test_release_workflow.py

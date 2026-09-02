@@ -5,7 +5,7 @@ from datetime import datetime
 from pathlib import Path
 
 from PySide6.QtCore import QSettings, Qt
-from PySide6.QtGui import QColor, QKeySequence, QShortcut
+from PySide6.QtGui import QColor, QIcon, QKeySequence, QShortcut
 from PySide6.QtWidgets import (
     QApplication, QCheckBox, QComboBox, QDialog, QFileDialog, QFrame,
     QGridLayout, QHBoxLayout, QHeaderView, QLabel, QLineEdit, QMainWindow,
@@ -20,8 +20,24 @@ from .evidence import build_markdown, build_ticket
 from .exporter import export_package
 from .filtering import filter_entries, group_by_transaction
 from .help_dialog import HelpDialog
-from .parser import parse_auto
+from .parser import parse_auto, parse_with_report
 from .theme import COLORS, stylesheet
+
+
+def resource_path(relative):
+    base = Path(getattr(sys, "_MEIPASS", Path(__file__).parents[2]))
+    return base / relative
+
+
+TRANSACTION_SOURCE_LABELS = {
+    "request_body": "Request Body",
+    "url_query": "URL Query",
+    "request_params": "Request Params",
+    "transaction_field": "Transaction Field",
+    "request_header": "Request Header",
+    "request_id_fallback": "Request ID fallback",
+    "not_found": "Not found",
+}
 
 
 def button(text, slot=None, primary=False, name=None):
@@ -66,6 +82,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("QA Evidence Builder")
+        self.setWindowIcon(QIcon(str(resource_path("assets/icons/png/icon-256.png"))))
         self.resize(1480, 900)
         self.setMinimumSize(860, 620)
         self.settings = QSettings("QA Evidence Builder", "QA Evidence Builder")
@@ -274,6 +291,10 @@ class MainWindow(QMainWindow):
         self.raw = QCheckBox("Raw log files")
         self.sanitized = QCheckBox("Sanitized log files"); self.sanitized.setChecked(True)
         for check in (self.summary_txt, self.summary_md, self.raw, self.sanitized): options.addWidget(check)
+        self.raw_warning = QLabel("⚠ Raw logs are exported without sensitive-data masking.")
+        self.raw_warning.setWordWrap(True); self.raw_warning.setObjectName("warning"); self.raw_warning.setVisible(False)
+        options.addWidget(self.raw_warning)
+        self.raw.toggled.connect(self.raw_warning.setVisible)
         options.addSpacing(12)
         grouping = QLabel("Folder grouping"); grouping.setObjectName("sectionTitle"); options.addWidget(grouping)
         self.export_group = QComboBox()
@@ -337,16 +358,43 @@ class MainWindow(QMainWindow):
         path, _ = QFileDialog.getOpenFileName(self, "Import logs", "", "JSON / HAR (*.json *.har);;All files (*)")
         if not path: return
         try:
-            self.entries = parse_auto(Path(path).read_text(encoding="utf-8")); self.included_indexes.clear(); self.refresh()
-            self.status_label.setText(f"Imported {len(self.entries)} logs from {Path(path).name}")
+            result = parse_with_report(Path(path).read_text(encoding="utf-8"))
+            if not result.entries: raise ValueError("No usable log records were found.")
+            self.entries = result.entries; self.included_indexes.clear(); self.refresh()
+            self._show_import_report(result.report, Path(path).name)
         except Exception as exc: QMessageBox.critical(self, "Import failed", str(exc))
 
     def paste_json(self):
         dialog = PasteDialog(self)
         if dialog.exec() != QDialog.Accepted: return
         try:
-            self.entries = parse_auto(dialog.editor.toPlainText().strip()); self.included_indexes.clear(); self.refresh()
+            result = parse_with_report(dialog.editor.toPlainText().strip())
+            if not result.entries: raise ValueError("No usable log records were found.")
+            self.entries = result.entries; self.included_indexes.clear(); self.refresh()
+            self._show_import_report(result.report, "pasted JSON")
         except Exception as exc: QMessageBox.critical(self, "Invalid input", str(exc))
+
+    def _show_import_report(self, report, source_name):
+        summary = f"Imported {report.imported_count} of {report.source_count} logs from {source_name}"
+        if report.skipped_count:
+            summary += f" · {report.skipped_count} skipped"
+        if report.warning_count:
+            summary += f" · {report.warning_count} warnings"
+        self.status_label.setText(summary)
+        if not report.skipped_count and not report.warning_count:
+            return
+        details = [summary, ""]
+        if report.invalid_timestamp_count:
+            details.append(f"• {report.invalid_timestamp_count} timestamp(s) missing or unreadable")
+        if report.missing_endpoint_count:
+            details.append(f"• {report.missing_endpoint_count} endpoint(s) missing")
+        categories = {}
+        for issue in report.issues:
+            if issue.category in {"invalid_timestamp", "missing_endpoint"}:
+                continue
+            categories[issue.message] = categories.get(issue.message, 0) + 1
+        details.extend(f"• {count} record(s): {message}" for message, count in categories.items())
+        QMessageBox.warning(self, "Import completed with warnings", "\n".join(details))
 
     def clear_all(self):
         self.entries = []
@@ -408,7 +456,9 @@ class MainWindow(QMainWindow):
         selected = self.selected_filtered_entries()
         if not selected: self.inspector.clear(); return
         e = selected[0]
-        self.inspector.setPlainText(f"{e.request_method} {e.request_uri}\nHTTP {e.response_status}  •  {e.response_time} ms\nRequest ID: {e.request_id}\nTransaction: {e.transaction_id}\nPage: {e.page_name}\nPage URL: {e.page_url}\nKafka topic: {e.kafka_topic}\n\nREQUEST HEADERS\n{e.request_header}\n\nREQUEST BODY\n{e.request_body}\n\nRESPONSE BODY\n{e.response_body}")
+        source = TRANSACTION_SOURCE_LABELS.get(e.transaction_source, e.transaction_source)
+        source_detail = f" · {e.transaction_source_field}" if e.transaction_source_field else ""
+        self.inspector.setPlainText(f"{e.request_method} {e.request_uri}\nHTTP {e.response_status}  •  {e.response_time} ms\nRequest ID: {e.request_id}\nTransaction: {e.transaction_id}\nTransaction Source: {source}{source_detail}\nPage: {e.page_name}\nPage URL: {e.page_url}\nKafka topic: {e.kafka_topic}\n\nREQUEST HEADERS\n{e.request_header}\n\nREQUEST BODY\n{e.request_body}\n\nRESPONSE BODY\n{e.response_body}")
 
     def _extra_mask_keys(self): return [x.strip() for x in self.extra_mask.text().split(",") if x.strip()]
     def update_preview(self): self.preview.setPlainText(build_ticket(self.included_entries(), self.mask.isChecked(), self.expected.toPlainText().strip(), self.actual.toPlainText().strip(), self._extra_mask_keys()))
@@ -437,6 +487,16 @@ class MainWindow(QMainWindow):
     def export(self):
         entries = self._require_included()
         if not entries: return
+        if self.raw.isChecked():
+            choice = QMessageBox.warning(
+                self,
+                "Export raw logs?",
+                f"{len(entries)} raw log file(s) will be exported without sensitive-data masking.\n\n"
+                "They may contain tokens, cookies, personal data, or internal system information.",
+                QMessageBox.Cancel | QMessageBox.Yes,
+                QMessageBox.Cancel,
+            )
+            if choice != QMessageBox.Yes: return
         parent = QFileDialog.getExistingDirectory(self, "Choose export folder")
         if not parent: return
         destination = Path(parent) / ("QA_Evidence_" + datetime.now().strftime("%Y%m%d_%H%M%S"))
@@ -465,6 +525,10 @@ App = MainWindow
 def main():
     application = QApplication.instance() or QApplication(sys.argv)
     application.setApplicationName("QA Evidence Builder")
+    application.setApplicationDisplayName("QA Evidence Builder")
+    application.setApplicationVersion(__version__)
+    application.setOrganizationName("Guide Jir")
+    application.setWindowIcon(QIcon(str(resource_path("assets/icons/png/icon-256.png"))))
     application.setStyle("Fusion")
     application.setStyleSheet(stylesheet())
     window = MainWindow(); window.show()

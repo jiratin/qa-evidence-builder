@@ -13,6 +13,9 @@ class LogEntry:
     response_time: str = ""
     request_id: str = ""
     transaction_id: str = ""
+    transaction_source: str = "not_found"
+    transaction_source_field: str = ""
+    transaction_is_fallback: bool = False
     page_name: str = ""
     page_url: str = ""
     kafka_topic: str = ""
@@ -44,3 +47,31 @@ class LogEntry:
         if self.is_slow:
             return "SLOW"
         return "OK"
+
+
+@dataclass
+class ImportIssue:
+    category: str
+    message: str
+    record_index: int | None = None
+
+
+@dataclass
+class ImportReport:
+    source_format: str
+    source_count: int = 0
+    imported_count: int = 0
+    skipped_count: int = 0
+    invalid_timestamp_count: int = 0
+    missing_endpoint_count: int = 0
+    issues: list[ImportIssue] = field(default_factory=list)
+
+    @property
+    def warning_count(self) -> int:
+        return self.invalid_timestamp_count + self.missing_endpoint_count
+
+
+@dataclass
+class ImportResult:
+    entries: list[LogEntry]
+    report: ImportReport

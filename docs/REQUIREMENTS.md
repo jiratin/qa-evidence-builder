@@ -12,6 +12,11 @@ tests, User Guide, and changelog.
 - FR-004: Accept the same formats through Paste JSON.
 - FR-005: Resolve Transaction ID from request body, URL/query, fields, headers,
   then Request ID fallback, in that order.
+- FR-006: Report the source field used for every resolved Transaction ID and
+  distinguish Request ID fallback values from explicit transaction values.
+- FR-007: Report imported, skipped, invalid-timestamp, and missing-endpoint
+  counts without exposing raw record contents. Mixed-validity input must retain
+  usable records.
 
 ## Investigation
 
@@ -35,6 +40,8 @@ tests, User Guide, and changelog.
 - FR-026: Use filesystem-safe, concise exported filenames based on endpoint and
   the first query parameter. When raw or sanitized is the only selected content,
   place its JSON files directly in the current group folder.
+- FR-027: Keep raw-log export disabled by default, show an inline warning when
+  enabled, and require confirmation before the UI starts a raw export.
 
 ## Application and delivery
 
@@ -46,6 +53,13 @@ tests, User Guide, and changelog.
 - NFR-005: The searchable User Guide reflects the current UI and behaviour.
 - NFR-006: PySide6 must remain pinned to the Windows packaging-tested version;
   dependency upgrades require launching the built executable in CI or locally.
+  Supported source/build runtimes are Python 3.10 through 3.13.
+- NFR-007: Source and packaged applications use the QA Evidence Builder icon,
+  `Guide Jir` publisher metadata, and application version metadata.
+- NFR-008: Release tags must match the application version. Required icons,
+  artifact names, and macOS bundle contents are validated before publishing.
+- NFR-009: Packaged Windows, macOS Apple Silicon, and macOS Intel applications
+  must pass a startup test before their artifacts can be released.
 
 ## Verification map
 

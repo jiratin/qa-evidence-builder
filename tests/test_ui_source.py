@@ -12,6 +12,10 @@ assert "def import_file(self):" in app
 assert "def paste_json(self):" in app
 assert "def open_help(self):" in app
 assert "HelpDialog(self)" in app
+assert "setWindowIcon" in app
+assert "Import completed with warnings" in app
+assert "Export raw logs?" in app
+assert "without sensitive-data masking" in app
 assert "QSplitter" in app
 assert "PySide6" in help_dialog
 assert "HELP_SECTIONS" in help_dialog

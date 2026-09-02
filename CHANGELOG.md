@@ -4,6 +4,23 @@ All notable changes to QA Evidence Builder are documented in this file.
 
 The project follows Semantic Versioning where practical.
 
+## [Unreleased]
+
+### Added
+
+- Add branded Windows/macOS icon assets and `Guide Jir` application metadata.
+- Show the source of each resolved Transaction ID and identify Request ID fallbacks.
+- Report skipped records, unreadable timestamps, and missing endpoints after import.
+- Warn inline and require confirmation before exporting unmasked raw logs.
+- Validate release versions, required assets, artifact names, and macOS bundles.
+- Launch-test both macOS packaged applications before publishing artifacts.
+
+### Fixed
+
+- Ignore malformed JSON/HAR records instead of aborting an entire import.
+- Resolve transaction IDs from JSON request headers without case sensitivity.
+- Keep the Help visibility regression check aligned with the PySide6 interface and run it in CI.
+
 ## [1.3.1] - 2026-09-01
 
 ### Fixed

@@ -93,6 +93,8 @@ def build_ticket(
             f"Response Time: {e.response_time or '-'} ms",
             f"Request ID: {e.request_id or '-'}",
             f"Transaction ID: {e.transaction_id or '-'}",
+            f"Transaction Source: {e.transaction_source or 'not_found'}"
+            + (f" ({e.transaction_source_field})" if e.transaction_source_field else ""),
             f"Error Fingerprint: {error_fingerprint(e) or '-'}",
             f"Page: {e.page_name or '-'}",
             f"Page URL: {e.page_url or '-'}",

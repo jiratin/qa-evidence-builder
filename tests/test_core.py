@@ -5,7 +5,7 @@ import zipfile
 
 sys.path.insert(0, str(Path(__file__).parents[1] / "src"))
 
-from qa_evidence.parser import parse_auto, parse_har
+from qa_evidence.parser import parse_auto, parse_har, parse_with_report
 from qa_evidence.filtering import filter_entries, group_by_transaction
 from qa_evidence.evidence import build_ticket, build_markdown
 from qa_evidence.sanitizer import sanitize
@@ -72,6 +72,9 @@ entries = parse_auto(sample)
 
 assert len(entries) == 3
 assert entries[0].transaction_id == "TX-001"
+assert entries[0].transaction_source == "request_header"
+assert entries[0].transaction_source_field == "mfaf-transaction"
+assert not entries[0].transaction_is_fallback
 assert entries[0].is_error
 assert entries[0].is_slow
 
@@ -84,6 +87,8 @@ body_transaction = parse_auto({"fields": {
     "TRANSACTION_ID": ["FIELD-TX"],
 }})
 assert body_transaction[0].transaction_id == "BODY-TX"
+assert body_transaction[0].transaction_source == "request_body"
+assert body_transaction[0].transaction_source_field == "transactionId"
 
 uri_transaction = parse_auto({"fields": {
     "REQUEST_URI": ["/api/v1/orders/query-transaction?transactionId=SERVICE260824152809-NE12816&orderId=123"],
@@ -91,6 +96,37 @@ uri_transaction = parse_auto({"fields": {
     "TRANSACTION_ID": ["FIELD-TX"],
 }})
 assert uri_transaction[0].transaction_id == "SERVICE260824152809-NE12816"
+assert uri_transaction[0].transaction_source == "url_query"
+
+case_insensitive_header = parse_auto({"fields": {
+    "REQUEST_URI": ["/api/header-transaction"],
+    "REQUEST_HEADER": ['{"X-Request-ID":"HEADER-REQ"}'],
+}})
+assert case_insensitive_header[0].transaction_id == "HEADER-REQ"
+assert case_insensitive_header[0].transaction_source == "request_header"
+
+fallback_transaction = parse_auto({"fields": {"REQUEST_ID": ["FALLBACK-REQ"]}})[0]
+assert fallback_transaction.transaction_is_fallback
+assert fallback_transaction.transaction_source == "request_id_fallback"
+
+mixed_json_records = parse_auto([
+    {"fields": ["invalid"]},
+    {"fields": {"REQUEST_URI": ["/valid"]}},
+    "invalid",
+])
+assert len(mixed_json_records) == 1
+assert mixed_json_records[0].request_uri == "/valid"
+
+mixed_result = parse_with_report([
+    "invalid",
+    {"fields": {"TIMESTAMP": ["not-a-time"]}},
+    {"fields": {"TIMESTAMP": ["2026-08-21 11:03:36.230"], "REQUEST_URI": ["/ok"]}},
+])
+assert mixed_result.report.source_count == 3
+assert mixed_result.report.imported_count == 2
+assert mixed_result.report.skipped_count == 1
+assert mixed_result.report.invalid_timestamp_count == 1
+assert mixed_result.report.missing_endpoint_count == 1
 
 page_url_entry = parse_auto({"fields": {
     "REQUEST_URI": ["/api/privateId.json"],
@@ -131,6 +167,7 @@ ticket = build_ticket(
 )
 assert "AUTO SUMMARY" in ticket
 assert "Error Fingerprint:" in ticket
+assert "Transaction Source:" in ticket
 assert '"password": "********"' in ticket
 assert '"customSecret": "********"' in ticket
 
@@ -170,6 +207,13 @@ har = {
 har_entries = parse_har(har)
 assert len(har_entries) == 1
 assert har_entries[0].request_uri == "/api/v1/config"
+assert har_entries[0].transaction_source == "request_id_fallback"
+
+malformed_har_entries = parse_har({"log": {"entries": [None, {
+    "request": {"headers": "invalid"},
+    "response": [],
+}]}})
+assert len(malformed_har_entries) == 1
 
 with tempfile.TemporaryDirectory() as directory:
     destination = Path(directory) / "evidence"

@@ -4,7 +4,7 @@ QA Evidence Builder is a local desktop tool for QA, Testers, and Developers to t
 
 ## Version
 
-**v1.3.1**
+**v1.3.2**
 
 ## Key features
 

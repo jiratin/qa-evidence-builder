@@ -6,6 +6,8 @@ The project follows Semantic Versioning where practical.
 
 ## [Unreleased]
 
+## [1.3.2] - 2026-09-02
+
 ### Added
 
 - Add branded Windows/macOS icon assets and `Guide Jir` application metadata.

@@ -38,10 +38,8 @@ pyinstaller \
     --osx-bundle-identifier "com.guidejir.qaevidencebuilder" \
     run.py
 
-APP_VERSION=$(python -c "import sys; sys.path.insert(0, 'src'); from qa_evidence import __version__; print(__version__)")
-/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $APP_VERSION" "dist/QA Evidence Builder.app/Contents/Info.plist"
-/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $APP_VERSION" "dist/QA Evidence Builder.app/Contents/Info.plist"
-/usr/libexec/PlistBuddy -c "Add :NSHumanReadableCopyright string Copyright © 2026 Guide Jir. All rights reserved." "dist/QA Evidence Builder.app/Contents/Info.plist" || true
+python scripts/stamp_macos_bundle.py "dist/QA Evidence Builder.app"
+codesign --force --deep --sign - "dist/QA Evidence Builder.app"
 python scripts/validate_release.py --check-assets --macos-app "dist/QA Evidence Builder.app"
 
 echo

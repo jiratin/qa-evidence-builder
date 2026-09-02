@@ -6,6 +6,10 @@ The project follows Semantic Versioning where practical.
 
 ## [Unreleased]
 
+### Fixed
+
+- Create missing macOS bundle metadata keys safely and re-sign the bundle before launch validation.
+
 ## [1.3.2] - 2026-09-02
 
 ### Added

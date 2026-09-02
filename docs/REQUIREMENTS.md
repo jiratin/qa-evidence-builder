@@ -55,6 +55,9 @@ tests, User Guide, and changelog.
   enabled, and require confirmation before the UI starts a raw export.
 - FR-028: Default export folders to `Log_{date}_{time}` and allow a persisted,
   filesystem-safe custom format using only the `{date}` and `{time}` tokens.
+- FR-029: Search within the rendered Evidence preview using Next, Previous,
+  Enter, and Shift+Enter, with optional case matching and wrap-around. Searching
+  must not modify included logs or copied/exported evidence.
 
 ## Application and delivery
 

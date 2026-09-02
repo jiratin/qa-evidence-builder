@@ -6,6 +6,13 @@ The project follows Semantic Versioning where practical.
 
 ## [Unreleased]
 
+## [1.3.5] - 2026-09-02
+
+### Added
+
+- Search the rendered Evidence preview with forward/backward navigation,
+  wrap-around, keyboard actions, and optional case matching.
+
 ### Documentation
 
 - Add project context, roadmap, architecture, decision records, and repository

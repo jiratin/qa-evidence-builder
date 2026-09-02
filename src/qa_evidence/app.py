@@ -5,7 +5,7 @@ from datetime import datetime
 from pathlib import Path
 
 from PySide6.QtCore import QSettings, Qt
-from PySide6.QtGui import QColor, QIcon, QKeySequence, QShortcut
+from PySide6.QtGui import QColor, QIcon, QKeySequence, QShortcut, QTextCursor, QTextDocument
 from PySide6.QtWidgets import (
     QAbstractItemView, QApplication, QCheckBox, QComboBox, QDialog, QFileDialog, QFrame,
     QGridLayout, QHBoxLayout, QHeaderView, QLabel, QLineEdit, QMainWindow,
@@ -343,9 +343,21 @@ class MainWindow(QMainWindow):
         self.actual = QPlainTextEdit(); self.actual.setPlaceholderText("Actual result")
         ea.addWidget(self.expected); ea.addWidget(self.actual)
         left.addWidget(ea)
+        preview_header = QHBoxLayout()
         preview_title = QLabel("Included evidence preview"); preview_title.setObjectName("sectionTitle")
+        self.evidence_search = QLineEdit(); self.evidence_search.setPlaceholderText("Find in evidence")
+        self.evidence_search.setClearButtonEnabled(True); self.evidence_search.setMaximumWidth(320)
+        self.evidence_search.setAccessibleName("Find in evidence preview")
+        self.evidence_search_previous = button("Previous", lambda: self.find_in_evidence(backward=True))
+        self.evidence_search_next = button("Next", self.find_in_evidence)
+        self.evidence_match_case = QCheckBox("Match case")
+        self.evidence_search_status = QLabel(); self.evidence_search_status.setObjectName("muted")
+        preview_header.addWidget(preview_title); preview_header.addStretch()
+        preview_header.addWidget(self.evidence_search); preview_header.addWidget(self.evidence_search_previous)
+        preview_header.addWidget(self.evidence_search_next); preview_header.addWidget(self.evidence_match_case)
+        preview_header.addWidget(self.evidence_search_status)
         self.preview = QPlainTextEdit(); self.preview.setReadOnly(True)
-        left.addWidget(preview_title); left.addWidget(self.preview, 1)
+        left.addLayout(preview_header); left.addWidget(self.preview, 1)
         root.addWidget(panel_from_layout(left), 3)
         options = QVBoxLayout(); options.setContentsMargins(15, 15, 15, 15)
         opt_title = QLabel("Evidence options"); opt_title.setObjectName("sectionTitle")
@@ -388,6 +400,12 @@ class MainWindow(QMainWindow):
         root.addWidget(panel(options), 1)
         self.expected.textChanged.connect(self.update_preview); self.actual.textChanged.connect(self.update_preview)
         self.mask.toggled.connect(self.update_preview); self.extra_mask.textChanged.connect(self.update_preview)
+        self.evidence_search.textChanged.connect(self.restart_evidence_search)
+        self.evidence_search.returnPressed.connect(self.find_in_evidence)
+        self.evidence_match_case.toggled.connect(self.restart_evidence_search)
+        self.evidence_search_previous_shortcut = QShortcut(QKeySequence("Shift+Return"), self.evidence_search)
+        self.evidence_search_previous_shortcut.setContext(Qt.WidgetShortcut)
+        self.evidence_search_previous_shortcut.activated.connect(lambda: self.find_in_evidence(backward=True))
         return page
 
     def _analysis_page(self):
@@ -706,7 +724,40 @@ class MainWindow(QMainWindow):
         self.status_label.setText("Evidence note saved")
 
     def _extra_mask_keys(self): return [x.strip() for x in self.extra_mask.text().split(",") if x.strip()]
-    def update_preview(self): self.preview.setPlainText(build_ticket(self.included_entries(), self.mask.isChecked(), self.expected.toPlainText().strip(), self.actual.toPlainText().strip(), self._extra_mask_keys()))
+
+    def _evidence_find_flags(self, backward=False):
+        flags = QTextDocument.FindFlags()
+        if backward: flags |= QTextDocument.FindBackward
+        if self.evidence_match_case.isChecked(): flags |= QTextDocument.FindCaseSensitively
+        return flags
+
+    def restart_evidence_search(self):
+        cursor = self.preview.textCursor()
+        cursor.clearSelection()
+        cursor.movePosition(QTextCursor.Start)
+        self.preview.setTextCursor(cursor)
+        if self.evidence_search.text():
+            self.find_in_evidence()
+        else:
+            self.evidence_search_status.clear()
+
+    def find_in_evidence(self, backward=False):
+        query = self.evidence_search.text()
+        if not query:
+            self.evidence_search_status.clear()
+            return
+        flags = self._evidence_find_flags(backward)
+        found = self.preview.find(query, flags)
+        if not found:
+            cursor = self.preview.textCursor()
+            cursor.movePosition(QTextCursor.End if backward else QTextCursor.Start)
+            self.preview.setTextCursor(cursor)
+            found = self.preview.find(query, flags)
+        self.evidence_search_status.setText("Match" if found else "No matches")
+
+    def update_preview(self):
+        self.preview.setPlainText(build_ticket(self.included_entries(), self.mask.isChecked(), self.expected.toPlainText().strip(), self.actual.toPlainText().strip(), self._extra_mask_keys()))
+        self.restart_evidence_search()
     def update_analysis(self):
         duplicates = find_duplicate_errors(self.filtered); lines = [build_auto_summary(self.filtered), "", "Duplicate / Similar Error Signatures", "=" * 72]
         if not duplicates: lines.append("No repeated error fingerprints found in current filtered logs.")

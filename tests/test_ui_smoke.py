@@ -61,6 +61,13 @@ window.toggle_theme()
 window.include_all_filtered()
 assert len(window.included_entries()) == len(window.entries)
 assert window.preview.toPlainText().strip()
+window.evidence_search.setText("Evidence")
+assert window.preview.textCursor().selectedText().lower() == "evidence"
+assert window.evidence_search_status.text() == "Match"
+window.evidence_match_case.setChecked(True)
+window.evidence_search.setText("evidence-value-that-does-not-exist")
+assert window.evidence_search_status.text() == "No matches"
+window.evidence_search.clear()
 window.raw.setChecked(True)
 with patch("qa_evidence.app.QMessageBox.warning", return_value=QMessageBox.Cancel), \
      patch("qa_evidence.app.QFileDialog.getExistingDirectory") as choose_folder:

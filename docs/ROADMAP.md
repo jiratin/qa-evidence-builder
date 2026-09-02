@@ -45,6 +45,7 @@ Status values are `Done`, `Partial`, `Planned`, `Deferred`, and `Rejected`.
 - Per-log Unicode evidence notes included only for included logs.
 - Configurable slow threshold.
 - Filter chips, filter count, category clear actions, and investigation presets.
+- Evidence Preview search with forward/backward navigation, case matching, and wrap-around.
 
 ### Partial
 

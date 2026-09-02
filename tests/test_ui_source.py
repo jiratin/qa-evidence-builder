@@ -55,5 +55,9 @@ assert "selected_text" in theme
 assert "assets/icons/png/icon-256.png" in (root / "README.md").read_text(encoding="utf-8")
 assert "export_folder_format" in app
 assert "Log_{date}_{time}" in app
+assert "Find in evidence" in app
+assert "find_in_evidence" in app
+assert "QTextDocument.FindCaseSensitively" in app
+assert 'QKeySequence("Shift+Return")' in app
 
 print("ALL_UI_SOURCE_TESTS_PASSED")

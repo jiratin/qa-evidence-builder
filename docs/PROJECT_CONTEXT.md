@@ -21,7 +21,7 @@ The product priorities are:
 
 ## Current baseline
 
-- Current release: `v1.3.4`.
+- Current release: `v1.3.5`.
 - Branch and release source: `main` at
   `https://github.com/jiratin/qa-evidence-builder`.
 - UI: PySide6 desktop application.
@@ -35,7 +35,7 @@ Released behaviour is defined by `REQUIREMENTS.md`, not by chat history. The
 built-in searchable guide in `src/qa_evidence/help_content.py` is the user-facing
 operating manual.
 
-## Delivered through v1.3.4
+## Delivered through v1.3.5
 
 - Single/multiple JSON and HAR import, merge, sorting, and source tracking.
 - Import validation counts for skipped and incomplete records.
@@ -44,6 +44,7 @@ operating manual.
 - Single-click or Space inclusion, compact metrics, resizable columns, and horizontal scrolling.
 - HTTP and business-error detection, error fingerprints, duplicate grouping, and transaction journey summary.
 - Per-log evidence notes, Expected/Actual results, sanitized evidence, optional raw logs, and optional ZIP.
+- Evidence Preview search with Next/Previous navigation and optional case matching.
 - Grouped exports and configurable `Log_{date}_{time}` folder names.
 - Dark/Light themes, branded icons, release metadata, and packaged startup validation.
 

@@ -6,7 +6,7 @@ QA Evidence Builder is a local desktop tool for QA, Testers, and Developers to t
 
 ## Version
 
-**v1.3.4**
+**v1.3.5**
 
 ## Key features
 
@@ -23,6 +23,7 @@ QA Evidence Builder is a local desktop tool for QA, Testers, and Developers to t
 - Transaction ID source and fallback indication
 - Import validation summary for skipped records and incomplete fields
 - Expected Result / Actual Result evidence
+- Search within the rendered Evidence preview with Next, Previous, and Match case
 - Sensitive-data masking and custom mask keys
 - Plain-text and Markdown ticket evidence
 - Evidence folder export grouped by Kafka topic, page name, page URL, or a custom folder

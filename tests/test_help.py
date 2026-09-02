@@ -24,6 +24,7 @@ for keyword in [
     "Folder Grouping",
     "Dark / Light Mode",
     "Also create ZIP archive",
+    "Find in Evidence Preview",
 ]:
     assert keyword.lower() in combined.lower(), keyword
 

@@ -1,6 +1,7 @@
 import json
 import re
 import zipfile
+from datetime import datetime
 from pathlib import Path
 from urllib.parse import parse_qsl, urlsplit
 
@@ -10,6 +11,15 @@ from .sanitizer import sanitize
 def _safe(s):
     s = re.sub(r'[<>:"/\\|?*\x00-\x1f]', "_", str(s or "log")).strip(" .")
     return s[:120] or "log"
+
+def build_export_folder_name(template="Log_{date}_{time}", timestamp=None):
+    moment = timestamp or datetime.now()
+    values = {"date": moment.strftime("%Y%m%d"), "time": moment.strftime("%H%M%S")}
+    try:
+        rendered = str(template or "Log_{date}_{time}").format(**values)
+    except (AttributeError, IndexError, KeyError, ValueError) as exc:
+        raise ValueError("Export folder format supports only {date} and {time}.") from exc
+    return _safe(rendered)
 
 def _filename_token(value, fallback="log"):
     token = re.sub(r"[^A-Za-z0-9_-]+", "_", str(value or ""))

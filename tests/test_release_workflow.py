@@ -43,8 +43,8 @@ with tempfile.TemporaryDirectory() as directory:
     stamp(app)
     with (contents / "Info.plist").open("rb") as stream:
         info = plistlib.load(stream)
-    assert info["CFBundleVersion"] == "1.3.3"
-    assert info["CFBundleShortVersionString"] == "1.3.3"
+    assert info["CFBundleVersion"] == "1.3.4"
+    assert info["CFBundleShortVersionString"] == "1.3.4"
     assert info["CFBundleIconFile"] == "qa-evidence-builder.icns"
     assert "Guide Jir" in info["NSHumanReadableCopyright"]
 

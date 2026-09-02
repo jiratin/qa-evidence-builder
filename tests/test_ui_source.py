@@ -45,5 +45,15 @@ assert "Reset all filters (" in app
 assert "Current Transaction" in app
 assert "clear_request_filters" in app
 assert "QPushButton#filterChip" in theme
+assert "QHeaderView.Interactive" in app
+assert "Qt.ScrollBarAsNeeded" in app
+assert "toggle_include_from_indicator" in app
+assert "toggle_include_selected_rows" in app
+assert "Qt.Key_Space" in app
+assert "toggle_filters" in app
+assert "selected_text" in theme
+assert "assets/icons/png/icon-256.png" in (root / "README.md").read_text(encoding="utf-8")
+assert "export_folder_format" in app
+assert "Log_{date}_{time}" in app
 
 print("ALL_UI_SOURCE_TESTS_PASSED")

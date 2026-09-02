@@ -178,8 +178,9 @@ V3 ขึ้นไปจะไม่ Export ทุก Log อัตโนมั�
 4) กด Include Selected
 5) Column Export จะเปลี่ยนจาก ○ เป็น ●
 
-วิธีที่ 2 — Double-click
-• Double-click ที่ Row เพื่อสลับ Include / Exclude
+วิธีที่ 2 — Click หรือ Spacebar
+• Click หนึ่งครั้งที่จุดใน Column Export เพื่อสลับ Include / Exclude
+• หรือเลือก Row แล้วกด Spacebar
 
 Select All
 • Include ทุก Log ที่ผ่าน Filter ปัจจุบัน
@@ -967,6 +968,31 @@ Chip เพื่อล้างเฉพาะเงื่อนไขนั้
 Quick preset มี All Errors, Slow APIs และ Current Transaction โดย Current
 Transaction จะใช้ Transaction ID จากแถว Timeline ที่เลือก ถ้าไม่มี Transaction ID
 โปรแกรมจะแจ้งให้เลือกแถวที่เหมาะสมก่อน Filters ทุกชนิดยังทำงานร่วมกันแบบ AND
+""",
+    ),
+    (
+        "43. Dashboard Layout และ Timeline Controls",
+        """
+Search & Filters สามารถกด Show filters หรือ Hide filters เพื่อพับ/ขยายพื้นที่
+โดยโปรแกรมจะจำสถานะไว้ Summary metrics ใช้รูปแบบบรรทัดเดียวเพื่อเหลือพื้นที่
+สำหรับ Timeline มากขึ้น
+
+ลากขอบหัว Column เพื่อปรับความกว้างได้อย่างอิสระ หาก Column รวมกันกว้างกว่า
+หน้าจอ ให้ใช้ Horizontal Scrollbar ด้านล่าง Timeline การ Include/Exclude ทำได้
+โดยคลิกหนึ่งครั้งที่จุดใน Column Export หรือเลือก Row แล้วกด Spacebar
+Spacebar จะทำงานนี้เฉพาะเมื่อ focus อยู่ใน Timeline และยังพิมพ์ช่องว่างตามปกติ
+เมื่อ focus อยู่ใน Search, Note หรือ Text Field อื่น
+""",
+    ),
+    (
+        "44. Export Folder Format",
+        """
+ชื่อโฟลเดอร์ Export ค่าเริ่มต้นคือ Log_{date}_{time} เช่น
+Log_20260902_140506 สามารถแก้รูปแบบในช่อง Export folder format ได้
+
+รองรับ Token {date} และ {time} เท่านั้น ตัวอย่าง QA-{date}-{time}
+ค่าที่ตั้งจะถูกจำในเครื่อง และอักขระที่ระบบไฟล์ไม่รองรับจะถูกแทนด้วย underscore
+เพื่อป้องกันชื่อไฟล์ผิดรูปแบบหรือการสร้าง path ออกนอกโฟลเดอร์ที่เลือก
 """,
     ),
 ]

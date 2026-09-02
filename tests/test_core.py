@@ -1,6 +1,7 @@
 import sys
 import tempfile
 import json
+from datetime import datetime
 from pathlib import Path
 import zipfile
 
@@ -10,7 +11,7 @@ from qa_evidence.parser import parse_auto, parse_files, parse_har, parse_with_re
 from qa_evidence.filtering import filter_entries, group_by_transaction
 from qa_evidence.evidence import build_ticket, build_markdown
 from qa_evidence.sanitizer import sanitize
-from qa_evidence.exporter import _log_filename, export_package
+from qa_evidence.exporter import _log_filename, build_export_folder_name, export_package
 from qa_evidence.analyzer import (
     error_fingerprint,
     find_duplicate_errors,
@@ -140,6 +141,17 @@ assert _log_filename(
     7,
     "/api/privateId.json?commandId=2026090110091033335038&publicId=ws00000010@EasyApp.co.th&appName=undefined",
 ) == "007_privateId_commandId_2026090110091033335038.json"
+
+export_moment = datetime(2026, 9, 2, 14, 5, 6)
+assert build_export_folder_name(timestamp=export_moment) == "Log_20260902_140506"
+assert build_export_folder_name("Evidence-{date}-{time}", export_moment) == "Evidence-20260902-140506"
+assert "/" not in build_export_folder_name("../../Log_{date}", export_moment)
+try:
+    build_export_folder_name("Log_{unknown}", export_moment)
+except ValueError as exc:
+    assert "supports only" in str(exc)
+else:
+    raise AssertionError("Unknown export-folder tokens must be rejected")
 
 errors = filter_entries(entries, errors_only=True)
 assert len(errors) == 2

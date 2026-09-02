@@ -7,7 +7,7 @@ from pathlib import Path
 from PySide6.QtCore import QSettings, Qt
 from PySide6.QtGui import QColor, QIcon, QKeySequence, QShortcut
 from PySide6.QtWidgets import (
-    QApplication, QCheckBox, QComboBox, QDialog, QFileDialog, QFrame,
+    QAbstractItemView, QApplication, QCheckBox, QComboBox, QDialog, QFileDialog, QFrame,
     QGridLayout, QHBoxLayout, QHeaderView, QLabel, QLineEdit, QMainWindow,
     QMessageBox, QPlainTextEdit, QPushButton, QScrollArea, QSizePolicy,
     QSplitter, QStackedWidget, QTableWidget, QTableWidgetItem, QTabWidget,
@@ -19,7 +19,7 @@ from .analyzer import (
     build_auto_summary, error_fingerprint, find_duplicate_errors, transaction_journey,
 )
 from .evidence import build_markdown, build_ticket
-from .exporter import export_package
+from .exporter import build_export_folder_name, export_package
 from .filtering import filter_entries, group_by_transaction
 from .help_dialog import HelpDialog
 from .parser import parse_auto, parse_files, parse_with_report
@@ -187,15 +187,16 @@ class MainWindow(QMainWindow):
             ("errors", "Errors", "#ff6b7a"), ("slow", "Slow APIs", "#f6c85f"),
             ("included", "Included", "#72b7ff"),
         ):
-            card_layout = QVBoxLayout()
+            card_layout = QHBoxLayout()
             cap = QLabel(label)
             cap.setObjectName("cardLabel")
             value = QLabel("0")
             value.setObjectName("metric")
             value.setStyleSheet(f"color: {color};")
             card_layout.addWidget(cap)
+            card_layout.addStretch()
             card_layout.addWidget(value)
-            card_layout.setContentsMargins(15, 12, 15, 12)
+            card_layout.setContentsMargins(12, 5, 12, 5)
             cards.addWidget(panel(card_layout), 1)
             self.metrics[key] = value
         root.addLayout(cards)
@@ -209,7 +210,7 @@ class MainWindow(QMainWindow):
         return page
 
     def _filters(self):
-        root = QVBoxLayout(); root.setContentsMargins(12, 10, 12, 10); root.setSpacing(8)
+        content_layout = QVBoxLayout(); content_layout.setContentsMargins(0, 4, 0, 0); content_layout.setSpacing(8)
         self.search = QLineEdit(); self.search.setPlaceholderText("Search API, request ID…")
         self.method = QComboBox(); self.method.addItems(["ALL", "GET", "POST", "PUT", "PATCH", "DELETE"])
         self.status = QComboBox(); self.status.addItems(["ALL", "2xx", "3xx", "4xx", "5xx", "Other"])
@@ -238,8 +239,8 @@ class MainWindow(QMainWindow):
         self.filter_preset = QComboBox()
         self.filter_preset.addItems(["Choose preset…", "All Errors", "Slow APIs", "Current Transaction"])
         preset_row.addWidget(self.filter_preset); preset_row.addWidget(button("Apply", self.apply_filter_preset)); preset_row.addStretch()
-        root.addLayout(preset_row)
-        root.addWidget(group("Search across logs", [self.search], self.clear_search_filter, stretch=True))
+        content_layout.addLayout(preset_row)
+        content_layout.addWidget(group("Search across logs", [self.search], self.clear_search_filter, stretch=True))
         categories = QGridLayout(); categories.setSpacing(8)
         categories.addWidget(group("Request", [self.method, self.status], self.clear_request_filters), 0, 0)
         categories.addWidget(group("Result", [self.errors_only, self.business_errors_only], self.clear_result_filters), 0, 1)
@@ -247,8 +248,17 @@ class MainWindow(QMainWindow):
         categories.addWidget(group("Context", [self.page_filter, self.topic, self.transaction], self.clear_context_filters), 1, 1)
         categories.setColumnStretch(1, 1)
         self.reset_filters_button = button("Reset all filters", self.reset_filters); categories.addWidget(self.reset_filters_button, 1, 2)
-        root.addLayout(categories)
-        return panel(root)
+        content_layout.addLayout(categories)
+        self.filter_content = QWidget(); self.filter_content.setLayout(content_layout)
+        expanded_value = str(self.settings.value("filters_expanded", "false")).lower()
+        expanded = expanded_value in {"1", "true", "yes"}
+        self.filter_content.setVisible(expanded)
+        outer = QVBoxLayout(); outer.setContentsMargins(12, 7, 12, 7); outer.setSpacing(4)
+        header = QHBoxLayout(); title = QLabel("Search & Filters"); title.setObjectName("sectionTitle")
+        self.filter_toggle = button("Hide filters ▲" if expanded else "Show filters ▼", self.toggle_filters)
+        header.addWidget(title); header.addStretch(); header.addWidget(self.filter_toggle)
+        outer.addLayout(header); outer.addWidget(self.filter_content)
+        return panel(outer)
 
     def _timeline_panel(self):
         lay = QVBoxLayout()
@@ -272,10 +282,19 @@ class MainWindow(QMainWindow):
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
         self.table.setAlternatingRowColors(True)
         self.table.verticalHeader().setVisible(False)
-        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        self.table.horizontalHeader().setSectionResizeMode(5, QHeaderView.Stretch)
-        self.table.cellDoubleClicked.connect(self.toggle_include_from_row)
+        table_header = self.table.horizontalHeader()
+        table_header.setSectionResizeMode(QHeaderView.Interactive)
+        table_header.setMinimumSectionSize(44)
+        table_header.setStretchLastSection(False)
+        for column, width in enumerate((58, 175, 120, 115, 75, 320, 72, 82, 180, 190)):
+            self.table.setColumnWidth(column, width)
+        self.table.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.table.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
+        self.table.cellClicked.connect(self.toggle_include_from_indicator)
         self.table.itemSelectionChanged.connect(self.update_inspector)
+        self.timeline_space_shortcut = QShortcut(QKeySequence(Qt.Key_Space), self.table)
+        self.timeline_space_shortcut.setContext(Qt.WidgetWithChildrenShortcut)
+        self.timeline_space_shortcut.activated.connect(self.toggle_include_selected_rows)
         lay.addWidget(self.table, 1)
         return panel(lay)
 
@@ -301,7 +320,10 @@ class MainWindow(QMainWindow):
         self.tx_table = QTableWidget(0, 7)
         self.tx_table.setHorizontalHeaderLabels(("Transaction ID", "APIs", "HTTP", "Business", "Slow", "Duration", "Source"))
         self.tx_table.setSelectionBehavior(QTableWidget.SelectRows); self.tx_table.setEditTriggers(QTableWidget.NoEditTriggers)
-        self.tx_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.tx_table.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
+        for column, width in enumerate((260, 70, 70, 90, 70, 110, 120)):
+            self.tx_table.setColumnWidth(column, width)
+        self.tx_table.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.tx_table.doubleClicked.connect(self.apply_transaction_group)
         self.tx_table.itemSelectionChanged.connect(self.update_journey_detail)
         root.addWidget(panel_with_widget(self.tx_table), 1)
@@ -352,7 +374,12 @@ class MainWindow(QMainWindow):
         self.custom_group_name = QLineEdit(); self.custom_group_name.setPlaceholderText("Custom folder name")
         self.custom_group_name.setVisible(False)
         self.include_zip = QCheckBox("Also create ZIP archive")
+        folder_format = QLabel("Export folder format"); folder_format.setObjectName("sectionTitle")
+        self.export_folder_format = QLineEdit(str(self.settings.value("export_folder_format", "Log_{date}_{time}")))
+        self.export_folder_format.setPlaceholderText("Log_{date}_{time}")
+        self.export_folder_format.setToolTip("Supported tokens: {date}, {time}")
         options.addWidget(self.export_group); options.addWidget(self.custom_group_name); options.addWidget(self.include_zip)
+        options.addWidget(folder_format); options.addWidget(self.export_folder_format)
         self.export_group.currentIndexChanged.connect(self._update_grouping_options)
         options.addStretch()
         options.addWidget(button("Copy for ticket", self.copy_ticket))
@@ -392,6 +419,12 @@ class MainWindow(QMainWindow):
         self.theme_mode = "light" if self.theme_mode == "dark" else "dark"
         self.settings.setValue("theme", self.theme_mode)
         self._apply_theme()
+
+    def toggle_filters(self):
+        expanded = self.filter_content.isHidden()
+        self.filter_content.setVisible(expanded)
+        self.filter_toggle.setText("Hide filters ▲" if expanded else "Show filters ▼")
+        self.settings.setValue("filters_expanded", expanded)
 
     def _update_grouping_options(self):
         self.custom_group_name.setVisible(self.export_group.currentData() == "custom")
@@ -590,9 +623,22 @@ class MainWindow(QMainWindow):
 
     def include_all_filtered(self): self.included_indexes.update(e.index for e in self.filtered); self.refresh()
     def clear_included(self): self.included_indexes.clear(); self.refresh()
-    def toggle_include_from_row(self, row, _column):
+    def toggle_include_from_indicator(self, row, column):
+        if column != 0: return
         index = self.filtered[row].index
         self.included_indexes.discard(index) if index in self.included_indexes else self.included_indexes.add(index)
+        self.refresh()
+
+    def toggle_include_selected_rows(self):
+        selected = self.selected_filtered_entries()
+        if not selected and self.table.currentRow() >= 0:
+            selected = [self.filtered[self.table.currentRow()]]
+        if not selected: return
+        indexes = {entry.index for entry in selected}
+        if all(index in self.included_indexes for index in indexes):
+            self.included_indexes.difference_update(indexes)
+        else:
+            self.included_indexes.update(indexes)
         self.refresh()
 
     def apply_transaction_group(self):
@@ -705,8 +751,10 @@ class MainWindow(QMainWindow):
             if choice != QMessageBox.Yes: return
         parent = QFileDialog.getExistingDirectory(self, "Choose export folder")
         if not parent: return
-        destination = Path(parent) / ("QA_Evidence_" + datetime.now().strftime("%Y%m%d_%H%M%S"))
         try:
+            folder_name = build_export_folder_name(self.export_folder_format.text().strip(), datetime.now())
+            self.settings.setValue("export_folder_format", self.export_folder_format.text().strip() or "Log_{date}_{time}")
+            destination = Path(parent) / folder_name
             if self.export_group.currentData() == "custom" and not self.custom_group_name.text().strip():
                 QMessageBox.information(self, "Folder name required", "Enter a custom folder name before exporting.")
                 return

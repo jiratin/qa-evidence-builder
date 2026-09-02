@@ -7,7 +7,8 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 root = Path(__file__).parents[1]
 sys.path.insert(0, str(root / "src"))
 
-from PySide6.QtWidgets import QApplication, QMessageBox
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QApplication, QHeaderView, QMessageBox
 from qa_evidence.app import MainWindow
 from qa_evidence.parser import parse_auto
 
@@ -20,6 +21,12 @@ window.refresh()
 assert window.table.rowCount() == len(window.entries)
 assert window.pages.count() == 4
 assert window.tx_table.columnCount() == 7
+assert window.table.horizontalHeader().sectionResizeMode(0) == QHeaderView.Interactive
+assert window.table.horizontalScrollBarPolicy() == Qt.ScrollBarAsNeeded
+filter_was_hidden = window.filter_content.isHidden()
+window.toggle_filters()
+assert window.filter_content.isHidden() != filter_was_hidden
+window.toggle_filters()
 assert not window.business_errors_only.isChecked()
 window.status.setCurrentText("5xx")
 assert window.reset_filters_button.text().endswith("(1)")
@@ -29,6 +36,16 @@ window.filter_preset.setCurrentText("All Errors")
 window.apply_filter_preset()
 assert window.errors_only.isChecked()
 window.reset_filters()
+window.table.selectRow(0)
+first_index = window.filtered[0].index
+window.toggle_include_selected_rows()
+assert first_index in window.included_indexes
+window.table.selectRow(0)
+window.toggle_include_selected_rows()
+assert first_index not in window.included_indexes
+window.toggle_include_from_indicator(0, 0)
+assert first_index in window.included_indexes
+window.clear_included()
 assert window.mask.isChecked()
 assert window.export_group.count() == 5
 assert not window.include_zip.isChecked()

@@ -6,6 +6,18 @@ The project follows Semantic Versioning where practical.
 
 ## [Unreleased]
 
+## [1.3.4] - 2026-09-02
+
+### Added
+
+- Default exports to `Log_{date}_{time}` and allow a safe custom folder-name format.
+- Display the application icon in the GitHub README.
+
+### Changed
+
+- Add a collapsible filter panel, compact metric cards, user-resizable table columns,
+  horizontal scrolling, higher-contrast Light Mode selection, and single-click/Space inclusion.
+
 ## [1.3.3] - 2026-09-02
 
 ### Added

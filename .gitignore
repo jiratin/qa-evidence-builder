@@ -58,6 +58,8 @@ benchmark-results/
 # Local/exported evidence
 QA_Evidence_*.zip
 QA_Evidence_*/
+Log_*.zip
+Log_*/
 exports/
 output/
 

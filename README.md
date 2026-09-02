@@ -1,10 +1,12 @@
 # QA Evidence Builder
 
+![QA Evidence Builder application icon](assets/icons/png/icon-256.png)
+
 QA Evidence Builder is a local desktop tool for QA, Testers, and Developers to turn API/network logs into focused evidence for defects, tickets, and technical investigation.
 
 ## Version
 
-**v1.3.3**
+**v1.3.4**
 
 ## Key features
 
@@ -14,6 +16,7 @@ QA Evidence Builder is a local desktop tool for QA, Testers, and Developers to t
 - Paste JSON directly into the application
 - Timeline view with API, status, response time, request ID, transaction, and error fingerprint
 - Search and filtering by method, status, page, Kafka topic, transaction, errors, and slow APIs
+- Collapsible categorized filters, removable filter chips, presets, and resizable timeline columns
 - Explicit log selection with Include/Exclude, Select All, and Deselect All
 - Transaction grouping
 - Transaction journey summaries with first error, slowest API, and duration
@@ -23,6 +26,7 @@ QA Evidence Builder is a local desktop tool for QA, Testers, and Developers to t
 - Sensitive-data masking and custom mask keys
 - Plain-text and Markdown ticket evidence
 - Evidence folder export grouped by Kafka topic, page name, page URL, or a custom folder
+- Configurable export-folder naming with `Log_{date}_{time}` as the default
 - Optional ZIP archive (off by default)
 - Explicit warning and confirmation before raw-log export
 - Error fingerprinting and repeated-error analysis

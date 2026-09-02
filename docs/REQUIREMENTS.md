@@ -53,6 +53,8 @@ tests, User Guide, and changelog.
   place its JSON files directly in the current group folder.
 - FR-027: Keep raw-log export disabled by default, show an inline warning when
   enabled, and require confirmation before the UI starts a raw export.
+- FR-028: Default export folders to `Log_{date}_{time}` and allow a persisted,
+  filesystem-safe custom format using only the `{date}` and `{time}` tokens.
 
 ## Application and delivery
 
@@ -65,6 +67,12 @@ tests, User Guide, and changelog.
 - NFR-003b: Active filters are represented by individually removable chips,
   the reset action displays the active count, each category can be cleared,
   and presets cover all errors, slow APIs, and the selected transaction.
+- NFR-003c: The filter panel is collapsible, dashboard metrics remain compact,
+  and timeline/transaction columns are user-resizable with horizontal scrolling
+  when their combined width exceeds the viewport.
+- NFR-003d: Timeline inclusion toggles with one click on the Include indicator
+  or Space while the table has focus; Space retains native behavior elsewhere.
+- NFR-003e: Selected timeline text remains legible in both themes.
 - NFR-004: Windows and macOS release builds are produced by GitHub Actions only
   after syntax, core, help, UI, and release-workflow checks pass.
 - NFR-005: The searchable User Guide reflects the current UI and behaviour.

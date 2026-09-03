@@ -1,16 +1,31 @@
 # Development Handoff Rules
 
-Before changing this repository, read:
+## Context-efficient reading
 
-1. `docs/PROJECT_CONTEXT.md`
-2. `docs/ROADMAP.md`
-3. `docs/REQUIREMENTS.md`
-4. `docs/ARCHITECTURE.md`
-5. `docs/DECISIONS.md`
+Do not scan the whole repository or read every project document by default.
+Before changing code:
 
-Treat `docs/REQUIREMENTS.md` as the released compatibility contract. Do not
+1. Read `docs/pages/README.md` to route the task.
+2. Read only the page document(s) that the request affects.
+3. Follow only the source, test, requirement, and decision links listed in those
+   page documents.
+4. Search for the specific symbol or requirement ID before opening a large file.
+
+Read `docs/PROJECT_CONTEXT.md` when resuming broad product work, checking the
+current baseline, or preparing a handoff. Read `docs/ROADMAP.md` only for scope,
+priority, or status decisions. Read `docs/ARCHITECTURE.md` when a change crosses
+module boundaries. Read `docs/DECISIONS.md` only for the decision categories
+relevant to the task. Read `docs/RELEASING.md` only for versioning, packaging,
+CI, or release work.
+
+A repository-wide scan is allowed case by case when the task is explicitly an
+audit, the affected page/domain cannot be identified, a shared contract changes,
+or evidence shows cross-cutting impact. State why the broader read is needed.
+
+Treat `docs/REQUIREMENTS.md` as the released compatibility contract. Read the
+relevant requirement section or IDs, not necessarily the entire file. Do not
 silently remove or alter a requirement. Keep parsing, analysis, sanitization,
-export, and UI orchestration within the module boundaries in `ARCHITECTURE.md`.
+export, and UI orchestration within the boundaries in `docs/ARCHITECTURE.md`.
 
 For every user-visible change:
 

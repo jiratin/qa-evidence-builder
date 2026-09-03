@@ -186,7 +186,12 @@ def _parse_json_array_with_report(payload, source_file=""):
             transaction_source_field=transaction_field,
             transaction_is_fallback=is_fallback,
             page_name=str(_first(fields, "CLIENT_PAGE_NAME", "CLIENT_PAGE_NAME.keyword")),
-            page_url=str(_first(fields, "PAGE_URL", "PAGE_URL.keyword")),
+            page_url=str(_first(
+                fields,
+                "PAGE_URL", "PAGE_URL.keyword",
+                "CLIENT_PAGE_URL", "CLIENT_PAGE_URL.keyword",
+                "page_url", "pageUrl",
+            )),
             kafka_topic=str(_first(fields, "kafka_topic_name", "kafka_topic_name.keyword")),
             request_body=_jsonish(_first(fields, "REQUEST_BODY", "REQUEST_BODY.keyword")),
             response_body=_jsonish(_first(fields, "RESPONSE_BODY", "RESPONSE_BODY.keyword")),

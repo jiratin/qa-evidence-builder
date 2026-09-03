@@ -6,13 +6,34 @@ The project follows Semantic Versioning where practical.
 
 ## [Unreleased]
 
+## [1.3.6] - 2026-09-04
+
+### Added
+
+- Display the application icon beside the in-app Sidebar brand.
+- Show the current and total match count while searching the Evidence preview.
+
+### Changed
+
+- Name exported logs from their timestamp, method, endpoint, and a stable short
+  hash, cap names at 80 characters for NAS compatibility, and preserve existing
+  files by adding a numeric collision suffix.
+
+### Fixed
+
+- Resolve Kibana `CLIENT_PAGE_URL` fields and their `.keyword` variants before
+  grouping exports by Page URL instead of placing those logs in `No Page URL`.
+
+### Documentation
+
+- Add page-specific UI contracts and context-efficient reading rules for future work.
+
 ## [1.3.5] - 2026-09-02
 
 ### Added
 
 - Search the rendered Evidence preview with forward/backward navigation,
   wrap-around, keyboard actions, and optional case matching.
-- Display the application icon beside the in-app Sidebar brand.
 
 ### Documentation
 

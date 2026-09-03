@@ -62,5 +62,7 @@ assert "Find in evidence" in app
 assert "find_in_evidence" in app
 assert "QTextDocument.FindCaseSensitively" in app
 assert 'QKeySequence("Shift+Return")' in app
+assert "_evidence_match_starts" in app
+assert 'f"{current} / {len(matches)} {noun}"' in app
 
 print("ALL_UI_SOURCE_TESTS_PASSED")

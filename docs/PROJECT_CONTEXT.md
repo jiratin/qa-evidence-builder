@@ -1,8 +1,9 @@
 # Project Context
 
-This is the starting point for anyone continuing QA Evidence Builder. Read this
-file together with `ROADMAP.md`, `REQUIREMENTS.md`, `ARCHITECTURE.md`, and
-`DECISIONS.md` before changing behaviour.
+This file provides the broad project baseline. For page-scoped work, start at
+`pages/README.md` and read only the routed documents. Use this file when resuming
+broad product work or preparing a handoff; do not load every project document by
+default.
 
 ## Product direction
 
@@ -21,7 +22,7 @@ The product priorities are:
 
 ## Current baseline
 
-- Current release: `v1.3.5`.
+- Current release: `v1.3.6`.
 - Branch and release source: `main` at
   `https://github.com/jiratin/qa-evidence-builder`.
 - UI: PySide6 desktop application.
@@ -35,9 +36,10 @@ Released behaviour is defined by `REQUIREMENTS.md`, not by chat history. The
 built-in searchable guide in `src/qa_evidence/help_content.py` is the user-facing
 operating manual.
 
-## Delivered through v1.3.5
+## Delivered through v1.3.6
 
 - Single/multiple JSON and HAR import, merge, sorting, and source tracking.
+- Page URL normalization across `PAGE_URL`, Kibana `CLIENT_PAGE_URL`, and HAR sources.
 - Import validation counts for skipped and incomplete records.
 - Transaction ID precedence, source display, and Request ID fallback warning.
 - Timeline filtering, categorized collapsible filters, chips, presets, and clear actions.
@@ -46,6 +48,7 @@ operating manual.
 - Per-log evidence notes, Expected/Actual results, sanitized evidence, optional raw logs, and optional ZIP.
 - Evidence Preview search with Next/Previous navigation and optional case matching.
 - Grouped exports and configurable `Log_{date}_{time}` folder names.
+- Chronological exported log filenames with stable non-sensitive short hashes.
 - Dark/Light themes, branded icons, release metadata, and packaged startup validation.
 
 See `ROADMAP.md` for partial and remaining work. In particular, do not assume
@@ -105,6 +108,7 @@ force-replace a published tag without explicit owner approval.
 
 ## Documentation ownership
 
+- Page-level UI contracts and task routing: `pages/README.md`
 - Current state and continuation rules: this file
 - Planned scope and status: `ROADMAP.md`
 - Behaviour contract: `REQUIREMENTS.md`

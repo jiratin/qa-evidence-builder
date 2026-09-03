@@ -65,10 +65,16 @@ assert len(window.included_entries()) == len(window.entries)
 assert window.preview.toPlainText().strip()
 window.evidence_search.setText("Evidence")
 assert window.preview.textCursor().selectedText().lower() == "evidence"
-assert window.evidence_search_status.text() == "Match"
+assert window.evidence_search_status.text().endswith("matches")
+assert int(window.evidence_search_status.text().split(" / ")[1].split()[0]) > 1
+first_match_status = window.evidence_search_status.text()
+window.find_in_evidence()
+assert window.evidence_search_status.text() != first_match_status
+window.find_in_evidence(backward=True)
+assert window.evidence_search_status.text() == first_match_status
 window.evidence_match_case.setChecked(True)
 window.evidence_search.setText("evidence-value-that-does-not-exist")
-assert window.evidence_search_status.text() == "No matches"
+assert window.evidence_search_status.text() == "0 matches"
 window.evidence_search.clear()
 window.raw.setChecked(True)
 with patch("qa_evidence.app.QMessageBox.warning", return_value=QMessageBox.Cancel), \

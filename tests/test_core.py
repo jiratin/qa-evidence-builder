@@ -1,6 +1,7 @@
 import sys
 import tempfile
 import json
+import re
 from datetime import datetime
 from pathlib import Path
 import zipfile
@@ -11,7 +12,9 @@ from qa_evidence.parser import parse_auto, parse_files, parse_har, parse_with_re
 from qa_evidence.filtering import filter_entries, group_by_transaction
 from qa_evidence.evidence import build_ticket, build_markdown
 from qa_evidence.sanitizer import sanitize
-from qa_evidence.exporter import _log_filename, build_export_folder_name, export_package
+from qa_evidence.exporter import (
+    MAX_EXPORT_LOG_FILENAME_LENGTH, _log_filename, build_export_folder_name, export_package,
+)
 from qa_evidence.analyzer import (
     error_fingerprint,
     find_duplicate_errors,
@@ -137,10 +140,34 @@ page_url_entry = parse_auto({"fields": {
 }})[0]
 assert page_url_entry.page_url == "https://easyapp.example/orders/summary"
 
-assert _log_filename(
-    7,
-    "/api/privateId.json?commandId=2026090110091033335038&publicId=ws00000010@EasyApp.co.th&appName=undefined",
-) == "007_privateId_commandId_2026090110091033335038.json"
+kibana_page_url_entry = parse_auto({"fields": {
+    "REQUEST_URI": ["/api/config/common"],
+    "CLIENT_PAGE_URL": ["/demo/home"],
+}})[0]
+assert kibana_page_url_entry.page_url == "/demo/home"
+
+kibana_sample_entries = parse_auto(
+    (Path(__file__).parents[1] / "samples/qa_logs_72_entries_realistic.json").read_text(encoding="utf-8")
+)
+assert kibana_sample_entries
+assert all(entry.page_url for entry in kibana_sample_entries)
+
+filename_entry = parse_auto({"fields": {
+    "TIMESTAMP": ["2026-09-03 10:29:03.111"],
+    "REQUEST_METHOD": ["POST"],
+    "REQUEST_URI": ["/api/privateId.json?commandId=2026090110091033335038"],
+}})[0]
+filename = _log_filename(filename_entry)
+assert re.fullmatch(r"20260903_102903_111_POST_privateId_[0-9A-F]{6}\.json", filename)
+assert _log_filename(filename_entry) == filename
+filename_entry.request_uri = "/api/" + ("veryLongEndpointName" * 10) + ".json"
+long_filename = _log_filename(filename_entry)
+assert len(long_filename) <= MAX_EXPORT_LOG_FILENAME_LENGTH
+assert re.fullmatch(r"20260903_102903_111_POST_[A-Za-z0-9_-]+_[0-9A-F]{6}\.json", long_filename)
+filename_entry.request_uri = "/api/privateId.json?commandId=2026090110091033335038"
+filename_entry.timestamp_raw = "not-a-time"
+filename_entry.timestamp_display = "not-a-time"
+assert _log_filename(filename_entry).startswith("unknown_date_unknown_time_000_POST_privateId_")
 
 export_moment = datetime(2026, 9, 2, 14, 5, 6)
 assert build_export_folder_name(timestamp=export_moment) == "Log_20260902_140506"
@@ -327,6 +354,17 @@ with tempfile.TemporaryDirectory() as directory:
     assert not (destination / "raw").exists()
     assert len(list(destination.glob("*.json"))) == 1
 
+    export_package(
+        entries[:1], destination,
+        include_summary_txt=False,
+        include_summary_md=False,
+        include_raw=True,
+        include_sanitized=False,
+    )
+    exported_names = sorted(path.name for path in destination.glob("*.json"))
+    assert len(exported_names) == 2
+    assert exported_names[1].endswith("_2.json")
+
 with tempfile.TemporaryDirectory() as directory:
     destination = Path(directory) / "page-url-groups"
     page_entries = parse_auto([
@@ -336,5 +374,16 @@ with tempfile.TemporaryDirectory() as directory:
     export_package(page_entries, destination, group_by="page_url")
     assert (destination / "_orders" / "summary.txt").exists()
     assert (destination / "_profile" / "summary.txt").exists()
+
+with tempfile.TemporaryDirectory() as directory:
+    destination = Path(directory) / "client-page-url-groups"
+    page_entries = parse_auto([
+        {"fields": {"REQUEST_URI": ["/a"], "CLIENT_PAGE_URL": ["/demo/home"]}},
+        {"fields": {"REQUEST_URI": ["/b"], "CLIENT_PAGE_URL.keyword": ["/demo/profile"]}},
+    ])
+    export_package(page_entries, destination, group_by="page_url")
+    assert (destination / "_demo_home" / "summary.txt").exists()
+    assert (destination / "_demo_profile" / "summary.txt").exists()
+    assert not (destination / "No Page URL").exists()
 
 print("ALL_V3_TESTS_PASSED")

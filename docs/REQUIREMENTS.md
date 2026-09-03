@@ -20,6 +20,9 @@ tests, User Guide, and changelog.
 - FR-008: Import multiple JSON and HAR files in one operation, retain each
   source filename/record index, assign collision-free application indexes, and
   merge usable records in timestamp order.
+- FR-009: Resolve Page URL from `PAGE_URL`, `CLIENT_PAGE_URL`, their Kibana
+  `.keyword` variants, common flat JSON aliases, and HAR referrer/page reference
+  values so Page URL grouping does not discard available context.
 
 ## Investigation
 
@@ -48,16 +51,21 @@ tests, User Guide, and changelog.
   custom folder. Distinct Kafka/page values must produce distinct folders.
 - FR-025: Create an evidence folder on every export. ZIP creation is optional
   and disabled by default.
-- FR-026: Use filesystem-safe, concise exported filenames based on endpoint and
-  the first query parameter. When raw or sanitized is the only selected content,
-  place its JSON files directly in the current group folder.
+- FR-026: Use filesystem-safe exported filenames in
+  `{date}_{time}_{millisecond}_{method}_{endpoint}_{short-id}.json` format. The
+  timestamp comes from the log, and the stable six-character hash must not expose
+  Request or Transaction IDs. Each log filename must be at most 80 characters;
+  the endpoint is truncated as needed. Existing log files must not be silently overwritten.
+  When raw or sanitized is the only selected content, place its JSON files directly
+  in the current group folder.
 - FR-027: Keep raw-log export disabled by default, show an inline warning when
   enabled, and require confirmation before the UI starts a raw export.
 - FR-028: Default export folders to `Log_{date}_{time}` and allow a persisted,
   filesystem-safe custom format using only the `{date}` and `{time}` tokens.
 - FR-029: Search within the rendered Evidence preview using Next, Previous,
-  Enter, and Shift+Enter, with optional case matching and wrap-around. Searching
-  must not modify included logs or copied/exported evidence.
+  Enter, and Shift+Enter, with optional case matching and wrap-around. Display
+  the current match position and total match count. Searching must not modify
+  included logs or copied/exported evidence.
 
 ## Application and delivery
 

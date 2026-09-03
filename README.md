@@ -6,7 +6,7 @@ QA Evidence Builder is a local desktop tool for QA, Testers, and Developers to t
 
 ## Version
 
-**v1.3.5**
+**v1.3.6**
 
 ## Key features
 
@@ -27,7 +27,9 @@ QA Evidence Builder is a local desktop tool for QA, Testers, and Developers to t
 - Sensitive-data masking and custom mask keys
 - Plain-text and Markdown ticket evidence
 - Evidence folder export grouped by Kafka topic, page name, page URL, or a custom folder
+- Page URL detection from Kibana `PAGE_URL` and `CLIENT_PAGE_URL` fields
 - Configurable export-folder naming with `Log_{date}_{time}` as the default
+- Chronological, collision-resistant exported log filenames capped at 80 characters for NAS compatibility
 - Optional ZIP archive (off by default)
 - Explicit warning and confirmation before raw-log export
 - Error fingerprinting and repeated-error analysis
@@ -128,6 +130,7 @@ See [`docs/RELEASING.md`](docs/RELEASING.md) for the release process and manual 
 
 ## Development documentation
 
+- [`docs/pages/README.md`](docs/pages/README.md) — page-specific documentation and task routing
 - [`docs/PROJECT_CONTEXT.md`](docs/PROJECT_CONTEXT.md) — current status, constraints, and continuation checklist
 - [`docs/ROADMAP.md`](docs/ROADMAP.md) — delivered, partial, planned, and deferred work
 - [`docs/REQUIREMENTS.md`](docs/REQUIREMENTS.md) — compatibility contract and verification map

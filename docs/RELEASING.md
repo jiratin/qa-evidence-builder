@@ -30,7 +30,7 @@ git tag -a vX.Y.Z -m "QA Evidence Builder vX.Y.Z"
 git push origin vX.Y.Z
 ```
 
-Use tags in the form `v1.3.5`, not `v.1.3.5`. Pushing the tag triggers the
+Use tags in the form `v1.3.6`, not `v.1.3.6`. Pushing the tag triggers the
 GitHub Actions release workflow. The tag must match `src/qa_evidence/__init__.py`,
 the README version, Windows metadata, workflow-dispatch default, changelog, and
 release-workflow test expectations.
@@ -62,7 +62,7 @@ On GitHub:
 1. Open **Actions**.
 2. Select **Build and Release**.
 3. Click **Run workflow**.
-4. Enter the exact existing release tag, such as `v1.3.5`.
+4. Enter the exact existing release tag, such as `v1.3.6`.
 5. Run the workflow.
 
 Use this only to rebuild an existing tag. A new release should be triggered by

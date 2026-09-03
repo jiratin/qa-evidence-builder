@@ -854,7 +854,8 @@ Folder grouping กำหนดโครงสร้างภายในโฟ�
 • No grouping — summary/raw/sanitized อยู่ที่ root เดียวกัน
 • Kafka topic — สร้างหนึ่งโฟลเดอร์ต่อ kafka_topic_name ที่ต่างกัน
 • Page name — สร้างหนึ่งโฟลเดอร์ต่อ CLIENT_PAGE_NAME ที่ต่างกัน
-• Page URL — สร้างหนึ่งโฟลเดอร์ต่อ PAGE_URL ที่ต่างกัน เหมาะกับ Log ที่ไม่มี Page Name
+• Page URL — สร้างหนึ่งโฟลเดอร์ต่อ PAGE_URL หรือ CLIENT_PAGE_URL ที่ต่างกัน
+  รวมถึง field แบบ .keyword เหมาะกับ Log ที่ไม่มี Page Name
 • Custom folder — รวม Included Logs ทั้งหมดไว้ใต้ชื่อโฟลเดอร์ที่ผู้ใช้กำหนด
 
 แต่ละกลุ่มมี summary และ raw/sanitized ของกลุ่มนั้นเอง ถ้า Log ไม่มีค่าที่ใช้จัดกลุ่ม
@@ -880,8 +881,17 @@ Raw log files ปิดเป็นค่าเริ่มต้นเพรา
 ไฟล์ JSON จะอยู่ในโฟลเดอร์ Evidence/กลุ่มโดยตรง ไม่สร้างชั้น raw หรือ sanitized เพิ่ม
 ถ้าเลือกหลาย content โปรแกรมจะแยก raw และ sanitized เพื่อไม่ให้ไฟล์ปะปนกัน
 
-ชื่อไฟล์ Log ใช้ endpoint และ query parameter คู่แรกแบบสั้น เช่น:
-007_privateId_commandId_2026090110091033335038.json
+ชื่อไฟล์ Log เรียงตามเวลาที่เกิดเหตุการณ์และใช้รูปแบบ:
+{date}_{time}_{millisecond}_{method}_{endpoint}_{short-id}.json
+
+ตัวอย่าง:
+20260903_102903_111_POST_privateId_A14F2C.json
+
+short-id เป็น Hash 6 ตัวแบบคงที่ ไม่แสดง Request ID หรือ Transaction ID ในชื่อไฟล์
+ชื่อไฟล์ Log จำกัดความยาวไม่เกิน 80 ตัวอักษร โดยตัดเฉพาะส่วน endpoint เมื่อจำเป็น
+เพื่อรองรับ NAS และระบบไฟล์ที่จำกัดความยาว
+ถ้า Export ซ้ำลงโฟลเดอร์เดิม โปรแกรมจะไม่เขียนทับไฟล์ Log เดิม แต่เติม _2, _3
+ตามลำดับ ส่วน Log ที่ไม่มี Timestamp ใช้ unknown_date_unknown_time_000
 """,
     ),
     (
@@ -1002,9 +1012,10 @@ Log_20260902_140506 สามารถแก้รูปแบบในช่อ
 preview โดยไม่เปลี่ยน Included Logs หรือเนื้อหาที่จะ Copy/Export
 
 พิมพ์คำค้นแล้วกด Enter หรือปุ่ม Next เพื่อไปผลลัพธ์ถัดไป ใช้ Previous หรือ
-Shift+Enter เพื่อย้อนกลับ เมื่อค้นหาถึงท้ายหรือต้นเอกสาร โปรแกรมจะวนค้นหาต่อ
-อีกด้าน เปิด Match case เมื่อต้องการแยกตัวพิมพ์ใหญ่และตัวพิมพ์เล็ก หากไม่พบ
-ข้อความจะแสดง No matches ช่องค้นหานี้ทำงานกับ Preview ที่แสดงหลัง Masking แล้ว
+Shift+Enter เพื่อย้อนกลับ สถานะจะแสดงตำแหน่งและจำนวนรวม เช่น 2 / 7 matches
+เมื่อค้นหาถึงท้ายหรือต้นเอกสาร โปรแกรมจะวนค้นหาต่ออีกด้าน เปิด Match case เมื่อ
+ต้องการแยกตัวพิมพ์ใหญ่และตัวพิมพ์เล็ก หากไม่พบจะแสดง 0 matches ช่องค้นหานี้
+ทำงานกับ Preview ที่แสดงหลัง Masking แล้ว
 """,
     ),
     (

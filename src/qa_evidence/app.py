@@ -362,6 +362,7 @@ class MainWindow(QMainWindow):
         self.evidence_search_next = button("Next", self.find_in_evidence)
         self.evidence_match_case = QCheckBox("Match case")
         self.evidence_search_status = QLabel(); self.evidence_search_status.setObjectName("muted")
+        self.evidence_search_status.setMinimumWidth(90)
         preview_header.addWidget(preview_title); preview_header.addStretch()
         preview_header.addWidget(self.evidence_search); preview_header.addWidget(self.evidence_search_previous)
         preview_header.addWidget(self.evidence_search_next); preview_header.addWidget(self.evidence_match_case)
@@ -751,6 +752,19 @@ class MainWindow(QMainWindow):
         else:
             self.evidence_search_status.clear()
 
+    def _evidence_match_starts(self, query):
+        if not query:
+            return []
+        flags = self._evidence_find_flags()
+        cursor = QTextCursor(self.preview.document())
+        cursor.movePosition(QTextCursor.Start)
+        starts = []
+        while True:
+            cursor = self.preview.document().find(query, cursor, flags)
+            if cursor.isNull():
+                return starts
+            starts.append(cursor.selectionStart())
+
     def find_in_evidence(self, backward=False):
         query = self.evidence_search.text()
         if not query:
@@ -763,7 +777,14 @@ class MainWindow(QMainWindow):
             cursor.movePosition(QTextCursor.End if backward else QTextCursor.Start)
             self.preview.setTextCursor(cursor)
             found = self.preview.find(query, flags)
-        self.evidence_search_status.setText("Match" if found else "No matches")
+        matches = self._evidence_match_starts(query)
+        if not found or not matches:
+            self.evidence_search_status.setText("0 matches")
+            return
+        current_start = self.preview.textCursor().selectionStart()
+        current = matches.index(current_start) + 1 if current_start in matches else 1
+        noun = "match" if len(matches) == 1 else "matches"
+        self.evidence_search_status.setText(f"{current} / {len(matches)} {noun}")
 
     def update_preview(self):
         self.preview.setPlainText(build_ticket(self.included_entries(), self.mask.isChecked(), self.expected.toPlainText().strip(), self.actual.toPlainText().strip(), self._extra_mask_keys()))

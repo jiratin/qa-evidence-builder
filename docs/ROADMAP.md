@@ -20,19 +20,9 @@ Status values are `Done`, `Partial`, `Planned`, `Deferred`, and `Rejected`.
 - Import validation that retains usable records.
 - Raw-export warning and confirmation.
 - Version/tag, icon, artifact, bundle, and packaged startup validation.
-
-### Partial
-
-- Export preview: the Evidence page shows included evidence, package options,
-  grouping, raw/sanitized state, ZIP state, and warnings. A pre-export folder
-  tree with per-group counts is not implemented.
-
-### Remaining acceptance criteria
-
-- A preview shows the exact root name, group folders, included count per group,
-  selected package contents, raw/sanitized state, and ZIP state before export.
-- Preview generation must not write files or expose unmasked values.
-- Tests cover no grouping, each supported grouping, and unsafe folder names.
+- Tabbed Included Evidence and Export Tree previews showing the exact next root
+  name, grouping tree, per-group counts, package contents, safety state, and ZIP
+  state without writing files or exposing log contents.
 
 ## P1 — Investigation and defect analysis
 

@@ -6,6 +6,43 @@ The project follows Semantic Versioning where practical.
 
 ## [Unreleased]
 
+## [1.3.7] - 2026-09-04
+
+### Added
+
+- Allow users to select Timeline columns from fields present in imported JSON,
+  with Kafka Topic selected by default.
+- Allow Timeline columns to be reordered by dragging their headers and persist
+  the latest order locally.
+- Add tabbed Included Evidence and expandable Export Tree previews showing the
+  exact next root folder, nested groups, counts, selected files, safety state,
+  and ZIP state without writing export data.
+- Add a persisted, token-based format for exported log filenames.
+
+### Changed
+
+- Append each successful file import or pasted JSON batch to the current session
+  while preserving inclusion state and re-sorting the combined Timeline.
+- Nest Kafka Topic folders beneath Page URL folders during Page URL grouping.
+- Persist local export and Timeline preferences while keeping masking enabled,
+  raw export disabled, and Dashboard filters reset on application startup.
+- Default exported log filenames to timestamp and endpoint without method or hash;
+  optional tokens can add them back when needed.
+
+### Fixed
+
+- Apply the Light/Dark palette to table corners, empty scroll areas, headers,
+  and horizontal scrollbars on Dashboard and Transactions.
+- Keep Timeline field-choice popup backgrounds, text, selection, and checked
+  indicators readable in Light Mode.
+- Keep Evidence preview tab backgrounds, panes, and normal/hover/selected text
+  readable in Light Mode.
+
+### Documentation
+
+- Make the macOS source setup command explicitly use Python 3.13 so a system
+  Python 3.14 cannot create an incompatible PySide6 environment silently.
+
 ## [1.3.6] - 2026-09-04
 
 ### Added

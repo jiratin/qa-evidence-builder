@@ -9,7 +9,10 @@ tests, User Guide, and changelog.
 - FR-001: Import one Elasticsearch/Kibana-style JSON object.
 - FR-002: Import a JSON array containing one or more log objects.
 - FR-003: Import a valid HAR object.
-- FR-004: Accept the same formats through Paste JSON.
+- FR-004: Accept the same formats through Paste JSON. Each successful file import
+  or paste appends usable records to the current session, preserves existing
+  inclusion state, and re-sorts the combined Timeline by timestamp. Clear is the
+  explicit action that replaces the accumulated session with an empty one.
 - FR-005: Resolve Transaction ID from request body, URL/query, fields, headers,
   then Request ID fallback, in that order.
 - FR-006: Report the source field used for every resolved Transaction ID and
@@ -40,6 +43,9 @@ tests, User Guide, and changelog.
   when that log is included in copied or exported evidence.
 - FR-018: Persist a positive slow-response threshold and success result-code
   list locally, applying them consistently to filters, analysis, and evidence.
+- FR-019: Allow users to add or remove Timeline columns from fields present in
+  the currently imported JSON, with Kafka Topic selected by default. Selected
+  Timeline fields persist locally, while Dashboard filter values do not.
 
 ## Evidence and export
 
@@ -48,14 +54,17 @@ tests, User Guide, and changelog.
 - FR-022: Copy evidence as plain text or Markdown.
 - FR-023: Select summary text, summary Markdown, raw, and sanitized contents.
 - FR-024: Export without grouping, by Kafka topic, by page name, by page URL, or into a
-  custom folder. Distinct Kafka/page values must produce distinct folders.
+  custom folder. Distinct Kafka/page values must produce distinct folders. Page URL
+  grouping nests each Kafka Topic folder beneath its Page URL folder.
 - FR-025: Create an evidence folder on every export. ZIP creation is optional
   and disabled by default.
-- FR-026: Use filesystem-safe exported filenames in
-  `{date}_{time}_{millisecond}_{method}_{endpoint}_{short-id}.json` format. The
-  timestamp comes from the log, and the stable six-character hash must not expose
-  Request or Transaction IDs. Each log filename must be at most 80 characters;
-  the endpoint is truncated as needed. Existing log files must not be silently overwritten.
+- FR-026: Use filesystem-safe exported filenames with a persisted custom format.
+  Supported tokens are `{date}`, `{time}`, `{millisecond}`, `{method}`, `{endpoint}`,
+  and `{short-id}`; the default is `{date}_{time}_{millisecond}_{endpoint}.json`.
+  Timestamp tokens come from the log, and the optional stable six-character
+  `{short-id}` must not expose Request or Transaction IDs. Each log filename must
+  be at most 80 characters and is truncated safely as needed. Existing log files
+  must not be silently overwritten.
   When raw or sanitized is the only selected content, place its JSON files directly
   in the current group folder.
 - FR-027: Keep raw-log export disabled by default, show an inline warning when
@@ -66,6 +75,11 @@ tests, User Guide, and changelog.
   Enter, and Shift+Enter, with optional case matching and wrap-around. Display
   the current match position and total match count. Searching must not modify
   included logs or copied/exported evidence.
+- FR-030: Present Included Evidence Preview and Export Tree Preview as tabs in
+  the same Evidence-page area. The tree can expand/collapse and shows the exact
+  root name used by the next export, nested grouping folders, included count per
+  group, selected package files, raw/sanitized and masking state, and ZIP state.
+  Building or browsing the preview must not write files or display log contents.
 
 ## Application and delivery
 
@@ -80,10 +94,17 @@ tests, User Guide, and changelog.
   and presets cover all errors, slow APIs, and the selected transaction.
 - NFR-003c: The filter panel is collapsible, dashboard metrics remain compact,
   and timeline/transaction columns are user-resizable with horizontal scrolling
-  when their combined width exceeds the viewport.
+  when their combined width exceeds the viewport. Timeline columns can be
+  reordered by dragging their headers, and the most recent order persists locally.
 - NFR-003d: Timeline inclusion toggles with one click on the Include indicator
   or Space while the table has focus; Space retains native behavior elsewhere.
 - NFR-003e: Selected timeline text remains legible in both themes.
+- NFR-003f: Dashboard and Transaction tables, headers, corner controls, empty
+  viewport areas, and both scrollbar orientations use the active theme palette
+  without falling back to contrasting native black backgrounds in Light Mode.
+  Popup menus, including Timeline field choices, must keep readable background,
+  text, selection, and checked states in both themes. Tab bars and their content
+  panes must keep readable normal, hover, selected, and disabled states.
 - NFR-004: Windows and macOS release builds are produced by GitHub Actions only
   after syntax, core, help, UI, and release-workflow checks pass.
 - NFR-005: The searchable User Guide reflects the current UI and behaviour.
@@ -110,7 +131,11 @@ tests, User Guide, and changelog.
 - The All Errors preset enables the error filter, Slow APIs enables the slow
   filter, and Current Transaction filters to the selected row's transaction.
 - User preferences are local application settings. They contain UI preferences
-  and analysis configuration, not imported log contents.
+  and analysis/export configuration, not imported log contents. Export grouping,
+  custom group name, folder/file formats, package contents, ZIP choice, extra mask
+  keys, and Timeline field selection persist. Masking starts enabled and raw export
+  starts disabled on every launch regardless of prior activity. Dashboard filter
+  values do not persist.
 
 ## Verification map
 

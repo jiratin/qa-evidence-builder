@@ -6,15 +6,15 @@ QA Evidence Builder is a local desktop tool for QA, Testers, and Developers to t
 
 ## Version
 
-**v1.3.6**
+**v1.3.7**
 
 ## Key features
 
 - Import Elasticsearch/Kibana-style single JSON objects and JSON arrays
 - Import HAR network logs
-- Import and merge multiple JSON/HAR files with source tracking
-- Paste JSON directly into the application
-- Timeline view with API, status, response time, request ID, transaction, and error fingerprint
+- Import, paste, and accumulate multiple JSON/HAR batches with source tracking
+- Timeline view with API, status, response time, request ID, transaction, error fingerprint,
+  and selectable JSON fields; Kafka Topic is shown by default
 - Search and filtering by method, status, page, Kafka topic, transaction, errors, and slow APIs
 - Collapsible categorized filters, removable filter chips, presets, and resizable timeline columns
 - Explicit log selection with Include/Exclude, Select All, and Deselect All
@@ -24,12 +24,17 @@ QA Evidence Builder is a local desktop tool for QA, Testers, and Developers to t
 - Import validation summary for skipped records and incomplete fields
 - Expected Result / Actual Result evidence
 - Search within the rendered Evidence preview with Next, Previous, and Match case
+- Switch between Included Evidence and an expandable Export Tree Preview showing
+  the exact package structure before files are written
 - Sensitive-data masking and custom mask keys
 - Plain-text and Markdown ticket evidence
-- Evidence folder export grouped by Kafka topic, page name, page URL, or a custom folder
+- Evidence folder export grouped by Kafka topic, page name, page URL/Kafka Topic,
+  or a custom folder
 - Page URL detection from Kibana `PAGE_URL` and `CLIENT_PAGE_URL` fields
 - Configurable export-folder naming with `Log_{date}_{time}` as the default
-- Chronological, collision-resistant exported log filenames capped at 80 characters for NAS compatibility
+- Configurable exported log filenames using timestamp, method, endpoint, and optional
+  short-ID tokens, capped at 80 characters for NAS compatibility
+- Persistent local export preferences with safe masking/raw-export startup defaults
 - Optional ZIP archive (off by default)
 - Explicit warning and confirmation before raw-log export
 - Error fingerprinting and repeated-error analysis
@@ -48,11 +53,16 @@ QA Evidence Builder is a local desktop tool for QA, Testers, and Developers to t
 ## Run locally
 
 ```bash
-python3 -m venv .venv
+python3.13 --version
+python3.13 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
 python run.py
 ```
+
+If `python3.13` is unavailable on macOS, install it first with
+`brew install python@3.13`. Do not create this environment with Python 3.14;
+the packaging-tested PySide6 6.8.3 runtime supports Python 3.10 through 3.13.
 
 On Windows, activate the virtual environment with:
 

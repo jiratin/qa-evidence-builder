@@ -8,12 +8,14 @@ import zipfile
 
 sys.path.insert(0, str(Path(__file__).parents[1] / "src"))
 
-from qa_evidence.parser import parse_auto, parse_files, parse_har, parse_with_report
+from qa_evidence.parser import merge_entries, parse_auto, parse_files, parse_har, parse_with_report
 from qa_evidence.filtering import filter_entries, group_by_transaction
 from qa_evidence.evidence import build_ticket, build_markdown
 from qa_evidence.sanitizer import sanitize
 from qa_evidence.exporter import (
-    MAX_EXPORT_LOG_FILENAME_LENGTH, _log_filename, build_export_folder_name, export_package,
+    DEFAULT_EXPORT_LOG_FILENAME_FORMAT, MAX_EXPORT_LOG_FILENAME_LENGTH, _log_filename,
+    build_export_folder_name, build_export_log_filename, build_export_structure,
+    export_package,
 )
 from qa_evidence.analyzer import (
     error_fingerprint,
@@ -134,6 +136,18 @@ assert mixed_result.report.skipped_count == 1
 assert mixed_result.report.invalid_timestamp_count == 1
 assert mixed_result.report.missing_endpoint_count == 1
 
+existing_batch = parse_auto({"fields": {
+    "TIMESTAMP": ["2026-08-21 11:03:40.000"], "REQUEST_URI": ["/existing"]
+}})
+existing_identity = existing_batch[0].index
+added_batch = parse_auto({"fields": {
+    "TIMESTAMP": ["2026-08-21 11:03:39.000"], "REQUEST_URI": ["/added"]
+}})
+merged_batches = merge_entries(existing_batch, added_batch)
+assert [entry.request_uri for entry in merged_batches] == ["/added", "/existing"]
+assert next(entry.index for entry in merged_batches if entry.request_uri == "/existing") == existing_identity
+assert len({entry.index for entry in merged_batches}) == 2
+
 page_url_entry = parse_auto({"fields": {
     "REQUEST_URI": ["/api/privateId.json"],
     "PAGE_URL": ["https://easyapp.example/orders/summary"],
@@ -158,16 +172,27 @@ filename_entry = parse_auto({"fields": {
     "REQUEST_URI": ["/api/privateId.json?commandId=2026090110091033335038"],
 }})[0]
 filename = _log_filename(filename_entry)
-assert re.fullmatch(r"20260903_102903_111_POST_privateId_[0-9A-F]{6}\.json", filename)
+assert filename == "20260903_102903_111_privateId.json"
 assert _log_filename(filename_entry) == filename
+custom_filename = build_export_log_filename(
+    filename_entry, "{method}_{endpoint}_{short-id}.json"
+)
+assert re.fullmatch(r"POST_privateId_[0-9A-F]{6}\.json", custom_filename)
+assert DEFAULT_EXPORT_LOG_FILENAME_FORMAT == "{date}_{time}_{millisecond}_{endpoint}"
 filename_entry.request_uri = "/api/" + ("veryLongEndpointName" * 10) + ".json"
 long_filename = _log_filename(filename_entry)
 assert len(long_filename) <= MAX_EXPORT_LOG_FILENAME_LENGTH
-assert re.fullmatch(r"20260903_102903_111_POST_[A-Za-z0-9_-]+_[0-9A-F]{6}\.json", long_filename)
+assert re.fullmatch(r"20260903_102903_111_[A-Za-z0-9_-]+\.json", long_filename)
 filename_entry.request_uri = "/api/privateId.json?commandId=2026090110091033335038"
 filename_entry.timestamp_raw = "not-a-time"
 filename_entry.timestamp_display = "not-a-time"
-assert _log_filename(filename_entry).startswith("unknown_date_unknown_time_000_POST_privateId_")
+assert _log_filename(filename_entry) == "unknown_date_unknown_time_000_privateId.json"
+try:
+    build_export_log_filename(filename_entry, "{request-id}")
+except ValueError as exc:
+    assert "supports only" in str(exc)
+else:
+    raise AssertionError("Unknown export-file tokens must be rejected")
 
 export_moment = datetime(2026, 9, 2, 14, 5, 6)
 assert build_export_folder_name(timestamp=export_moment) == "Log_20260902_140506"
@@ -179,6 +204,40 @@ except ValueError as exc:
     assert "supports only" in str(exc)
 else:
     raise AssertionError("Unknown export-folder tokens must be rejected")
+
+preview_entry = parse_auto({"fields": {
+    "TIMESTAMP": ["2026-09-03 10:29:03.111"],
+    "REQUEST_URI": ["/api/preview"],
+    "PAGE_URL": ["/orders"],
+    "CLIENT_PAGE_NAME": ["Order<Page"],
+    "kafka_topic_name": ["orders/topic"],
+    "REQUEST_HEADER": ['{"Authorization":"must-not-appear"}'],
+}})[0]
+for preview_group in ("none", "kafka", "page", "page_url", "custom"):
+    structure = build_export_structure(
+        [preview_entry], "Log_20260903_102903", group_by=preview_group,
+        custom_group_name="../../Custom", include_zip=True,
+    )
+    assert structure["root"] == "Log_20260903_102903"
+    assert structure["included_count"] == 1
+    assert structure["zip"]
+    assert len(structure["groups"]) == 1
+    assert structure["groups"][0]["count"] == 1
+    assert ("summary.txt",) in structure["groups"][0]["files"]
+    assert ("summary.md",) in structure["groups"][0]["files"]
+    assert any(path[0] == "sanitized" for path in structure["groups"][0]["files"])
+    assert structure["sanitized"] and not structure["raw"] and structure["mask"]
+    assert "must-not-appear" not in repr(structure)
+assert build_export_structure(
+    [preview_entry], "root", group_by="page_url"
+)["groups"][0]["path"] == ("_orders", "orders_topic")
+assert build_export_structure(
+    [preview_entry], "root", group_by="page"
+)["groups"][0]["path"] == ("Order_Page",)
+with tempfile.TemporaryDirectory() as directory:
+    preview_destination = Path(directory) / "preview-must-not-exist"
+    build_export_structure([preview_entry], preview_destination.name)
+    assert not preview_destination.exists()
 
 errors = filter_entries(entries, errors_only=True)
 assert len(errors) == 2
@@ -325,6 +384,16 @@ with tempfile.TemporaryDirectory() as directory:
         assert sum("/sanitized/" in name for name in names) == 1
 
 with tempfile.TemporaryDirectory() as directory:
+    invalid_destination = Path(directory) / "invalid-template"
+    try:
+        export_package(entries[:1], invalid_destination, filename_format="{secret}")
+    except ValueError as exc:
+        assert "supports only" in str(exc)
+    else:
+        raise AssertionError("Invalid filename format must stop export")
+    assert not invalid_destination.exists()
+
+with tempfile.TemporaryDirectory() as directory:
     grouped_entries = parse_auto([
         {"fields": {"REQUEST_URI": ["/a"], "kafka_topic_name": ["topic-a"]}},
         {"fields": {"REQUEST_URI": ["/b"], "kafka_topic_name": ["topic-b"]}},
@@ -368,12 +437,12 @@ with tempfile.TemporaryDirectory() as directory:
 with tempfile.TemporaryDirectory() as directory:
     destination = Path(directory) / "page-url-groups"
     page_entries = parse_auto([
-        {"fields": {"REQUEST_URI": ["/a"], "PAGE_URL": ["/orders"]}},
-        {"fields": {"REQUEST_URI": ["/b"], "PAGE_URL": ["/profile"]}},
+        {"fields": {"REQUEST_URI": ["/a"], "PAGE_URL": ["/orders"], "kafka_topic_name": ["orders-topic"]}},
+        {"fields": {"REQUEST_URI": ["/b"], "PAGE_URL": ["/profile"], "kafka_topic_name": ["profile-topic"]}},
     ])
     export_package(page_entries, destination, group_by="page_url")
-    assert (destination / "_orders" / "summary.txt").exists()
-    assert (destination / "_profile" / "summary.txt").exists()
+    assert (destination / "_orders" / "orders-topic" / "summary.txt").exists()
+    assert (destination / "_profile" / "profile-topic" / "summary.txt").exists()
 
 with tempfile.TemporaryDirectory() as directory:
     destination = Path(directory) / "client-page-url-groups"
@@ -382,8 +451,8 @@ with tempfile.TemporaryDirectory() as directory:
         {"fields": {"REQUEST_URI": ["/b"], "CLIENT_PAGE_URL.keyword": ["/demo/profile"]}},
     ])
     export_package(page_entries, destination, group_by="page_url")
-    assert (destination / "_demo_home" / "summary.txt").exists()
-    assert (destination / "_demo_profile" / "summary.txt").exists()
+    assert (destination / "_demo_home" / "No Kafka Topic" / "summary.txt").exists()
+    assert (destination / "_demo_profile" / "No Kafka Topic" / "summary.txt").exists()
     assert not (destination / "No Page URL").exists()
 
 print("ALL_V3_TESTS_PASSED")

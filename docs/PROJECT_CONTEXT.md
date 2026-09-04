@@ -22,7 +22,7 @@ The product priorities are:
 
 ## Current baseline
 
-- Current release: `v1.3.6`.
+- Current release: `v1.3.7`.
 - Branch and release source: `main` at
   `https://github.com/jiratin/qa-evidence-builder`.
 - UI: PySide6 desktop application.
@@ -36,7 +36,7 @@ Released behaviour is defined by `REQUIREMENTS.md`, not by chat history. The
 built-in searchable guide in `src/qa_evidence/help_content.py` is the user-facing
 operating manual.
 
-## Delivered through v1.3.6
+## Delivered through v1.3.7
 
 - Single/multiple JSON and HAR import, merge, sorting, and source tracking.
 - Page URL normalization across `PAGE_URL`, Kibana `CLIENT_PAGE_URL`, and HAR sources.
@@ -47,8 +47,12 @@ operating manual.
 - HTTP and business-error detection, error fingerprints, duplicate grouping, and transaction journey summary.
 - Per-log evidence notes, Expected/Actual results, sanitized evidence, optional raw logs, and optional ZIP.
 - Evidence Preview search with Next/Previous navigation and optional case matching.
+- Tabbed Included Evidence and expandable Export Tree previews.
 - Grouped exports and configurable `Log_{date}_{time}` folder names.
-- Chronological exported log filenames with stable non-sensitive short hashes.
+- Configurable, length-capped exported log filenames with optional non-sensitive
+  short hashes and Page URL/Kafka Topic nested grouping.
+- Accumulated import/paste sessions, persisted safe export preferences, and
+  selectable/reorderable Timeline fields with Kafka Topic shown by default.
 - Dark/Light themes, branded icons, release metadata, and packaged startup validation.
 
 See `ROADMAP.md` for partial and remaining work. In particular, do not assume

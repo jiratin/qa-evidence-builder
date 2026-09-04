@@ -1,16 +1,18 @@
 """Modern PySide6 desktop interface for QA Evidence Builder."""
 
+import json
 import sys
 from datetime import datetime
 from pathlib import Path
 
 from PySide6.QtCore import QSettings, Qt
-from PySide6.QtGui import QColor, QIcon, QKeySequence, QPixmap, QShortcut, QTextCursor, QTextDocument
+from PySide6.QtGui import QAction, QColor, QIcon, QKeySequence, QPixmap, QShortcut, QTextCursor, QTextDocument
 from PySide6.QtWidgets import (
     QAbstractItemView, QApplication, QCheckBox, QComboBox, QDialog, QFileDialog, QFrame,
     QGridLayout, QHBoxLayout, QHeaderView, QLabel, QLineEdit, QMainWindow,
-    QMessageBox, QPlainTextEdit, QPushButton, QScrollArea, QSizePolicy,
+    QMenu, QMessageBox, QPlainTextEdit, QPushButton, QScrollArea, QSizePolicy,
     QSplitter, QStackedWidget, QTableWidget, QTableWidgetItem, QTabWidget,
+    QTreeWidget, QTreeWidgetItem,
     QVBoxLayout, QWidget,
 )
 
@@ -19,10 +21,13 @@ from .analyzer import (
     build_auto_summary, error_fingerprint, find_duplicate_errors, transaction_journey,
 )
 from .evidence import build_markdown, build_ticket
-from .exporter import build_export_folder_name, export_package
+from .exporter import (
+    DEFAULT_EXPORT_LOG_FILENAME_FORMAT, build_export_folder_name,
+    build_export_structure, export_package,
+)
 from .filtering import filter_entries, group_by_transaction
 from .help_dialog import HelpDialog
-from .parser import parse_auto, parse_files, parse_with_report
+from .parser import merge_entries, parse_auto, parse_files, parse_with_report
 from .theme import COLORS, stylesheet
 
 
@@ -40,6 +45,19 @@ TRANSACTION_SOURCE_LABELS = {
     "request_id_fallback": "Request ID fallback",
     "not_found": "Not found",
 }
+
+TIMELINE_BASE_COLUMNS = (
+    ("Export", "include", 58),
+    ("Timestamp", "timestamp_display", 175),
+    ("Flag", "severity", 120),
+    ("Fingerprint", "fingerprint", 115),
+    ("Method", "request_method", 75),
+    ("API", "request_uri", 320),
+    ("Status", "response_status", 72),
+    ("ms", "response_time", 82),
+    ("Request ID", "request_id", 180),
+    ("Transaction", "transaction_id", 190),
+)
 
 
 def button(text, slot=None, primary=False, name=None):
@@ -95,6 +113,8 @@ class MainWindow(QMainWindow):
             self.slow_threshold_ms = 3000.0
         stored_codes = str(self.settings.value("success_result_codes", "0,200,20000,SUCCESS,OK"))
         self.success_result_codes = tuple(code.strip() for code in stored_codes.split(",") if code.strip())
+        stored_timeline_fields = str(self.settings.value("timeline_fields", "kafka_topic_name"))
+        self.timeline_fields = [field for field in stored_timeline_fields.split("|") if field]
         self.entries, self.filtered = [], []
         self.included_indexes = set()
         self._build()
@@ -279,14 +299,16 @@ class MainWindow(QMainWindow):
         title = QLabel("Timeline"); title.setObjectName("sectionTitle")
         self.result_count = QLabel("0 results"); self.result_count.setObjectName("muted")
         header.addWidget(title); header.addWidget(self.result_count); header.addStretch()
+        self.timeline_fields_button = button("Timeline fields")
+        self.timeline_fields_menu = QMenu(self.timeline_fields_button)
+        self.timeline_fields_button.setMenu(self.timeline_fields_menu)
+        header.addWidget(self.timeline_fields_button)
         header.addWidget(button("Include selected", self.include_selected))
         header.addWidget(button("Exclude selected", self.exclude_selected))
         header.addWidget(button("Select all", self.include_all_filtered))
         header.addWidget(button("Deselect all", self.clear_included))
         lay.addLayout(header)
-        columns = ("Export", "Timestamp", "Flag", "Fingerprint", "Method", "API", "Status", "ms", "Request ID", "Transaction")
-        self.table = QTableWidget(0, len(columns))
-        self.table.setHorizontalHeaderLabels(columns)
+        self.table = QTableWidget(0, 0)
         self.table.setSelectionBehavior(QTableWidget.SelectRows)
         self.table.setSelectionMode(QTableWidget.ExtendedSelection)
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
@@ -294,10 +316,12 @@ class MainWindow(QMainWindow):
         self.table.verticalHeader().setVisible(False)
         table_header = self.table.horizontalHeader()
         table_header.setSectionResizeMode(QHeaderView.Interactive)
+        table_header.setSectionsMovable(True)
         table_header.setMinimumSectionSize(44)
         table_header.setStretchLastSection(False)
-        for column, width in enumerate((58, 175, 120, 115, 75, 320, 72, 82, 180, 190)):
-            self.table.setColumnWidth(column, width)
+        self._rebuild_timeline_field_menu()
+        self._configure_timeline_columns()
+        table_header.sectionMoved.connect(self._persist_timeline_column_order)
         self.table.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.table.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
         self.table.cellClicked.connect(self.toggle_include_from_indicator)
@@ -348,13 +372,15 @@ class MainWindow(QMainWindow):
     def _evidence_page(self):
         page = QWidget(); root = QHBoxLayout(page); root.setContentsMargins(0, 0, 0, 0)
         left = QVBoxLayout()
+        self.export_preview_moment = datetime.now()
         ea = QSplitter(Qt.Horizontal)
         self.expected = QPlainTextEdit(); self.expected.setPlaceholderText("Expected result")
         self.actual = QPlainTextEdit(); self.actual.setPlaceholderText("Actual result")
         ea.addWidget(self.expected); ea.addWidget(self.actual)
         left.addWidget(ea)
+        preview_page = QWidget(); preview_page_layout = QVBoxLayout(preview_page)
+        preview_page_layout.setContentsMargins(8, 8, 8, 8)
         preview_header = QHBoxLayout()
-        preview_title = QLabel("Included evidence preview"); preview_title.setObjectName("sectionTitle")
         self.evidence_search = QLineEdit(); self.evidence_search.setPlaceholderText("Find in evidence")
         self.evidence_search.setClearButtonEnabled(True); self.evidence_search.setMaximumWidth(320)
         self.evidence_search.setAccessibleName("Find in evidence preview")
@@ -363,29 +389,49 @@ class MainWindow(QMainWindow):
         self.evidence_match_case = QCheckBox("Match case")
         self.evidence_search_status = QLabel(); self.evidence_search_status.setObjectName("muted")
         self.evidence_search_status.setMinimumWidth(90)
-        preview_header.addWidget(preview_title); preview_header.addStretch()
+        preview_header.addStretch()
         preview_header.addWidget(self.evidence_search); preview_header.addWidget(self.evidence_search_previous)
         preview_header.addWidget(self.evidence_search_next); preview_header.addWidget(self.evidence_match_case)
         preview_header.addWidget(self.evidence_search_status)
         self.preview = QPlainTextEdit(); self.preview.setReadOnly(True)
-        left.addLayout(preview_header); left.addWidget(self.preview, 1)
+        preview_page_layout.addLayout(preview_header); preview_page_layout.addWidget(self.preview, 1)
+
+        tree_page = QWidget(); tree_page_layout = QVBoxLayout(tree_page)
+        tree_page_layout.setContentsMargins(8, 8, 8, 8)
+        tree_header = QHBoxLayout()
+        self.export_tree_status = QLabel(); self.export_tree_status.setObjectName("muted")
+        tree_header.addWidget(self.export_tree_status); tree_header.addStretch()
+        tree_header.addWidget(button("Expand all", lambda: self.export_tree.expandAll()))
+        tree_header.addWidget(button("Collapse all", lambda: self.export_tree.collapseAll()))
+        self.export_tree = QTreeWidget()
+        self.export_tree.setHeaderLabels(("Export structure", "Details"))
+        self.export_tree.setAlternatingRowColors(True)
+        self.export_tree.header().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.export_tree.header().setSectionResizeMode(1, QHeaderView.ResizeToContents)
+        tree_page_layout.addLayout(tree_header); tree_page_layout.addWidget(self.export_tree, 1)
+
+        self.evidence_preview_tabs = QTabWidget()
+        self.evidence_preview_tabs.addTab(preview_page, "Included Evidence Preview")
+        self.evidence_preview_tabs.addTab(tree_page, "Export Tree Preview")
+        left.addWidget(self.evidence_preview_tabs, 1)
         root.addWidget(panel_from_layout(left), 3)
         options = QVBoxLayout(); options.setContentsMargins(15, 15, 15, 15)
         opt_title = QLabel("Evidence options"); opt_title.setObjectName("sectionTitle")
         options.addWidget(opt_title)
         self.mask = QCheckBox("Mask sensitive data"); self.mask.setChecked(True)
-        self.extra_mask = QLineEdit(); self.extra_mask.setPlaceholderText("Extra mask keys, comma separated")
+        self.extra_mask = QLineEdit(str(self.settings.value("extra_mask_keys", ""))); self.extra_mask.setPlaceholderText("Extra mask keys, comma separated")
         options.addWidget(self.mask); options.addWidget(self.extra_mask); options.addSpacing(12)
         pkg = QLabel("Package contents"); pkg.setObjectName("sectionTitle"); options.addWidget(pkg)
-        self.summary_txt = QCheckBox("summary.txt"); self.summary_txt.setChecked(True)
-        self.summary_md = QCheckBox("summary.md"); self.summary_md.setChecked(True)
+        self.summary_txt = QCheckBox("summary.txt"); self.summary_txt.setChecked(self._setting_bool("include_summary_txt", True))
+        self.summary_md = QCheckBox("summary.md"); self.summary_md.setChecked(self._setting_bool("include_summary_md", True))
         self.raw = QCheckBox("Raw log files")
-        self.sanitized = QCheckBox("Sanitized log files"); self.sanitized.setChecked(True)
+        self.sanitized = QCheckBox("Sanitized log files"); self.sanitized.setChecked(self._setting_bool("include_sanitized", True))
         for check in (self.summary_txt, self.summary_md, self.raw, self.sanitized): options.addWidget(check)
         self.raw_warning = QLabel("⚠ Raw logs are exported without sensitive-data masking.")
         self.raw_warning.setWordWrap(True); self.raw_warning.setObjectName("alert"); self.raw_warning.setVisible(False)
         options.addWidget(self.raw_warning)
         self.raw.toggled.connect(self.raw_warning.setVisible)
+        self.raw.toggled.connect(self.update_export_tree)
         options.addSpacing(12)
         grouping = QLabel("Folder grouping"); grouping.setObjectName("sectionTitle"); options.addWidget(grouping)
         self.export_group = QComboBox()
@@ -394,16 +440,32 @@ class MainWindow(QMainWindow):
         self.export_group.addItem("Page name", "page")
         self.export_group.addItem("Page URL", "page_url")
         self.export_group.addItem("Custom folder", "custom")
-        self.custom_group_name = QLineEdit(); self.custom_group_name.setPlaceholderText("Custom folder name")
+        stored_group = str(self.settings.value("export_group", "none"))
+        stored_group_index = self.export_group.findData(stored_group)
+        self.export_group.setCurrentIndex(max(0, stored_group_index))
+        self.custom_group_name = QLineEdit(str(self.settings.value("custom_group_name", ""))); self.custom_group_name.setPlaceholderText("Custom folder name")
         self.custom_group_name.setVisible(False)
-        self.include_zip = QCheckBox("Also create ZIP archive")
+        self.include_zip = QCheckBox("Also create ZIP archive"); self.include_zip.setChecked(self._setting_bool("include_zip", False))
         folder_format = QLabel("Export folder format"); folder_format.setObjectName("sectionTitle")
         self.export_folder_format = QLineEdit(str(self.settings.value("export_folder_format", "Log_{date}_{time}")))
         self.export_folder_format.setPlaceholderText("Log_{date}_{time}")
         self.export_folder_format.setToolTip("Supported tokens: {date}, {time}")
+        file_format = QLabel("Export file format"); file_format.setObjectName("sectionTitle")
+        self.export_file_format = QLineEdit(str(self.settings.value("export_file_format", DEFAULT_EXPORT_LOG_FILENAME_FORMAT)))
+        self.export_file_format.setPlaceholderText(DEFAULT_EXPORT_LOG_FILENAME_FORMAT)
+        self.export_file_format.setToolTip("Supported tokens: {date}, {time}, {millisecond}, {method}, {endpoint}, {short-id}")
         options.addWidget(self.export_group); options.addWidget(self.custom_group_name); options.addWidget(self.include_zip)
         options.addWidget(folder_format); options.addWidget(self.export_folder_format)
+        options.addWidget(file_format); options.addWidget(self.export_file_format)
         self.export_group.currentIndexChanged.connect(self._update_grouping_options)
+        for check in (self.summary_txt, self.summary_md, self.sanitized, self.include_zip):
+            check.toggled.connect(self._persist_preferences)
+        self.export_group.currentIndexChanged.connect(self._persist_preferences)
+        self.custom_group_name.textChanged.connect(self._persist_preferences)
+        self.export_folder_format.textChanged.connect(self._persist_preferences)
+        self.export_file_format.textChanged.connect(self._persist_preferences)
+        self.extra_mask.textChanged.connect(self._persist_preferences)
+        self._update_grouping_options()
         options.addStretch()
         options.addWidget(button("Copy for ticket", self.copy_ticket))
         options.addWidget(button("Copy as Markdown", self.copy_markdown))
@@ -455,6 +517,117 @@ class MainWindow(QMainWindow):
         self.filter_toggle.setText("Hide filters ▲" if expanded else "Show filters ▼")
         self.settings.setValue("filters_expanded", expanded)
 
+    def _setting_bool(self, key, default=False):
+        return str(self.settings.value(key, str(default).lower())).lower() in {"1", "true", "yes"}
+
+    def _persist_preferences(self, *args):
+        if not hasattr(self, "export_group"):
+            return
+        self.settings.setValue("extra_mask_keys", self.extra_mask.text().strip())
+        self.settings.setValue("include_summary_txt", self.summary_txt.isChecked())
+        self.settings.setValue("include_summary_md", self.summary_md.isChecked())
+        self.settings.setValue("include_sanitized", self.sanitized.isChecked())
+        self.settings.setValue("include_zip", self.include_zip.isChecked())
+        self.settings.setValue("export_group", self.export_group.currentData())
+        self.settings.setValue("custom_group_name", self.custom_group_name.text().strip())
+        self.settings.setValue("export_folder_format", self.export_folder_format.text().strip() or "Log_{date}_{time}")
+        self.settings.setValue("export_file_format", self.export_file_format.text().strip() or DEFAULT_EXPORT_LOG_FILENAME_FORMAT)
+        if hasattr(self, "export_tree"):
+            self.update_export_tree()
+
+    def _source_fields(self):
+        fields = {"kafka_topic_name"}
+        for entry in self.entries:
+            raw = entry.raw if isinstance(entry.raw, dict) else {}
+            source = raw.get("fields") or raw.get("_source") or raw
+            if isinstance(source, dict):
+                fields.update(str(key) for key in source)
+        return sorted(fields, key=str.casefold)
+
+    def _rebuild_timeline_field_menu(self):
+        if not hasattr(self, "timeline_fields_menu"):
+            return
+        self.timeline_fields_menu.clear()
+        available = self._source_fields()
+        for field in available:
+            action = QAction("Kafka Topic" if field == "kafka_topic_name" else field, self.timeline_fields_menu)
+            action.setCheckable(True)
+            action.setChecked(field in self.timeline_fields)
+            action.toggled.connect(lambda checked, name=field: self._toggle_timeline_field(name, checked))
+            self.timeline_fields_menu.addAction(action)
+
+    def _active_timeline_fields(self):
+        available = set(self._source_fields())
+        return [field for field in self.timeline_fields if field in available]
+
+    def _toggle_timeline_field(self, field, checked):
+        if checked and field not in self.timeline_fields:
+            self.timeline_fields.append(field)
+        elif not checked and field in self.timeline_fields:
+            self.timeline_fields.remove(field)
+        self.settings.setValue("timeline_fields", "|".join(self.timeline_fields))
+        self._configure_timeline_columns()
+        self.refresh()
+
+    def _configure_timeline_columns(self):
+        if not hasattr(self, "table"):
+            return
+        headers = [item[0] for item in TIMELINE_BASE_COLUMNS]
+        active_fields = self._active_timeline_fields()
+        headers.extend("Kafka Topic" if field == "kafka_topic_name" else field for field in active_fields)
+        self.timeline_column_keys = [item[1] for item in TIMELINE_BASE_COLUMNS]
+        self.timeline_column_keys.extend(f"field:{field}" for field in active_fields)
+        self.table.setColumnCount(len(headers))
+        self.table.setHorizontalHeaderLabels(headers)
+        for column, (_, _, width) in enumerate(TIMELINE_BASE_COLUMNS):
+            self.table.setColumnWidth(column, width)
+        for column in range(len(TIMELINE_BASE_COLUMNS), len(headers)):
+            self.table.setColumnWidth(column, 180)
+        self._restore_timeline_column_order()
+
+    def _stored_timeline_column_order(self):
+        try:
+            value = json.loads(str(self.settings.value("timeline_column_order", "[]")))
+        except (TypeError, ValueError, json.JSONDecodeError):
+            return []
+        return [str(key) for key in value] if isinstance(value, list) else []
+
+    def _restore_timeline_column_order(self):
+        header = self.table.horizontalHeader()
+        stored = self._stored_timeline_column_order()
+        desired = [key for key in stored if key in self.timeline_column_keys]
+        desired.extend(key for key in self.timeline_column_keys if key not in desired)
+        was_blocked = header.blockSignals(True)
+        try:
+            for target_visual, key in enumerate(desired):
+                logical = self.timeline_column_keys.index(key)
+                current_visual = header.visualIndex(logical)
+                if current_visual != target_visual:
+                    header.moveSection(current_visual, target_visual)
+        finally:
+            header.blockSignals(was_blocked)
+
+    def _persist_timeline_column_order(self, *args):
+        header = self.table.horizontalHeader()
+        order = [
+            self.timeline_column_keys[header.logicalIndex(visual)]
+            for visual in range(header.count())
+        ]
+        self.settings.setValue("timeline_column_order", json.dumps(order))
+
+    @staticmethod
+    def _timeline_source_value(entry, field):
+        if field == "kafka_topic_name":
+            return entry.kafka_topic
+        raw = entry.raw if isinstance(entry.raw, dict) else {}
+        source = raw.get("fields") or raw.get("_source") or raw
+        value = source.get(field, "") if isinstance(source, dict) else ""
+        if isinstance(value, list) and len(value) == 1:
+            value = value[0]
+        if isinstance(value, (dict, list)):
+            return json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+        return value
+
     def _update_grouping_options(self):
         self.custom_group_name.setVisible(self.export_group.currentData() == "custom")
 
@@ -477,7 +650,7 @@ class MainWindow(QMainWindow):
         try:
             result = parse_files(paths)
             if not result.entries: raise ValueError("No usable log records were found.")
-            self.entries = result.entries; self._configure_entries(); self.included_indexes.clear(); self.refresh()
+            self._append_entries(result.entries)
             source_name = Path(paths[0]).name if len(paths) == 1 else f"{len(paths)} files"
             self._show_import_report(result.report, source_name)
         except Exception as exc: QMessageBox.critical(self, "Import failed", str(exc))
@@ -488,9 +661,16 @@ class MainWindow(QMainWindow):
         try:
             result = parse_with_report(dialog.editor.toPlainText().strip())
             if not result.entries: raise ValueError("No usable log records were found.")
-            self.entries = result.entries; self._configure_entries(); self.included_indexes.clear(); self.refresh()
+            self._append_entries(result.entries)
             self._show_import_report(result.report, "pasted JSON")
         except Exception as exc: QMessageBox.critical(self, "Invalid input", str(exc))
+
+    def _append_entries(self, new_entries):
+        self.entries = merge_entries(self.entries, new_entries)
+        self._configure_entries()
+        self._rebuild_timeline_field_menu()
+        self._configure_timeline_columns()
+        self.refresh()
 
     def _show_import_report(self, report, source_name):
         summary = f"Imported {report.imported_count} of {report.source_count} logs from {source_name}"
@@ -614,8 +794,11 @@ class MainWindow(QMainWindow):
         self.filtered = filter_entries(self.entries, search=self.search.text(), errors_only=self.errors_only.isChecked(), business_errors_only=self.business_errors_only.isChecked(), slow_only=self.slow_only.isChecked(), method=self.method.currentText(), status_class=self.status.currentText(), min_ms=self.min_ms.text(), page=self.page_filter.text(), topic=self.topic.text(), transaction=self.transaction.text())
         self.update_active_filter_chips()
         self.table.setRowCount(len(self.filtered))
+        active_timeline_fields = self._active_timeline_fields()
         for row, entry in enumerate(self.filtered):
-            values = ("●" if entry.index in self.included_indexes else "○", entry.timestamp_display, entry.severity, error_fingerprint(entry), entry.request_method, entry.request_uri, entry.response_status, entry.response_time, entry.request_id, entry.transaction_id)
+            values = ["●" if entry.index in self.included_indexes else "○"]
+            values.extend((entry.timestamp_display, entry.severity, error_fingerprint(entry), entry.request_method, entry.request_uri, entry.response_status, entry.response_time, entry.request_id, entry.transaction_id))
+            values.extend(self._timeline_source_value(entry, field) for field in active_timeline_fields)
             for col, value in enumerate(values):
                 item = QTableWidgetItem(str(value)); item.setData(Qt.UserRole, entry.index)
                 if col == 0: item.setForeground(QColor("#7c6df2" if entry.index in self.included_indexes else "#62708e"))
@@ -789,6 +972,86 @@ class MainWindow(QMainWindow):
     def update_preview(self):
         self.preview.setPlainText(build_ticket(self.included_entries(), self.mask.isChecked(), self.expected.toPlainText().strip(), self.actual.toPlainText().strip(), self._extra_mask_keys()))
         self.restart_evidence_search()
+        self.update_export_tree()
+
+    def update_export_tree(self, *args):
+        if not hasattr(self, "export_tree") or not hasattr(self, "export_folder_format"):
+            return
+        self.export_tree.clear()
+        entries = self.included_entries()
+        try:
+            root_name = build_export_folder_name(
+                self.export_folder_format.text().strip(), self.export_preview_moment
+            )
+            structure = build_export_structure(
+                entries=entries,
+                root_name=root_name,
+                mask=self.mask.isChecked(),
+                include_summary_txt=self.summary_txt.isChecked(),
+                include_summary_md=self.summary_md.isChecked(),
+                include_raw=self.raw.isChecked(),
+                include_sanitized=self.sanitized.isChecked(),
+                group_by=self.export_group.currentData(),
+                custom_group_name=self.custom_group_name.text().strip(),
+                include_zip=self.include_zip.isChecked(),
+                filename_format=self.export_file_format.text().strip() or DEFAULT_EXPORT_LOG_FILENAME_FORMAT,
+            )
+        except ValueError as exc:
+            self.export_tree_status.setText(str(exc))
+            self.export_tree_status.setObjectName("errorText")
+            self.export_tree_status.style().unpolish(self.export_tree_status)
+            self.export_tree_status.style().polish(self.export_tree_status)
+            return
+
+        state = "Raw + Sanitized" if structure["raw"] and structure["sanitized"] else (
+            "Raw" if structure["raw"] else "Sanitized" if structure["sanitized"] else "No JSON logs"
+        )
+        mask_state = "Mask on" if structure["mask"] else "Mask off"
+        zip_state = "ZIP on" if structure["zip"] else "ZIP off"
+        self.export_tree_status.setText(
+            f"Included {structure['included_count']} · {state} · {mask_state} · {zip_state}"
+        )
+        self.export_tree_status.setObjectName("alert" if structure["raw"] else "muted")
+        self.export_tree_status.style().unpolish(self.export_tree_status)
+        self.export_tree_status.style().polish(self.export_tree_status)
+
+        root_item = QTreeWidgetItem([f"{structure['root']}/", f"{structure['included_count']} logs"])
+        self.export_tree.addTopLevelItem(root_item)
+        nodes = {(): root_item}
+
+        def folder_item(parts, count_text=""):
+            current = ()
+            parent = root_item
+            for part in parts:
+                current += (part,)
+                if current not in nodes:
+                    nodes[current] = QTreeWidgetItem(parent, [f"{part}/", ""])
+                parent = nodes[current]
+            if count_text:
+                parent.setText(1, count_text)
+            return parent
+
+        if not structure["groups"]:
+            QTreeWidgetItem(root_item, ["No logs included", ""])
+        prefix_counts = {}
+        for group in structure["groups"]:
+            group_path = tuple(group["path"])
+            for depth in range(1, len(group_path) + 1):
+                prefix = group_path[:depth]
+                prefix_counts[prefix] = prefix_counts.get(prefix, 0) + group["count"]
+        for path, count in prefix_counts.items():
+            folder_item(path, f"{count} logs")
+        for group in structure["groups"]:
+            group_path = tuple(group["path"])
+            for file_path in group["files"]:
+                directory = group_path + tuple(file_path[:-1])
+                file_parent = folder_item(directory)
+                QTreeWidgetItem(file_parent, [file_path[-1], ""])
+        root_item.setExpanded(True)
+        if structure["zip"]:
+            self.export_tree.addTopLevelItem(QTreeWidgetItem([
+                f"{structure['root']}.zip", "ZIP archive"
+            ]))
     def update_analysis(self):
         duplicates = find_duplicate_errors(self.filtered); lines = [build_auto_summary(self.filtered), "", "Duplicate / Similar Error Signatures", "=" * 72]
         if not duplicates: lines.append("No repeated error fingerprints found in current filtered logs.")
@@ -834,14 +1097,16 @@ class MainWindow(QMainWindow):
         parent = QFileDialog.getExistingDirectory(self, "Choose export folder")
         if not parent: return
         try:
-            folder_name = build_export_folder_name(self.export_folder_format.text().strip(), datetime.now())
-            self.settings.setValue("export_folder_format", self.export_folder_format.text().strip() or "Log_{date}_{time}")
+            folder_name = build_export_folder_name(self.export_folder_format.text().strip(), self.export_preview_moment)
+            self._persist_preferences()
             destination = Path(parent) / folder_name
             if self.export_group.currentData() == "custom" and not self.custom_group_name.text().strip():
                 QMessageBox.information(self, "Folder name required", "Enter a custom folder name before exporting.")
                 return
-            path = export_package(entries=entries, destination=destination, mask=self.mask.isChecked(), expected=self.expected.toPlainText().strip(), actual=self.actual.toPlainText().strip(), extra_mask_keys=self._extra_mask_keys(), include_summary_txt=self.summary_txt.isChecked(), include_summary_md=self.summary_md.isChecked(), include_raw=self.raw.isChecked(), include_sanitized=self.sanitized.isChecked(), group_by=self.export_group.currentData(), custom_group_name=self.custom_group_name.text().strip(), include_zip=self.include_zip.isChecked())
+            path = export_package(entries=entries, destination=destination, mask=self.mask.isChecked(), expected=self.expected.toPlainText().strip(), actual=self.actual.toPlainText().strip(), extra_mask_keys=self._extra_mask_keys(), include_summary_txt=self.summary_txt.isChecked(), include_summary_md=self.summary_md.isChecked(), include_raw=self.raw.isChecked(), include_sanitized=self.sanitized.isChecked(), group_by=self.export_group.currentData(), custom_group_name=self.custom_group_name.text().strip(), include_zip=self.include_zip.isChecked(), filename_format=self.export_file_format.text().strip() or DEFAULT_EXPORT_LOG_FILENAME_FORMAT)
             QMessageBox.information(self, "Export complete", f"Exported {len(entries)} logs.\n\nCreated:\n{path}")
+            self.export_preview_moment = datetime.now()
+            self.update_export_tree()
         except Exception as exc: QMessageBox.critical(self, "Export failed", str(exc))
 
     def open_help(self): HelpDialog(self).exec()

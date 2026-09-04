@@ -14,6 +14,7 @@ the first failure and slowest call, and include an entire journey in Evidence.
 - Double-clicking a transaction applies it to the Dashboard filter.
 - Include journey adds every record in the selected group to Evidence.
 - Request ID fallback grouping is explicitly marked as a warning.
+- Table headers, corners, empty areas, and scrollbars follow the active theme palette.
 
 ## Invariants
 

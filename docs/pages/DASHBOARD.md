@@ -11,8 +11,14 @@ choose which records enter Evidence.
 - Collapsible Search & Filters with task categories, active chips, presets,
   per-category Clear, and Reset count.
 - Timeline columns: Export, Timestamp, Flag, Fingerprint, Method, API, Status,
-  response time, Request ID, and Transaction.
-- Resizable columns and horizontal scrolling.
+  response time, Request ID, Transaction, plus user-selected fields found in the
+  current JSON. Kafka Topic is selected by default.
+- Resizable columns and horizontal scrolling. Timeline headers can be dragged
+  into any order, and the order persists across application restarts.
+- Timeline field selection persists locally; Dashboard filters never persist.
+- Table headers, corners, empty areas, and scrollbars follow the active theme palette.
+- The Timeline fields popup, selected rows, hover state, and checked indicators
+  remain readable in both Light and Dark Mode.
 - Log Inspector with normalized fields, raw payload view, alerts, and per-log note.
 
 ## Interaction contract

@@ -319,6 +319,20 @@ def parse_har(payload):
 def parse_auto(payload):
     return parse_with_report(payload).entries
 
+
+def merge_entries(existing, additions):
+    """Append parsed records with collision-free identities and timestamp order."""
+    combined = list(existing)
+    next_index = max((entry.index for entry in combined), default=0) + 1
+    for offset, entry in enumerate(additions):
+        entry.index = next_index + offset
+        combined.append(entry)
+    combined.sort(key=lambda entry: (
+        entry.timestamp_sort or float("inf"), entry.source_file,
+        entry.source_record_index, entry.index,
+    ))
+    return combined
+
 def parse_with_report(payload, source_file=""):
     parsed = json.loads(payload) if isinstance(payload, str) else payload
     if isinstance(parsed, list):

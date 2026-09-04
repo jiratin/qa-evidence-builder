@@ -855,7 +855,8 @@ Folder grouping กำหนดโครงสร้างภายในโฟ�
 • Kafka topic — สร้างหนึ่งโฟลเดอร์ต่อ kafka_topic_name ที่ต่างกัน
 • Page name — สร้างหนึ่งโฟลเดอร์ต่อ CLIENT_PAGE_NAME ที่ต่างกัน
 • Page URL — สร้างหนึ่งโฟลเดอร์ต่อ PAGE_URL หรือ CLIENT_PAGE_URL ที่ต่างกัน
-  รวมถึง field แบบ .keyword เหมาะกับ Log ที่ไม่มี Page Name
+  รวมถึง field แบบ .keyword และภายใน Page URL แต่ละโฟลเดอร์จะแยกโฟลเดอร์
+  Kafka Topic อีกหนึ่งชั้นเป็น Page URL / Kafka Topic
 • Custom folder — รวม Included Logs ทั้งหมดไว้ใต้ชื่อโฟลเดอร์ที่ผู้ใช้กำหนด
 
 แต่ละกลุ่มมี summary และ raw/sanitized ของกลุ่มนั้นเอง ถ้า Log ไม่มีค่าที่ใช้จัดกลุ่ม
@@ -881,13 +882,15 @@ Raw log files ปิดเป็นค่าเริ่มต้นเพรา
 ไฟล์ JSON จะอยู่ในโฟลเดอร์ Evidence/กลุ่มโดยตรง ไม่สร้างชั้น raw หรือ sanitized เพิ่ม
 ถ้าเลือกหลาย content โปรแกรมจะแยก raw และ sanitized เพื่อไม่ให้ไฟล์ปะปนกัน
 
-ชื่อไฟล์ Log เรียงตามเวลาที่เกิดเหตุการณ์และใช้รูปแบบ:
-{date}_{time}_{millisecond}_{method}_{endpoint}_{short-id}.json
+ชื่อไฟล์ Log ตั้งรูปแบบได้ด้วย {date}, {time}, {millisecond}, {method},
+{endpoint} และ {short-id} โดยค่าเริ่มต้นคือ:
+{date}_{time}_{millisecond}_{endpoint}.json
 
 ตัวอย่าง:
-20260903_102903_111_POST_privateId_A14F2C.json
+20260903_102903_111_privateId.json
 
-short-id เป็น Hash 6 ตัวแบบคงที่ ไม่แสดง Request ID หรือ Transaction ID ในชื่อไฟล์
+ถ้าเพิ่ม {short-id} จะได้ Hash 6 ตัวแบบคงที่ซึ่งไม่แสดง Request ID หรือ
+Transaction ID ในชื่อไฟล์
 ชื่อไฟล์ Log จำกัดความยาวไม่เกิน 80 ตัวอักษร โดยตัดเฉพาะส่วน endpoint เมื่อจำเป็น
 เพื่อรองรับ NAS และระบบไฟล์ที่จำกัดความยาว
 ถ้า Export ซ้ำลงโฟลเดอร์เดิม โปรแกรมจะไม่เขียนทับไฟล์ Log เดิม แต่เติม _2, _3
@@ -900,9 +903,33 @@ short-id เป็น Hash 6 ตัวแบบคงที่ ไม่แส�
 หลัง Import โปรแกรมจะแสดงจำนวนรายการทั้งหมด รายการที่นำเข้าได้ รายการที่ข้าม
 และคำเตือนสำหรับ Timestamp หรือ Endpoint ที่ไม่มี/อ่านไม่ได้
 
+การ Import ไฟล์หรือ Paste JSON ครั้งใหม่จะเพิ่ม Log ต่อจากข้อมูลเดิมและเรียง
+Timeline ใหม่ตาม Timestamp โดยไม่ลบ Included selection เดิม หากต้องการเริ่มชุดใหม่
+ให้กด Clear ก่อน Import หรือ Paste
+
 รายการที่โครงสร้างเสียจะถูกข้ามโดยไม่ทำให้รายการที่ถูกต้องหายไป ส่วน Log ที่ไม่มี
 Timestamp หรือ Endpoint ยังนำเข้าได้และจะแสดงเป็น warning รายงานนี้ไม่แสดงเนื้อหา
 Raw Log หรือข้อมูลสำคัญจาก record
+""",
+    ),
+    (
+        "35.1 Timeline Fields และการจำค่า Config",
+        """
+ปุ่ม Timeline fields ใช้เลือก column เพิ่มเติมจาก field ที่พบใน JSON ปัจจุบัน
+Kafka Topic ถูกเลือกไว้เป็นค่าเริ่มต้น การเลือก field จะถูกจำไว้ในเครื่องและนำกลับมา
+ใช้เมื่อ field นั้นมีอยู่ในข้อมูลที่ Import ครั้งต่อไป เมนู field และสถานะที่เลือก
+จะแสดงด้วยสีที่อ่านได้ทั้ง Light Mode และ Dark Mode
+
+ลากหัว column เช่น API, Timestamp หรือ Status ไปทางซ้ายหรือขวาเพื่อเรียง Timeline
+ตามรูปแบบที่ต้องการ โปรแกรมจะจำลำดับล่าสุดไว้ หากเพิ่ม field ใหม่ column ใหม่นั้น
+จะต่อท้ายโดยไม่เปลี่ยนลำดับ column ที่จัดไว้แล้ว
+
+โปรแกรมจำ Theme, Analysis settings, Timeline fields, Extra mask keys, Folder grouping,
+Custom folder, Package contents, ZIP และรูปแบบชื่อ Folder/File ล่าสุด แต่ไม่จำ
+Dashboard filters, Log, Expected/Actual, Notes หรือ Included selection ข้ามการเปิดแอป
+
+เพื่อความปลอดภัย Mask sensitive data จะเปิด และ Raw log files จะปิดทุกครั้งที่
+เปิดโปรแกรม แม้รอบก่อนจะเปลี่ยนสองค่านี้ไว้
 """,
     ),
     (
@@ -992,6 +1019,9 @@ Search & Filters สามารถกด Show filters หรือ Hide filters
 โดยคลิกหนึ่งครั้งที่จุดใน Column Export หรือเลือก Row แล้วกด Spacebar
 Spacebar จะทำงานนี้เฉพาะเมื่อ focus อยู่ใน Timeline และยังพิมพ์ช่องว่างตามปกติ
 เมื่อ focus อยู่ใน Search, Note หรือ Text Field อื่น
+
+พื้นหลังตาราง, มุม Header, พื้นที่ว่าง และ Scrollbar ทั้งแนวตั้ง/แนวนอนจะใช้สี
+ตาม Theme เดียวกัน เพื่อไม่ให้เกิดพื้นที่ดำแทรกใน Light Mode
 """,
     ),
     (
@@ -1016,6 +1046,21 @@ Shift+Enter เพื่อย้อนกลับ สถานะจะแส�
 เมื่อค้นหาถึงท้ายหรือต้นเอกสาร โปรแกรมจะวนค้นหาต่ออีกด้าน เปิด Match case เมื่อ
 ต้องการแยกตัวพิมพ์ใหญ่และตัวพิมพ์เล็ก หากไม่พบจะแสดง 0 matches ช่องค้นหานี้
 ทำงานกับ Preview ที่แสดงหลัง Masking แล้ว
+""",
+    ),
+    (
+        "45.1 Export Tree Preview",
+        """
+พื้นที่ Preview ในหน้า Evidence แบ่งเป็นสอง Tab โดยไม่เพิ่มความสูงของหน้า:
+
+• Included Evidence Preview — แสดงหลักฐานที่ผ่าน Masking และค้นหาข้อความได้
+• Export Tree Preview — แสดงโฟลเดอร์และไฟล์ที่จะสร้างในรูปแบบ Tree
+
+กดลูกศรหน้าโฟลเดอร์เพื่อเปิดหรือพับแต่ละส่วน หรือใช้ Expand all / Collapse all
+Tree แสดงชื่อ Root ที่จะใช้กับการ Export ครั้งถัดไป จำนวน Included Logs ของแต่ละ
+กลุ่ม Package Contents, Raw/Sanitized, Masking และ ZIP state การเปิดดู Tree
+ไม่สร้างไฟล์และไม่แสดง Request/Response หรือค่า sensitive จาก Log พื้นหลังและ
+ตัวหนังสือของ Tab จะแสดงตาม Light/Dark Mode รวมถึงสถานะ Hover และ Selected
 """,
     ),
     (

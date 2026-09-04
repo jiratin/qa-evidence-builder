@@ -26,6 +26,17 @@ assert "QFrame#sidebar" in theme
 assert "QPushButton#primary" in theme
 assert '"light"' in theme
 assert "QComboBox QAbstractItemView" in theme
+assert "QMenu {" in theme
+assert "QMenu::item:selected" in theme
+assert "QMenu::indicator:checked" in theme
+assert "QTabWidget::pane" in theme
+assert "QTabBar::tab:hover" in theme
+assert "QTabBar::tab:selected" in theme
+assert "QTabBar::tab:disabled" in theme
+assert "QAbstractScrollArea::corner" in theme
+assert "QTableCornerButton::section" in theme
+assert "QScrollBar:horizontal" in theme
+assert "QScrollBar::handle:horizontal" in theme
 assert "Also create ZIP archive" in app
 assert "Kafka topic" in app
 assert "Page URL" in app
@@ -49,6 +60,9 @@ assert "Current Transaction" in app
 assert "clear_request_filters" in app
 assert "QPushButton#filterChip" in theme
 assert "QHeaderView.Interactive" in app
+assert "setSectionsMovable(True)" in app
+assert "sectionMoved.connect(self._persist_timeline_column_order)" in app
+assert "def _restore_timeline_column_order(self):" in app
 assert "Qt.ScrollBarAsNeeded" in app
 assert "toggle_include_from_indicator" in app
 assert "toggle_include_selected_rows" in app
@@ -58,6 +72,17 @@ assert "selected_text" in theme
 assert "assets/icons/png/icon-256.png" in (root / "README.md").read_text(encoding="utf-8")
 assert "export_folder_format" in app
 assert "Log_{date}_{time}" in app
+assert "export_file_format" in app
+assert "DEFAULT_EXPORT_LOG_FILENAME_FORMAT" in app
+assert "def _append_entries(self, new_entries):" in app
+assert "def _rebuild_timeline_field_menu(self):" in app
+assert 'button("Timeline fields")' in app
+assert "QTreeWidget" in app
+assert 'addTab(preview_page, "Included Evidence Preview")' in app
+assert 'addTab(tree_page, "Export Tree Preview")' in app
+assert "def update_export_tree(self, *args):" in app
+assert "build_export_structure" in app
+assert "QTreeWidget::item:selected" in theme
 assert "Find in evidence" in app
 assert "find_in_evidence" in app
 assert "QTextDocument.FindCaseSensitively" in app

@@ -54,8 +54,11 @@ message. Different rows can intentionally share a fingerprint.
 ## Local persistence
 
 `QSettings` stores UI and analysis preferences including theme, filter-panel
-visibility, slow threshold, successful result codes, and export-folder format.
-Imported logs, evidence text, notes, and raw values are not persisted there.
+visibility, slow threshold, successful result codes, selected Timeline fields,
+extra mask-key rules, export grouping/package options, and folder/file formats.
+Dashboard filter values, imported logs, evidence text, notes, and raw values are
+not persisted there. Masking and raw-export defaults are restored safely on every
+launch rather than inheriting an unsafe prior session state.
 
 Future profile/workspace features must preserve that boundary unless their file
 contents and security model are explicitly specified in requirements.

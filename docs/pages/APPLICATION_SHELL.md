@@ -13,8 +13,12 @@ application icon, and responsive Sidebar width.
   statement, version, and Help entry.
 - Header actions remain available regardless of the active page.
 - Import accepts one or more JSON/HAR files; Paste accepts supported JSON/HAR text.
+  Each successful action appends to the current session and re-sorts the combined
+  Timeline. Clear is the explicit reset action.
 - Clear removes loaded/included records, Expected/Actual text, and filters.
 - Theme choice persists locally through `QSettings`.
+- Non-sensitive UI, analysis, Timeline-column, and export preferences persist;
+  Dashboard filter values and imported content do not.
 - Import warnings report counts without showing complete raw records.
 
 ## Invariants
@@ -22,6 +26,7 @@ application icon, and responsive Sidebar width.
 - Import and analysis remain local-only.
 - Malformed records do not discard usable records from the same import.
 - Shared actions must not behave differently merely because navigation changed.
+- Repeated imports and pastes must retain existing records and inclusion state.
 - Application identity must remain consistent in-app and in packaged OS surfaces.
 
 ## Targeted implementation map

@@ -54,11 +54,13 @@ The application, README, changelog, Windows metadata, workflow default, release
 tests, and annotated Git tag use the same semantic version. Valid tags use
 `vX.Y.Z`; the older dotted form `v.X.Y.Z` must not be repeated.
 
-## D-009 — Constrained export-folder templates
+## D-009 — Constrained export templates
 
 Custom root folder formats support only `{date}` and `{time}`. This keeps names
-predictable and prevents arbitrary formatting fields or path traversal. Group and
-record filenames are sanitized independently.
+predictable and prevents arbitrary formatting fields or path traversal. Log file
+formats support only `{date}`, `{time}`, `{millisecond}`, `{method}`, `{endpoint}`,
+and `{short-id}`. Group and record filenames are sanitized independently and log
+filenames remain capped at 80 characters.
 
 ## D-010 — Keep filters task-oriented
 
